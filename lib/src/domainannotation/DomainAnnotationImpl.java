@@ -18,6 +18,19 @@ import us.kbase.kbasereport.*;
 import us.kbase.kbasecollections.*;
 import us.kbase.common.utils.FastaWriter;
 
+import us.kbase.common.service.Tuple11;
+import us.kbase.common.service.Tuple2;
+import us.kbase.common.service.Tuple4;
+import us.kbase.common.service.Tuple5;
+import us.kbase.common.utils.AlignUtil;
+import us.kbase.common.utils.CorrectProcess;
+import us.kbase.common.utils.RpsBlastParser;
+import us.kbase.common.taskqueue.TaskQueueConfig;
+import us.kbase.kbasegenomes.Feature;
+import us.kbase.kbasegenomes.Genome;
+import us.kbase.workspace.ObjectData;
+import us.kbase.workspace.ObjectIdentity;
+
 import com.fasterxml.jackson.databind.*;
 
 import org.strbio.IO;
@@ -36,6 +49,8 @@ public class DomainAnnotationImpl {
     
     public static final String domainAnnotationWsType = "KBaseGeneFamilies.DomainAnnotation";
     public static final String domainAlignmentsWsType = "KBaseGeneFamilies.DomainAlignments";
+
+    protected static File tempDir = new File("/kb/module/work/");
     
     /**
        creates a workspace client; if token is null, client can
@@ -188,7 +203,6 @@ public class DomainAnnotationImpl {
                                           SearchDomainsInput input) throws Exception {
 
         WorkspaceClient wc = createWsClient(wsURL,token);
-        File tempDir = new File("/kb/module/work/");
 
         // turn local into absolute paths
         String genomeRef = input.getGenomeRef();
@@ -221,7 +235,7 @@ public class DomainAnnotationImpl {
             for (String id : domainLibMap.values()) {
                 reportText += "Running domain search against library "+id;
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
-                DomainAnnotation results = runDomainSearch(genome, genomeRef, domainModelSetRef, dl);
+                DomainAnnotation results = runDomainSearch(genome, genomeRef, domainModelSetRef, dl, shockURL, token);
 
                 // combine all the results into one object
                 if (da==null)
@@ -274,13 +288,427 @@ public class DomainAnnotationImpl {
     public static DomainAnnotation runDomainSearch(Genome genome,
                                                    String genomeRef,
                                                    String domainModelSetRef,
-                                                   DomainLibrary dl) throws Exception {
+                                                   DomainLibrary dl,
+                                                   String shockURL,
+                                                   AuthToken token) throws Exception {
+        String genomeName = genome.getScientificName();
+        File dbFile = new File(getDomainsDir().getPath()+"/"+dl.getLibraryFiles().get(0).getFileName());
+        File fastaFile = File.createTempFile("proteome", ".fasta", tempDir);
+        File outFile = null;
 
-        return null;
+        final Map<String,Long> modelNameToLength = new HashMap<String,Long>();
+
+        // save the length of each model, to compute coverage.
+        // This replaces modelNameToRefConsensus in Roman's legacy code:
+        Map<String,DomainModel> libDomains = dl.getDomains();
+        for (String accession : libDomains.keySet()) {
+            DomainModel m = libDomains.get(accession);
+            modelNameToLength.put(accession, m.getLength());
+        }
+
+        // make sure we have local copies of all library files
+        prepareLibraryFiles(dl,shockURL,token);
+
+        try {
+            final Map<String, List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>> contig2prots =
+                new TreeMap<String, List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>>();
+            FastaWriter fw = new FastaWriter(fastaFile);
+            int protCount = 0;
+            final Map<Integer, Tuple2<String, Long>> posToContigFeatIndex = new LinkedHashMap<Integer, Tuple2<String, Long>>();
+            Map<String, Tuple2<String, Long>> featIdToContigFeatIndex = new TreeMap<String, Tuple2<String, Long>>();
+            // to work around genomes with missing contigs:
+            HashSet<String> realContigs = new HashSet<String>();
+            // write out each protein sequentially into a FASTA file,
+            // keeping track of its (first) position in the genome
+            try {
+                List<Feature> features = genome.getFeatures();
+                int pos = -1;
+                for (Feature feat : features) {
+                    pos++;
+                    String seq = feat.getProteinTranslation();
+                    if (feat.getLocation().size() < 1)
+                        continue;
+                    Tuple4<String, Long, String, Long> loc = feat.getLocation().get(0);
+                    String contigId = loc.getE1();
+                    String featId = feat.getId();
+                    if ((contigId==null) || (featId==null))
+                        continue;
+                    if (seq != null && !seq.isEmpty()) {
+                        fw.write("" + pos, seq);
+                        Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);
+                        posToContigFeatIndex.put(pos, contigFeatIndex);
+                        featIdToContigFeatIndex.put(featId, contigFeatIndex);
+                        protCount++;
+                        realContigs.add(contigId);
+                    }
+                    List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
+                    if (prots == null) {
+                        prots = new ArrayList<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>();
+                        contig2prots.put(contigId, prots);
+                    }
+                    long start = loc.getE3().equals("-") ? (loc.getE2() - loc.getE4() + 1) : loc.getE2();
+                    // fake the stop site based on protein length
+                    long stop;
+                    if (seq != null)
+                        stop = start - 1 + ((seq.length()+1) * 3);
+                    else {
+                        // correct calculation for end of 1st exon:
+                        stop = loc.getE3().equals("-") ? loc.getE2() : (loc.getE2() + loc.getE4() - 1);
+                    }
+                    long dir = loc.getE3().equals("-") ? -1 : +1;
+                    prots.add(new Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>()
+                              .withE1(feat.getId())
+                              .withE2(start)
+                              .withE3(stop)
+                              .withE4(dir)
+                              .withE5(new TreeMap<String, List<Tuple5<Long, Long, Double, Double, Double>>>()));
+                }
+            }
+            finally {
+                try { fw.close(); } catch (Exception ignore) {}
+            }
+            if (protCount == 0)
+                throw new IllegalStateException("There are no protein translations in genome " + genomeName + " (" + genomeRef + ")");
+
+            // make contig-based indices
+            HashMap<String,Long> contigLengths = new HashMap<String,Long>();
+
+            // first, get the reported contigs from genome object
+            List<String> genomeContigs = genome.getContigIds();
+            List<Long> genomeContigLengths = genome.getContigLengths();
+            int nContigs = 0;
+            if (genomeContigs != null)
+                nContigs = genomeContigs.size();
+            for (int contigPos = 0; contigPos < nContigs; contigPos++) {
+                String contigId = genomeContigs.get(contigPos);
+                if (!contig2prots.containsKey(contigId))
+                    continue;
+                long contigLength = 1;
+                if ((genomeContigLengths != null) &&
+                    (genomeContigLengths.size() > contigPos))
+                    contigLength = genomeContigLengths.get(contigPos).longValue();
+                contigLengths.put(contigId, new Long(contigLength));
+            }
+            // next, add any missing contigs as length 1
+            for (String contigId : realContigs) {
+                if (contigLengths.get(contigId) == null)
+                    contigLengths.put(contigId, new Long(1));
+            }
+
+            // map contigs to "size" (both length and # of proteins)
+            Map<String, Tuple2<Long, Long>> contigSizes = new TreeMap<String, Tuple2<Long, Long>>();
+            for (String contigId : contigLengths.keySet()) {
+                List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
+                Collections.sort(prots, new Comparator<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>() {
+                        @Override
+                        public int compare(Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>> o1,
+                                           Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>> o2) {
+                            return Long.compare(o1.getE2(), o2.getE2());
+                        }
+                    });
+                long contigLength = contigLengths.get(contigId).longValue();
+                contigSizes.put(contigId, new Tuple2<Long, Long>().withE1(contigLength).withE2((long)prots.size()));
+                for (int i=0; i<prots.size(); i++) {
+                    String featId = prots.get(i).getE1();
+                    Tuple2<String, Long> contigFeatIndex = featIdToContigFeatIndex.get(featId);
+                    if (contigFeatIndex != null)
+                        contigFeatIndex.setE2((long)i);
+                }
+            }
+            
+            // run the appropriate annotation program
+            String program = dl.getProgram();
+
+            if (program.equals("rpsblast-2.2.30")) {
+                outFile = runRpsBlast(dbFile, fastaFile);
+                RpsBlastParser.processRpsOutput(outFile, new RpsBlastParser.RpsBlastCallback() {
+                    @Override
+                    public void next(String query,
+                                     String subject,
+                                     int qstart,
+                                     String qseq,
+                                     int sstart,
+                                     String sseq,
+                                     String evalue,
+                                     double bitscore,
+                                     double ident) throws Exception {
+                        Long modelLength = modelNameToLength.get(subject);
+                        if (modelLength == null)
+                            throw new IllegalStateException("Unexpected subject name in prs blast result: " + subject);
+                        int featurePos = Integer.parseInt(query);
+                        String alignedSeq = AlignUtil.removeGapsFromSubject((int)(modelLength.longValue()), qseq, sstart - 1, sseq);
+                        int coverage = 100 - AlignUtil.getGapPercent(alignedSeq);
+                        Tuple2<String, Long> contigIdFeatIndex = posToContigFeatIndex.get(featurePos);
+                        long featureIndex = contigIdFeatIndex.getE2();
+                        Map<String, List<Tuple5<Long, Long, Double, Double, Double>>> domains = contig2prots.get(contigIdFeatIndex.getE1()).get((int)featureIndex).getE5();
+                        List<Tuple5<Long, Long, Double, Double, Double>> places = domains.get(subject);
+                        if (places == null) {
+                            places = new ArrayList<Tuple5<Long, Long, Double, Double, Double>>();
+                            domains.put(subject, places);
+                        }
+                        int qlen = AlignUtil.removeGaps(qseq).length();
+                        places.add(new Tuple5<Long, Long, Double, Double, Double>()
+                                   .withE1((long)qstart)
+                                   .withE2((long)qstart + qlen - 1)
+                                   .withE3(Double.parseDouble(evalue))
+                                   .withE4(bitscore)
+                                   .withE5(coverage / 100.0));
+                    }
+                });
+            }
+            else if (program.equals("hmmscan-3.1b1")) {
+                outFile = runHmmer(dbFile, fastaFile);
+                BufferedReader infile = IO.openReader(outFile.getPath());
+                if (infile==null)
+                    throw new Exception("failed to open HMMER output");
+
+                int featurePos = -1;
+                while (infile.ready()) {
+                    String buffer = infile.readLine();
+                    if (buffer==null) {
+                        infile.close();
+                        break;
+                    }
+                    if (buffer.startsWith("Query:"))
+                        featurePos = StringUtil.atoi(buffer,7);
+                    else if (buffer.startsWith("Domain annotation for each model (and alignments):")) {
+                        buffer = infile.readLine();
+
+                        while (buffer.startsWith(">> ")) {
+                            Long modelLength = null;
+                            String modelName = null;
+                            StringTokenizer st = new StringTokenizer(buffer);
+                            try {
+                                st.nextToken();
+                                modelName = st.nextToken();
+
+                                modelLength = modelNameToLength.get(modelName);
+                                if (modelLength == null)
+                                    throw new IllegalStateException("No recognized domain in HMMER output line '"+buffer+"'");
+                            }
+                            catch (NoSuchElementException e) {
+                                throw new Exception("Format error in HMMER output line '"+buffer+"'");
+                            }
+                            buffer = infile.readLine();
+                            buffer = infile.readLine();
+                            buffer = infile.readLine();
+
+                            if (buffer.startsWith(">> "))
+                                continue;
+
+                            while (buffer.length() > 0) {
+                                st = new StringTokenizer(buffer.substring(7));
+                                try {
+                                    double score = StringUtil.atod(st.nextToken());
+                                    st.nextToken(); // bias
+                                    st.nextToken(); // c-evalue
+
+                                    String eString = st.nextToken();  // i-evalue
+                                    // these numbers are 1-offset, for
+                                    // compatibility with RPS-BLAST parsing code:
+                                    int hStart = StringUtil.atoi(st.nextToken());
+                                    int hLength = StringUtil.atoi(st.nextToken()) - hStart + 1;
+
+                                    st.nextToken(); // bounds
+
+                                    // these numbers are 1-offset, for
+                                    // compatibility with RPS-BLAST parsing code:
+                                    int start = StringUtil.atoi(st.nextToken());
+                                    int l = StringUtil.atoi(st.nextToken()) - start + 1;
+
+                                    // save this hit
+                                    double coverage = (double)hLength / (double)modelLength;
+                                    Tuple2<String, Long> contigIdFeatIndex = posToContigFeatIndex.get(featurePos);
+                                    long featureIndex = contigIdFeatIndex.getE2();
+                                    Map<String, List<Tuple5<Long, Long, Double, Double, Double>>> domains = contig2prots.get(contigIdFeatIndex.getE1()).get((int)featureIndex).getE5();
+                                    List<Tuple5<Long, Long, Double, Double, Double>> places = domains.get(modelName);
+                                    if (places == null) {
+                                        places = new ArrayList<Tuple5<Long, Long, Double, Double, Double>>();
+                                        domains.put(modelName, places);
+                                    }
+                                    places.add(new Tuple5<Long, Long, Double, Double, Double>()
+                                               .withE1((long)start)
+                                               .withE2((long)start + l - 1)
+                                               .withE3(Double.parseDouble(eString))
+                                               .withE4(score)
+                                               .withE5(coverage));
+                                }
+                                catch (NoSuchElementException e) {
+                                    throw new Exception("Format error in HMMER output line '"+buffer+"'");
+                                }
+                                buffer = infile.readLine();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+                throw new Exception("unsupported domain search program "+program);
+
+            DomainAnnotation rv = new DomainAnnotation()
+                .withGenomeRef(genomeRef)
+                .withUsedDmsRef(domainModelSetRef)
+                .withData(contig2prots)
+                .withContigToSizeAndFeatureCount(contigSizes)
+                .withFeatureToContigAndIndex(featIdToContigFeatIndex);
+            return rv;
+        }
+        finally {
+            try { fastaFile.delete(); } catch (Exception ignore) {}
+            if (outFile != null)
+                try { outFile.delete(); } catch (Exception ignore) {}
+        }
+    }
+
+    public static File getBinDir() {
+        File ret = new File(tempDir, "bin");
+        if (!ret.exists())
+            ret.mkdir();
+        return ret;
+    }
+
+    private static File getDomainsDir() {
+        File ret = new File(tempDir, "domains");
+        if (!ret.exists())
+            ret.mkdir();
+        return ret;
+    }
+
+    /**
+       gets all the required library files out of shock.  Only
+       supports publicly readable libraries for now (private libraries
+       cannot currently be uploaded)
+    */
+    public static void prepareLibraryFiles(DomainLibrary dl,
+                                           String shockURL,
+                                           AuthToken token) throws Exception {
+        File dir = getDomainsDir();
+        for (Handle h : dl.getLibraryFiles()) {
+            File f = new File(dir.getPath()+"/"+h.getFileName());
+            if (f.canRead())
+                continue;
+            fromShock(h, shockURL, token, f, false);
+        }
+    }
+
+    private static File getRpsBlastBin() throws Exception {
+        return new File(getBinDir()+"rpsblast");
+    }
+
+    private static File getHmmerBin() throws Exception {
+        return new File(getBinDir()+"hmmscan");
+    }
+
+    /**
+       Runs RPS-BLAST on a file
+    */
+    public static File runRpsBlast(File dbFile, File fastaQuery) throws Exception {
+        File tempOutputFile = File.createTempFile("rps", ".tab", tempDir);
+        CorrectProcess cp = null;
+        ByteArrayOutputStream errBaos = null;
+        Exception err = null;
+        String binPath = getRpsBlastBin().getAbsolutePath();
+        int procExitValue = -1;
+        FileOutputStream fos = new FileOutputStream(tempOutputFile);
+        try {
+            Process p = Runtime.getRuntime().exec(CorrectProcess.arr(binPath,
+                                                                     "-db", dbFile.getAbsolutePath(),
+                                                                     "-query", fastaQuery.getAbsolutePath(),
+                                                                     "-outfmt", RpsBlastParser.OUTPUT_FORMAT_STRING,
+                                                                     "-evalue", MAX_BLAST_EVALUE));
+            errBaos = new ByteArrayOutputStream();
+            cp = new CorrectProcess(p, fos, "", errBaos, "");
+            p.waitFor();
+            errBaos.close();
+            procExitValue = p.exitValue();
+        }
+        catch(Exception ex) {
+            try{
+                errBaos.close();
+            }
+            catch (Exception ignore) {}
+            try{
+                if(cp!=null)
+                    cp.destroy();
+            }
+            catch (Exception ignore) {}
+            err = ex;
+        }
+        finally {
+            try { fos.close(); } catch (Exception ignore) {}
+        }
+        if (errBaos != null) {
+            String err_text = new String(errBaos.toByteArray());
+            if (err_text.length() > 0)
+                err = new Exception("RPS-BLAST: " + err_text, err);
+        }
+        if (procExitValue != 0) {
+            if (err == null)
+                err = new IllegalStateException("RPS-BLAST exit code: " + procExitValue);
+            throw err;
+        }
+        return tempOutputFile;
+    }
+
+    /**
+       Runs HMMER on a file
+    */
+    public static File runHmmer(File dbFile, File fastaQuery) throws Exception {
+        File tempOutputFile = File.createTempFile("hmmer", ".txt", tempDir);
+        CorrectProcess cp = null;
+        ByteArrayOutputStream errBaos = null;
+        Exception err = null;
+        String binPath = getHmmerBin().getAbsolutePath();
+        int procExitValue = -1;
+        FileOutputStream fos = new FileOutputStream(tempOutputFile);
+        try {
+            Process p = Runtime.getRuntime().exec(CorrectProcess.arr(binPath,
+                                                                     "--acc",
+                                                                     "--notextw",
+                                                                     "--cut_tc",
+                                                                     dbFile.getAbsolutePath(),
+                                                                     fastaQuery.getAbsolutePath()));
+            errBaos = new ByteArrayOutputStream();
+            cp = new CorrectProcess(p, fos, "", errBaos, "");
+            p.waitFor();
+            errBaos.close();
+            procExitValue = p.exitValue();
+        }
+        catch(Exception ex) {
+            try{
+                errBaos.close();
+            }
+            catch (Exception ignore) {}
+            try{
+                if(cp!=null)
+                    cp.destroy();
+            }
+            catch (Exception ignore) {}
+            err = ex;
+        }
+        finally {
+            try { fos.close(); } catch (Exception ignore) {}
+        }
+        if (errBaos != null) {
+            String err_text = new String(errBaos.toByteArray());
+            if (err_text.length() > 0)
+                err = new Exception("HMMSCAN: " + err_text, err);
+        }
+        if (procExitValue != 0) {
+            if (err == null)
+                err = new IllegalStateException("HMMSCAN exit code: " + procExitValue);
+            throw err;
+        }
+        return tempOutputFile;
+    }
+
+    public static void processRpsOutput(File results, RpsBlastParser.RpsBlastCallback callback) throws Exception {
+        RpsBlastParser.processRpsOutput(results, callback);
     }
     
     /**
-       calculate statistics to store in metadata, used for quick widget drawing
+       calculate statistics to store in metadata,
+       used for quick widget drawing
     */
     public static Map<String,String> getMetadata(DomainAnnotation ann) throws Exception {
         Map<String,String> metadata = new HashMap<String,String>();
