@@ -36,7 +36,7 @@ public class DomainAnnotationServerTest {
         config = ini.get("DomainAnnotation");
         wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), token);
         wsClient.setAuthAllowedForHttp(true);
-        BasicShockClient shockClient = new BasicShockClient(new URL(config.get("workspace-url")), token);
+        BasicShockClient shockClient = new BasicShockClient(new URL(config.get("shock-url")), token);
         
         // These lines are necessary because we don't want to start linux syslog bridge service
         JsonServerSyslog.setStaticUseSyslog(false);
