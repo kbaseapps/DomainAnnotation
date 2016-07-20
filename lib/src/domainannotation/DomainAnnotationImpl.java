@@ -592,11 +592,11 @@ public class DomainAnnotationImpl {
     }
 
     private static File getRpsBlastBin() throws Exception {
-        return new File(getBinDir()+"rpsblast");
+        return new File(getBinDir()+"rpsblast.linux");
     }
 
     private static File getHmmerBin() throws Exception {
-        return new File(getBinDir()+"hmmscan");
+        return new File(getBinDir()+"hmmscan.linux");
     }
 
     /**
