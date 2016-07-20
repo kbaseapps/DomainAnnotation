@@ -135,14 +135,14 @@ module DomainAnnotation {
     /*
     genome_ref genome - genome for domain annotation process
     dms_ref dms_ref - set of domain models that will be searched in defined genome
-    string out_workspace - output workspace
-    string out_result_id - id of resulting object of type DomainAnnotation
+    string ws - workspace
+    string output_result_id - id of resulting object of type DomainAnnotation
     */
     typedef structure {
-        genome_ref genome;
+        genome_ref genome_ref;
         dms_ref dms_ref;
-        string out_workspace;
-        domain_annotation_ref out_result_id;
+        string ws;
+        domain_annotation_ref output_result_id;
     } SearchDomainsInput;
 
     /*

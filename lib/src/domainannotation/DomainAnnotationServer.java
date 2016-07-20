@@ -28,8 +28,7 @@ import us.kbase.workspace.WorkspaceClient;
 /**
  * <p>Original spec-file module name: DomainAnnotation</p>
  * <pre>
- * A KBase module: DomainAnnotation
- * This sample module contains one small method - filter_contigs.
+ * This is a port of the KBaseGeneFamilies module to the SDK.
  * </pre>
  */
 public class DomainAnnotationServer extends JsonServerServlet {
@@ -37,87 +36,47 @@ public class DomainAnnotationServer extends JsonServerServlet {
 
     //BEGIN_CLASS_HEADER
     private final String wsUrl;
+    private final String shockUrl;
     //END_CLASS_HEADER
 
     public DomainAnnotationServer() throws Exception {
         super("DomainAnnotation");
         //BEGIN_CONSTRUCTOR
         wsUrl = config.get("workspace-url");
+        shockUrl = config.get("shock-url");
         //END_CONSTRUCTOR
     }
 
     /**
-     * <p>Original spec-file function name: filter_contigs</p>
+     * <p>Original spec-file function name: search_domains</p>
      * <pre>
-     * Filter contigs in a ContigSet by DNA length
+     * Search for domains in a genome
      * </pre>
-     * @param   params   instance of type {@link domainannotation.FilterContigsParams FilterContigsParams}
-     * @return   instance of type {@link domainannotation.FilterContigsResults FilterContigsResults}
+     * @param   input   instance of type {@link domainannotation.SearchDomainsInput SearchDomainsInput}
+     * @return   parameter "output" of type {@link domainannotation.SearchDomainsOutput SearchDomainsOutput}
      */
-    @JsonServerMethod(rpc = "DomainAnnotation.filter_contigs", async=true)
-    public FilterContigsResults filterContigs(FilterContigsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        FilterContigsResults returnVal = null;
-        //BEGIN filter_contigs
-        
-        System.out.println("Starting filter contigs method.");
-        
-        if (params.getWorkspace() == null)
-            throw new IllegalStateException("Parameter workspace is not set in input arguments");
-        String workspaceName = params.getWorkspace();
-        if (params.getContigsetId() == null)
-            throw new IllegalStateException("Parameter contigset_id is not set in input arguments");
-        String contigsetId = params.getContigsetId();
-        if (params.getMinLength() == null)
-            throw new IllegalStateException("Parameter min_length is not set in input arguments");
-        long minLength = params.getMinLength();
-        if (minLength < 0)
-            throw new IllegalStateException("min_length parameter shouldn't be negative (" + minLength + ")");
-        
-        WorkspaceClient wc = new WorkspaceClient(new URL(this.wsUrl), authPart);
-        wc.setAuthAllowedForHttp(true);
-        ContigSet contigSet;
-        try {
-            contigSet = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(
-                    workspaceName + "/" + contigsetId))).get(0).getData().asClassInstance(ContigSet.class);
-        } catch (Exception ex) {
-            throw new IllegalStateException("Error loading original ContigSet object from workspace", ex);
-        }
-        
-        System.out.println("Got ContigSet data.");
+    @JsonServerMethod(rpc = "DomainAnnotation.search_domains", async=true)
+    public SearchDomainsOutput searchDomains(SearchDomainsInput input, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        SearchDomainsOutput returnVal = null;
+        //BEGIN search_domains
+        returnVal = DomainAnnotationImpl.run(wsUrl,shockUrl,authPart,input);
+        //END search_domains
+        return returnVal;
+    }
 
-        int nInitialContigs = contigSet.getContigs().size();
-        List<Contig> newContigs = new ArrayList<Contig>();
-        for(Contig ctg : contigSet.getContigs()) {
-            if (ctg.getLength() >= minLength)
-                newContigs.add(ctg);
-        }
-        int nContigsRemaining = newContigs.size();
-        contigSet.setContigs(newContigs);
-        
-        System.out.println("Filtered ContigSet to " + nContigsRemaining + " contigs out of " + nInitialContigs);
-        
-        Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String,String>> info;
-        try {
-            info = wc.saveObjects(new SaveObjectsParams().withWorkspace(workspaceName)
-                .withObjects(Arrays.asList(new ObjectSaveData()
-                .withType("KBaseGenomes.ContigSet").withName(contigsetId)
-                .withData(new UObject(contigSet))
-                .withProvenance((List<ProvenanceAction>)jsonRpcContext.getProvenance())))).get(0);
-        } catch (Exception ex) {
-            throw new IllegalStateException("Error saving filtered ContigSet object to workspace", ex);
-        }
-                        
-        System.out.println("saved:" + info);
-        
-        String newRef = info.getE7() + "/" + info.getE1() + "/" + info.getE5();
-        returnVal = new FilterContigsResults().withNewContigsetRef(newRef)
-                .withNInitialContigs((long)nInitialContigs)
-                .withNContigsRemoved((long)nInitialContigs - (long)nContigsRemaining)
-                .withNContigsRemaining((long)nContigsRemaining);
-        
-        System.out.println("returning:" + returnVal);
-        
-        //END filter_contigs
+    /**
+     * <p>Original spec-file function name: version</p>
+     * <pre>
+     * returns version number of service
+     * </pre>
+     * @return   parameter "version" of String
+     */
+    @JsonServerMethod(rpc = "DomainAnnotation.version", async=true)
+    public String version(RpcContext jsonRpcContext) throws Exception {
+        String returnVal = null;
+        //BEGIN version
+        returnVal = "DomainAnnotation-1.0."+serialVersionUID;
+        //END version
         return returnVal;
     }
 

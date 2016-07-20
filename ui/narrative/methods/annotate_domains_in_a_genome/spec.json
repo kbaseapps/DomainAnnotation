@@ -12,7 +12,7 @@
     },
     "parameters": [ 
 	{
-	    "id" : "genome",
+	    "id" : "genome_ref",
 	    "optional" : false,
 	    "advanced" : false,
 	    "allow_multiple" : false,
@@ -59,7 +59,7 @@
 	    }
 	},
 	{
-	    "id" : "out_result_id",
+	    "id" : "output_result_id",
 	    "optional" : false,
 	    "advanced" : false,
 	    "allow_multiple" : false,
@@ -78,8 +78,8 @@
 	    "method": "search_domains",
 	    "input_mapping": [
 		{
-		    "input_parameter": "genome",
-		    "target_property": "genome",
+		    "input_parameter": "genome_ref",
+		    "target_property": "genome_ref",
 		    "target_type_transform": "ref"
 		},
 		{
@@ -88,11 +88,11 @@
 		},
 		{
 		    "narrative_system_variable": "workspace",
-		    "target_property": "out_workspace"
+		    "target_property": "ws"
 		},
 		{
-		    "input_parameter": "out_result_id",
-		    "target_property": "out_result_id",
+		    "input_parameter": "output_result_id",
+		    "target_property": "output_result_id",
 		    "generated_value": {
 			"prefix": "domains_"
 		    }
@@ -100,8 +100,8 @@
 	    ],
 	    "output_mapping": [
                 {
-                    "service_method_output_path": [0, "out_result_id"],
-                    "target_property": "out_result_id"
+                    "service_method_output_path": [0, "output_result_id"],
+                    "target_property": "output_result_id"
                 },
                 {
                     "service_method_output_path": [0, "report_name"],

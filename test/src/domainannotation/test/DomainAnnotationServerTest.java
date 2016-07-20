@@ -14,9 +14,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import domainannotation.FilterContigsParams;
-import domainannotation.FilterContigsResults;
-import domainannotation.DomainAnnotationServer;
+import domainannotation.*;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;

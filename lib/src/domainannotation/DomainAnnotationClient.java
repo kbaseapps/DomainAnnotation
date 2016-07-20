@@ -15,8 +15,7 @@ import us.kbase.common.service.UnauthorizedException;
 /**
  * <p>Original spec-file module name: DomainAnnotation</p>
  * <pre>
- * A KBase module: DomainAnnotation
- * This sample module contains one small method - filter_contigs.
+ * This is a port of the KBaseGeneFamilies module to the SDK.
  * </pre>
  */
 public class DomainAnnotationClient {
@@ -140,20 +139,36 @@ public class DomainAnnotationClient {
     }
 
     /**
-     * <p>Original spec-file function name: filter_contigs</p>
+     * <p>Original spec-file function name: search_domains</p>
      * <pre>
-     * Filter contigs in a ContigSet by DNA length
+     * Search for domains in a genome
      * </pre>
-     * @param   params   instance of type {@link domainannotation.FilterContigsParams FilterContigsParams}
-     * @return   instance of type {@link domainannotation.FilterContigsResults FilterContigsResults}
+     * @param   input   instance of type {@link domainannotation.SearchDomainsInput SearchDomainsInput}
+     * @return   parameter "output" of type {@link domainannotation.SearchDomainsOutput SearchDomainsOutput}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public FilterContigsResults filterContigs(FilterContigsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public SearchDomainsOutput searchDomains(SearchDomainsInput input, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(params);
-        TypeReference<List<FilterContigsResults>> retType = new TypeReference<List<FilterContigsResults>>() {};
-        List<FilterContigsResults> res = caller.jsonrpcCall("DomainAnnotation.filter_contigs", args, retType, true, true, jsonRpcContext);
+        args.add(input);
+        TypeReference<List<SearchDomainsOutput>> retType = new TypeReference<List<SearchDomainsOutput>>() {};
+        List<SearchDomainsOutput> res = caller.jsonrpcCall("DomainAnnotation.search_domains", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: version</p>
+     * <pre>
+     * returns version number of service
+     * </pre>
+     * @return   parameter "version" of String
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String version(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("DomainAnnotation.version", args, retType, true, false, jsonRpcContext);
         return res.get(0);
     }
 }

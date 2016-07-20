@@ -24,7 +24,7 @@ suggestions:
       []
 
 parameters:
-  genome :
+  genome_ref :
     ui-name : |
       Genome
     short-hint : |
@@ -40,7 +40,7 @@ parameters:
     long-hint  : |
       Set of domain models or libraries to use
 
-  out_result_id :
+  output_result_id :
     ui-name : |
       Output DomainAnnotation Name
     short-hint : |
