@@ -116,7 +116,7 @@
                     "target_property": "workspaceID"
                 },
                 {
-                    "input_parameter": "out_result_id",
+                    "input_parameter": "output_result_id",
                     "target_property": "domainAnnotationID"
                 }
 	    ]
