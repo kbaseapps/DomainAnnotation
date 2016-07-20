@@ -24,7 +24,7 @@ suggestions:
       []
 
 parameters:
-  genome_ref :
+  genome :
     ui-name : |
       Genome
     short-hint : |
