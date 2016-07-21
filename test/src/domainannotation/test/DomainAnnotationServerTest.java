@@ -23,7 +23,7 @@ public class DomainAnnotationServerTest {
     private static AuthToken token = null;
     private static Map<String, String> config = null;
     private static WorkspaceClient wsClient = null;
-    private static BasicShockClient shockClient = null;
+    private static String shockURL = null;
     private static String wsName = null;
     private static DomainAnnotationServer impl = null;
     
@@ -36,7 +36,7 @@ public class DomainAnnotationServerTest {
         config = ini.get("DomainAnnotation");
         wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), token);
         wsClient.setAuthAllowedForHttp(true);
-        BasicShockClient shockClient = new BasicShockClient(new URL(config.get("shock-url")), token);
+        shockURL = config.get("shock-url");
         
         // These lines are necessary because we don't want to start linux syslog bridge service
         JsonServerSyslog.setStaticUseSyslog(false);
@@ -75,14 +75,9 @@ public class DomainAnnotationServerTest {
         for (String id : domainLibMap.values()) {
             DomainLibrary dl = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
             System.out.println("Testing shock files for "+dl.getSource()+" "+dl.getVersion());
-            for (Handle h : dl.getLibraryFiles()) {
-                System.out.println("  testing "+h.getFileName()+", "+h.getShockId());
-                File f = new File("/tmp/"+h.getFileName());
-                OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
-                shockClient.getFile(new ShockNodeId(h.getShockId()),os);
-                os.close();
-                assertTrue(f.length() > 0);
-            }
+            DomainAnnotationImpl.prepareLibraryFiles(dl,
+                                                     shockURL,
+                                                     token);
         }
     }
     
