@@ -17,15 +17,25 @@ import us.kbase.auth.AuthToken;
 import us.kbase.shock.client.*;
 import us.kbase.common.service.*;
 import us.kbase.workspace.*;
-
+import us.kbase.kbasegenomes.*;
 
 public class DomainAnnotationServerTest {
     private static AuthToken token = null;
     private static Map<String, String> config = null;
     private static WorkspaceClient wsClient = null;
     private static String shockURL = null;
+    private static String wsURL = null;
     private static String wsName = null;
     private static DomainAnnotationServer impl = null;
+    private static final String genomeWsName = "KBasePublicGenomesV4";
+    private static final String domainWsName = "KBasePublicGeneDomains";
+    private static final String domainLibraryType = "KBaseGeneFamilies.DomainLibrary";
+    private static final String domainModelSetType = "KBaseGeneFamilies.DomainModelSet";
+    private static final String domainAnnotationType = "KBaseGeneFamilies.DomainAnnotation";
+    private static final String ecoliRef = genomeWsName+"/kb|g.0";
+    private static final String smartRef = domainWsName+"/SMART-only";
+    private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
+    private static final String allLibsRef = domainWsName+"/All";
     
     @BeforeClass
     public static void init() throws Exception {
@@ -34,7 +44,8 @@ public class DomainAnnotationServerTest {
         File deploy = new File(configFilePath);
         Ini ini = new Ini(deploy);
         config = ini.get("DomainAnnotation");
-        wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), token);
+        wsURL = config.get("workspace-url");
+        wsClient = new WorkspaceClient(new URL(wsURL), token);
         wsClient.setAuthAllowedForHttp(true);
         shockURL = config.get("shock-url");
         
@@ -65,10 +76,7 @@ public class DomainAnnotationServerTest {
     */
     @Test
     public void checkDMS() throws Exception {
-        String domainWsName = "KBasePublicGeneDomains";
-        String allRef = domainWsName+"/All";
-        
-        DomainModelSet dms = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(allRef))).get(0).getData().asClassInstance(DomainModelSet.class);
+        DomainModelSet dms = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(allLibsRef))).get(0).getData().asClassInstance(DomainModelSet.class);
 
         Map<String,String> domainLibMap = dms.getDomainLibs();
 
@@ -79,6 +87,48 @@ public class DomainAnnotationServerTest {
                                                      shockURL,
                                                      token);
         }
+    }
+
+    /**
+       Check that we can read E coli genome
+    */
+    @Test
+    public void getEColi() throws Exception {
+        Genome genome = null;
+
+        System.out.println("Reading genome from WS");
+        genome = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(ecoliRef))).get(0).getData().asClassInstance(Genome.class);
+
+        System.out.println(genome.getScientificName());
+        assertEquals(genome.getScientificName(), "Escherichia coli K12");
+    }
+
+    /**
+       Check that we can get the SMART-only DomainModelSet from the
+       public workspace.
+    */
+    @Test
+    public void getSMART() throws Exception {
+        DomainModelSet smart = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(smartRef))).get(0).getData().asClassInstance(DomainModelSet.class);
+
+        assertEquals(smart.getSetName(),"SMART-only");
+    }
+
+    /**
+       Check that we can annotate E. coli with SMART.  This is
+       fairly fast.
+    */
+    @Test
+    public void searchEColiPSSM() throws Exception {
+        SearchDomainsInput input = new SearchDomainsInput()
+            .withGenomeRef(ecoliRef)
+            .withDmsRef(smartRef)
+            .withWs(wsName)
+            .withOutputResultId("test");
+        SearchDomainsOutput output = DomainAnnotationImpl.run(wsURL,
+                                                              shockURL,
+                                                              token,
+                                                              input);
     }
     
     @AfterClass
