@@ -5,8 +5,6 @@ MAINTAINER John-Marc Chandonia
 # Insert instructions here to install
 # any required dependencies for your module.
 
-# get a particular version of FEBA code (for provenance/stability):
-
 RUN mkdir -p /kb/module/work/bin
 
 WORKDIR /kb/module/work/bin
