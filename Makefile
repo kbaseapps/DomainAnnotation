@@ -20,8 +20,14 @@ ANT = $(KB_RUNTIME)/ant/bin/ant
 default: compile build-startup-script build-executable-script build-test-script
 
 compile-java-typespec-data:
+	gen_java_types -S spec/spec/KBaseGenomes.spec -s lib/src/
+	gen_java_types -S spec/spec/KBaseGeneFamilies.spec -s lib/src/
 	gen_java_types -S spec/spec/KBaseCollections.spec -s lib/src/
 	gen_java_types -S spec/spec/KBaseReport.spec -s lib/src/
+	rm lib/src/us/kbase/kbasegenomes/KBaseGenomesClient.java
+	rm lib/src/us/kbase/kbasegenomes/KBaseGenomesServer.java
+	rm lib/src/us/kbase/kbasegenefamilies/KBaseGeneFamiliesClient.java
+	rm lib/src/us/kbase/kbasegenefamilies/KBaseGeneFamiliesServer.java
 	rm lib/src/us/kbase/kbasecollections/KBaseCollectionsClient.java
 	rm lib/src/us/kbase/kbasecollections/KBaseCollectionsServer.java
 	rm lib/src/us/kbase/kbasereport/KBaseReportClient.java
@@ -68,4 +74,3 @@ test:
 
 clean:
 	rm -rfv $(LBIN_DIR)
-	
