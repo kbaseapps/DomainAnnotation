@@ -68,6 +68,9 @@ commit=${git.commit}</echo>
       </fileset>
     </copy>
     <jar destfile="${dist}/${jar.file}" basedir="${classes}"/>
+      <manifest>
+        <attribute name="Main-Class" value="domainannotation.DomainModelLibPreparation"/>
+      </manifest>
     <delete dir="${classes}"/>
   </target>
 

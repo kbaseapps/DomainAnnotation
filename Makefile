@@ -33,6 +33,15 @@ compile-java-typespec-data:
 	rm lib/src/us/kbase/kbasereport/KBaseReportClient.java
 	rm lib/src/us/kbase/kbasereport/KBaseReportServer.java
 
+download-thirdparty-bins:
+        ./download_3rd_party_bins.sh
+
+prepare-thirdparty-dbs: download-thirdparty-bins
+        ./prepare_3rd_party_dbs.sh
+
+prepare-library-objects: prepare-thirdparty-dbs compile
+        java -jar dist/$(SERVICE_NAME).jar
+
 compile:
 	kb-sdk compile $(SPEC_FILE) \
 		--out $(LIB_DIR) \
