@@ -40,7 +40,7 @@ prepare-thirdparty-dbs: download-thirdparty-bins
 	./prepare_3rd_party_dbs.sh
 
 prepare-library-objects: prepare-thirdparty-dbs compile
-	java -jar dist/$(SERVICE_NAME).jar
+	java -jar dist/$(SERVICE_CAPS).jar
 
 compile:
 	kb-sdk compile $(SPEC_FILE) \

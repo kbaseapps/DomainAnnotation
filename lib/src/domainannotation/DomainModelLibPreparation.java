@@ -28,39 +28,39 @@ public class DomainModelLibPreparation {
 	
         parseDomainLibrary("COGs-CDD-3.12",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "/kb/dev_container/modules/gene_families/data/db/Cog",
-                           "/kb/dev_container/modules/gene_families/data/db/cddid.tbl.gz",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cog",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
                            "3.12",
                            "2014-10-03",
                            "COG",
                            "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=");
         parseDomainLibrary("CDD-NCBI-curated-3.12",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "/kb/dev_container/modules/gene_families/data/db/Cdd",
-                           "/kb/dev_container/modules/gene_families/data/db/cddid.tbl.gz",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cdd",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
                            "3.12",
                            "2014-10-03",
                            "cd",
                            "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=");
         parseDomainLibrary("SMART-6.0-CDD-3.12",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "/kb/dev_container/modules/gene_families/data/db/Smart",
-                           "/kb/dev_container/modules/gene_families/data/db/cddid.tbl.gz",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Smart",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
                            "6.0",
                            "2014-10-03",
                            "smart",
                            "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
         parseDomainLibrary("Pfam-27.0",
                            "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam27.0/Pfam-A.hmm.gz",
-                           "/kb/dev_container/modules/gene_families/data/db/Pfam-A.hmm",
-                           "/kb/dev_container/modules/gene_families/data/db/Pfam-A.full.gz",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.hmm",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.full.gz",
                            "27.0",
                            "2013-03-14",
                            "PF",
                            "http://pfam.xfam.org/family/");
         parseDomainLibrary("TIGRFAMs-15.0",
                            "ftp://ftp.jcvi.org/pub/data/TIGRFAMs/TIGRFAMs_15.0_HMM.LIB.gz",
-                           "/kb/dev_container/modules/gene_families/data/db/TIGRFAMs_15.0_HMM.LIB",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/TIGRFAMs_15.0_HMM.LIB",
                            null,
                            "15.0",
                            "2014-09-17",
@@ -236,10 +236,13 @@ public class DomainModelLibPreparation {
         // store them all in Shock
         AuthToken token = getDevToken();
         String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
+        if (configFilePath==null)
+            throw new Exception("Need to set KB_DEPLOYMENT_CONFIG");
+        
         File deploy = new File(configFilePath);
         Ini ini = new Ini(deploy);
-        Map<String, String> config = ini.get("DomainAnnotation");
-        String shockURL = config.get("shock-url");
+        Map<String, String> config = ini.get("global");
+        String shockURL = config.get("shock_url");
         BasicShockClient client = new BasicShockClient(new URL(shockURL), token);
         for (Handle h : libraryFiles) {
             File f = new File(libDir.getPath()+"/"+h.getFileName());
@@ -400,10 +403,12 @@ public class DomainModelLibPreparation {
         WorkspaceClient rv = null;
 
         String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
+        if (configFilePath==null)
+            throw new Exception("Need to set KB_DEPLOYMENT_CONFIG");
         File deploy = new File(configFilePath);
         Ini ini = new Ini(deploy);
-        Map<String, String> config = ini.get("DomainAnnotation");
-        String wsURL = config.get("workspace-url");
+        Map<String, String> config = ini.get("global");
+        String wsURL = config.get("workspace_url");
 	
         if (token==null)
             rv = new WorkspaceClient(new URL(wsURL));
