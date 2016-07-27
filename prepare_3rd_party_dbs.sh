@@ -1,8 +1,7 @@
 #!/bin/bash
-cd ./data
-if [ ! -d tmp ]; then
-    mkdir tmp
-fi
+cd data
+mkdir -p db
+mkdir -p tmp
 cd ./tmp
 unamestr=`uname`
 
