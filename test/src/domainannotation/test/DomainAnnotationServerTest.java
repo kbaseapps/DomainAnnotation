@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.net.URL;
 
-import org.junit.Test;
+import junit.framework.Assert;
 import static junit.framework.Assert.*;
 
 import org.ini4j.Ini;
@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import domainannotation.*;
+import us.kbase.kbasereport.*;
 import us.kbase.auth.AuthToken;
 import us.kbase.shock.client.*;
 import us.kbase.common.service.*;
@@ -123,12 +124,18 @@ public class DomainAnnotationServerTest {
         SearchDomainsInput input = new SearchDomainsInput()
             .withGenomeRef(ecoliRef)
             .withDmsRef(smartRef)
-            .withWs(wsName)
+            .withWs(getWsName())
             .withOutputResultId("test");
         SearchDomainsOutput output = DomainAnnotationImpl.run(wsURL,
                                                               shockURL,
                                                               token,
                                                               input);
+        Assert.assertNotNull(output);
+        String reportRef = output.getReportRef();
+        Assert.assertNotNull(reportRef);
+        Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
+        Assert.assertNotNull(report);
+        System.out.println(report.getTextMessage());   
     }
     
     @AfterClass
