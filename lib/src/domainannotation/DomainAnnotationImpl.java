@@ -561,7 +561,7 @@ public class DomainAnnotationImpl {
     }
 
     public static File getBinDir() {
-        File ret = new File(tempDir, "bin");
+        File ret = new File("/kb/module/dependencies/bin");
         if (!ret.exists())
             ret.mkdir();
         return ret;
@@ -592,11 +592,11 @@ public class DomainAnnotationImpl {
     }
 
     private static File getRpsBlastBin() throws Exception {
-        return new File(getBinDir()+"rpsblast.linux");
+        return new File(getBinDir()+"/rpsblast.linux");
     }
 
     private static File getHmmerBin() throws Exception {
-        return new File(getBinDir()+"hmmscan.linux");
+        return new File(getBinDir()+"/hmmscan.linux");
     }
 
     /**
