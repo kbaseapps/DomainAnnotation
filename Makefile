@@ -13,11 +13,14 @@ EXECUTABLE_SCRIPT_NAME = run_$(SERVICE_CAPS)_async_job.sh
 STARTUP_SCRIPT_NAME = start_server.sh
 TEST_SCRIPT_NAME = run_tests.sh
 KB_RUNTIME ?= /kb/runtime
+ANT_HOME ?= $(KB_RUNTIME)/ant
 ANT = $(KB_RUNTIME)/ant/bin/ant
 
 .PHONY: test
 
-default: compile build-startup-script build-executable-script build-test-script
+default: compile
+
+all: compile build build-startup-script build-executable-script build-test-script
 
 compile-java-typespec-data:
 	gen_java_types -S spec/spec/KBaseGenomes.spec -s lib/src/
@@ -52,6 +55,10 @@ compile:
 		--java \
 		--javasrv \
 		--javapackage .;
+	$(ANT) war -Djars.dir=$(JARS_DIR)
+	chmod +x $(SCRIPTS_DIR)/entrypoint.sh
+
+build:
 	$(ANT) war -Djars.dir=$(JARS_DIR)
 	chmod +x $(SCRIPTS_DIR)/entrypoint.sh
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientCaller;
 import us.kbase.common.service.JsonClientException;
@@ -20,6 +21,7 @@ import us.kbase.common.service.UnauthorizedException;
  */
 public class DomainAnnotationClient {
     private JsonClientCaller caller;
+    private String serviceVersion = null;
 
 
     /** Constructs a client with a custom URL and no user credentials.
@@ -138,6 +140,14 @@ public class DomainAnnotationClient {
         caller.setFileForNextRpcResponse(f);
     }
 
+    public String getServiceVersion() {
+        return this.serviceVersion;
+    }
+
+    public void setServiceVersion(String newValue) {
+        this.serviceVersion = newValue;
+    }
+
     /**
      * <p>Original spec-file function name: search_domains</p>
      * <pre>
@@ -152,7 +162,7 @@ public class DomainAnnotationClient {
         List<Object> args = new ArrayList<Object>();
         args.add(input);
         TypeReference<List<SearchDomainsOutput>> retType = new TypeReference<List<SearchDomainsOutput>>() {};
-        List<SearchDomainsOutput> res = caller.jsonrpcCall("DomainAnnotation.search_domains", args, retType, true, true, jsonRpcContext);
+        List<SearchDomainsOutput> res = caller.jsonrpcCall("DomainAnnotation.search_domains", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 
@@ -168,7 +178,14 @@ public class DomainAnnotationClient {
     public String version(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("DomainAnnotation.version", args, retType, true, false, jsonRpcContext);
+        List<String> res = caller.jsonrpcCall("DomainAnnotation.version", args, retType, true, false, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};
+        List<Map<String, Object>> res = caller.jsonrpcCall("DomainAnnotation.status", args, retType, true, false, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 }

@@ -1,6 +1,8 @@
 package domainannotation;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
@@ -33,6 +35,9 @@ import us.kbase.workspace.WorkspaceClient;
  */
 public class DomainAnnotationServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
+    private static final String version = "0.0.1";
+    private static final String gitUrl = "git@github.com:jmchandonia/DomainAnnotation.git";
+    private static final String gitCommitHash = "1ac8f1c896eb980ab4a39994d89d304a6083f56e";
 
     //BEGIN_CLASS_HEADER
     private final String wsUrl;
@@ -77,6 +82,19 @@ public class DomainAnnotationServer extends JsonServerServlet {
         //BEGIN version
         returnVal = "DomainAnnotation-1.0."+serialVersionUID;
         //END version
+        return returnVal;
+    }
+    @JsonServerMethod(rpc = "DomainAnnotation.status")
+    public Map<String, Object> status() {
+        Map<String, Object> returnVal = null;
+        //BEGIN_STATUS
+        returnVal = new LinkedHashMap<String, Object>();
+        returnVal.put("state", "OK");
+        returnVal.put("message", "");
+        returnVal.put("version", version);
+        returnVal.put("git_url", gitUrl);
+        returnVal.put("git_commit_hash", gitCommitHash);
+        //END_STATUS
         return returnVal;
     }
 
