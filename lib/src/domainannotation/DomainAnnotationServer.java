@@ -36,8 +36,8 @@ import us.kbase.workspace.WorkspaceClient;
 public class DomainAnnotationServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
-    private static final String gitUrl = "git@github.com:jmchandonia/DomainAnnotation.git";
-    private static final String gitCommitHash = "1ac8f1c896eb980ab4a39994d89d304a6083f56e";
+    private static final String gitUrl = "git@github.com:kbaseapps/DomainAnnotation.git";
+    private static final String gitCommitHash = "7b485f2ae502a348ee7fd0f42a79f07dced6f31b";
 
     //BEGIN_CLASS_HEADER
     private final String wsUrl;

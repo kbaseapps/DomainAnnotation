@@ -107,7 +107,7 @@ public class DomainAnnotationImpl {
                                  File f,
                                  boolean gzip) throws Exception {
 
-        System.err.println("shock cmd equivalent to "+"/usr/bin/curl -k -X GET "+shockUrl+" -H \"Authorization: OAuth "+token.toString()+"\""+(gzip ? "| /bin/gzip" : ""));
+        // System.err.println("shock cmd equivalent to "+"/usr/bin/curl -k -X GET "+shockUrl+" -H \"Authorization: OAuth "+token.toString()+"\""+(gzip ? "| /bin/gzip" : ""));
         
         BasicShockClient shockClient = new BasicShockClient(new URL(shockUrl), token);
         ShockNode sn = shockClient.getNode(new ShockNodeId(h.getShockId()));

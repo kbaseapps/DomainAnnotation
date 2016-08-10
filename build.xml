@@ -35,7 +35,7 @@
     <include name="slf4j/slf4j-api-1.7.7.jar"/>
     <include name="syslog4j/syslog4j-0.9.46.jar"/>
     <include name="kbase/workspace/WorkspaceClient-0.2.0.jar"/>
-    <include name="kbase/shock/shock-client-0.0.10.jar" />
+    <include name="kbase/shock/shock-client-0.0.13.jar" />
     <include name="kbase/genomes/kbase-genomes-20140411.jar"/>
     <include name="strbio/strbio-1.3.jar"/>
     <include name="apache_commons/http/httpclient-4.3.1.jar"/>
