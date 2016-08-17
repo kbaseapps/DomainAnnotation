@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Annotate Domains in a Genome
+name: Annotate Domains in a Genome Annotation
 tooltip: |
-  Annotate a genome with protein domains from widely used domain libraries.
+  Annotate a genome annotation with protein domains from widely used domain libraries.
 screenshots: []
 
 icon: domains-red.png
@@ -19,18 +19,18 @@ suggestions:
       []
   methods:
     related:
-      [annotate_genome_generic, annotate_contigset]
+      []
     next:
       []
 
 parameters:
-  genome_ref :
+  genome_annotation_ref :
     ui-name : |
-      Genome
+      Genome Annotation
     short-hint : |
-      Genome to annotate
+      Genome annotation to annotate
     long-hint  : |
-      Select a Genome from your data store to annotate with domains.  It must already have annotated genes
+      Select a Genome Annotation from your data store to annotate with domains.  It must already have annotated genes
 
   dms_ref :
     ui-name : |
@@ -42,7 +42,7 @@ parameters:
 
   output_result_id :
     ui-name : |
-      Output DomainAnnotation Name
+      Output GenomeAnnotation Name
     short-hint : |
       This object with annotated domains will be stored in your data store
     long-hint  : |
@@ -50,9 +50,9 @@ parameters:
 
 
 description : |
-   <p>This method identifies protein domains from widely used domain libraries.  It requires a Genome as input, which must already have annotated genes (e.g., those identified using the <a data-method-id=<D2>reannotate_microbial_genome<D3>>Annotate Microbial Genome</a> or <a data-method-id=<D2>annotate_contigset<D3>>Annotate Microbial Contigs</a> methods).</p>
+   <p>This method identifies protein domains from widely used domain libraries.  It requires a Genome Annotation as input, which must already have annotated genes (e.g., those identified using the <a data-method-id=<D2>reannotate_microbial_genome<D3>>Annotate Microbial Genome</a> or <a data-method-id=<D2>annotate_contigset<D3>>Annotate Microbial Contigs</a> methods).</p>
     
-    <p>The user must choose one of the following sets of models with which to annotate their Genome:</p>
+    <p>The user must choose one of the following sets of models with which to annotate domains in their genome:</p>
     
     <ul>
     <li><b>COGs</b> (clusters of orthologous groups, <a href="http://www.ncbi.nlm.nih.gov/COG/">http://www.ncbi.nlm.nih.gov/COG/</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.12.</li>
