@@ -197,10 +197,10 @@ public class DomainAnnotationImpl {
        Takes a domainModelSetRef (in the SearchDomainsInput) as input,
        which is searched as individual libraries.
     */
-    public static SearchDomainsOutput run(String wsURL,
-                                          String shockURL,
-                                          AuthToken token,
-                                          SearchDomainsInput input) throws Exception {
+    public static SearchDomainsOutput searchDomains(String wsURL,
+                                                    String shockURL,
+                                                    AuthToken token,
+                                                    SearchDomainsInput input) throws Exception {
 
         WorkspaceClient wc = createWsClient(wsURL,token);
 
@@ -280,6 +280,95 @@ public class DomainAnnotationImpl {
         return rv;
     }
 
+    /**
+       Runs a domain search on a single genome, returning annotations.
+       Takes a domainModelSetRef (in the SearchDomainsInput) as input,
+       which is searched as individual libraries.
+    */
+    public static SearchDomainsGAOutput searchDomainsGA(String wsURL,
+                                                        String shockURL,
+                                                        AuthToken token,
+                                                        SearchDomainsGAInput input) throws Exception {
+
+        WorkspaceClient wc = createWsClient(wsURL,token);
+
+        // turn local into absolute paths
+        String genomeAnnotationRef = input.getGenomeAnnotationRef();
+        if (genomeAnnotationRef.indexOf("/") == -1)
+            genomeAnnotationRef = input.getWs()+"/"+genomeAnnotationRef;
+        String domainModelSetRef = input.getDmsRef();
+        if (domainModelSetRef.indexOf("/") == -1)
+            domainModelSetRef = input.getWs()+"/"+domainModelSetRef;
+        
+        // for provenance
+        String methodName = "DomainAnnotation.search_domains_ga";
+        List<UObject> methodParams = Arrays.asList(new UObject(input));
+        
+        // start building report
+        String reportText = "Search Domains output:\n";
+        List<String> warnings = null;
+        List<WorkspaceObject> objects = new ArrayList<WorkspaceObject>();
+
+        //run annotation
+        DomainAnnotation da = null;
+        String outputGenomeAnnotationRef = null;
+        try {
+            reportText += "Getting DomainModelSet from storage.\n";
+            final DomainModelSet dms = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(domainModelSetRef))).get(0).getData().asClassInstance(DomainModelSet.class);
+            
+            reportText += "Getting Proteins in GenomeAnnotation from storage.\n";
+            URL callbackUrl = new URL(System.getenv("SDK_CALLBACK_URL"));
+            GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
+            gaClient.setIsInsecureHttpConnectionAllowed(true);
+            InputsGetProteins igp = new InputsGetProteins().withRef(genomeAnnotationRef);
+            Map<String,ProteinData> proteinMap = gaClient.getProteins(igp);
+            
+            // collect one set of annotations per library
+            Map<String,String> domainLibMap = dms.getDomainLibs();
+            for (String id : domainLibMap.values()) {
+                reportText += "Running domain search against library "+id;
+                DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
+                DomainAnnotation results = runDomainSearchGA(proteinMap, domainModelSetRef, dl, shockURL, token);
+
+                // combine all the results into one object
+                if (da==null)
+                    da = results;
+                else
+                    combineData(results,da);
+            }
+
+            // save final GenomeAnnotation object
+            // need API from Matt to do this
+            outputGenomeAnnotationRef = null;
+
+            objects.add(new WorkspaceObject()
+                        .withRef(outputGenomeAnnotationRef)
+                        .withDescription("Genome with Domain Annotations"));
+        }
+        catch (Exception e) {
+            reportText += "\n\nERROR: "+e.getMessage();
+            warnings = new ArrayList<String>();
+            warnings.add("ERROR: "+e.getMessage());
+        }
+
+        // generate report with list of objects created
+        String[] report = makeReport(wc,
+                                     input.getWs(),
+                                     reportText,
+                                     warnings,
+                                     objects,
+                                     makeProvenance("Domain Annotation Report",
+                                                    methodName,
+                                                    methodParams));
+
+        SearchDomainsOutput rv = new SearchDomainsGAOutput()
+            .withOutputResultId(outputGenomeAnnotationRef)
+            .withReportName(report[0])
+            .withReportRef(report[1]);
+
+        return rv;
+    }
+    
     /**
        Runs a domain search on a single genome, returning annotations.
        This works on a single library, but needs metadata (references
