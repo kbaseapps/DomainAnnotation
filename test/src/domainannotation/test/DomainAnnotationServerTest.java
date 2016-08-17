@@ -28,12 +28,14 @@ public class DomainAnnotationServerTest {
     private static String wsURL = null;
     private static String wsName = null;
     private static DomainAnnotationServer impl = null;
-    private static final String genomeWsName = "KBasePublicGenomesV4";
+    private static final String genomeWsName = "KBasePublicGenomesV5";
+    private static final String genomeAnnotationWsName = "8020";
     private static final String domainWsName = "KBasePublicGeneDomains";
     private static final String domainLibraryType = "KBaseGeneFamilies.DomainLibrary";
     private static final String domainModelSetType = "KBaseGeneFamilies.DomainModelSet";
     private static final String domainAnnotationType = "KBaseGeneFamilies.DomainAnnotation";
     private static final String ecoliRef = genomeWsName+"/kb|g.0";
+    private static final String ecoliGARef = genomeAnnotationWsName+"/511145_RefSeq";
     private static final String smartRef = domainWsName+"/SMART-only";
     private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
     private static final String allLibsRef = domainWsName+"/All";
@@ -136,6 +138,29 @@ public class DomainAnnotationServerTest {
         Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
         Assert.assertNotNull(report);
         System.out.println(report.getTextMessage());   
+    }
+    
+    /**
+       Check that we can annotate E. coli with SMART.  This is
+       fairly fast.
+    */
+    @Test
+    public void searchEColiGAPSSM() throws Exception {
+        SearchDomainsGAInput input = new SearchDomainsGAInput()
+            .withGenomeAnnotationRef(ecoliGARef)
+            .withDmsRef(smartRef)
+            .withWs(getWsName())
+            .withOutputResultId("test");
+        SearchDomainsGAOutput output = DomainAnnotationImpl.searchDomainsGA(wsURL,
+                                                                            shockURL,
+                                                                            token,
+                                                                            input);
+        Assert.assertNotNull(output);
+        String reportRef = output.getReportRef();
+        Assert.assertNotNull(reportRef);
+        Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
+        Assert.assertNotNull(report);
+        System.out.println(report.getTextMessage());
     }
     
     @AfterClass
