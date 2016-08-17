@@ -23,7 +23,7 @@ import us.kbase.common.service.Tuple7;
  *         Should the Genome object have a list of feature ids? (in
  *         addition to having a list of feature_refs)
  *         Should the Genome object contain a list of contig_ids too?
- * @optional quality close_genomes analysis_events features source_id source contigs contig_ids publications md5 taxonomy gc_content complete dna_size num_contigs contig_lengths contigset_ref
+ * @optional assembly_ref quality close_genomes analysis_events features source_id source contigs contig_ids publications md5 taxonomy gc_content complete dna_size num_contigs contig_lengths contigset_ref
  * @metadata ws gc_content as GC content
  * @metadata ws taxonomy as Taxonomy
  * @metadata ws md5 as MD5
@@ -60,6 +60,7 @@ import us.kbase.common.service.Tuple7;
     "publications",
     "features",
     "contigset_ref",
+    "assembly_ref",
     "quality",
     "close_genomes",
     "analysis_events"
@@ -102,6 +103,8 @@ public class Genome {
     private List<Feature> features;
     @JsonProperty("contigset_ref")
     private java.lang.String contigsetRef;
+    @JsonProperty("assembly_ref")
+    private java.lang.String assemblyRef;
     /**
      * <p>Original spec-file type: Genome_quality_measure</p>
      * <pre>
@@ -387,6 +390,21 @@ public class Genome {
         return this;
     }
 
+    @JsonProperty("assembly_ref")
+    public java.lang.String getAssemblyRef() {
+        return assemblyRef;
+    }
+
+    @JsonProperty("assembly_ref")
+    public void setAssemblyRef(java.lang.String assemblyRef) {
+        this.assemblyRef = assemblyRef;
+    }
+
+    public Genome withAssemblyRef(java.lang.String assemblyRef) {
+        this.assemblyRef = assemblyRef;
+        return this;
+    }
+
     /**
      * <p>Original spec-file type: Genome_quality_measure</p>
      * <pre>
@@ -458,7 +476,7 @@ public class Genome {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((("Genome"+" [id=")+ id)+", scientificName=")+ scientificName)+", domain=")+ domain)+", geneticCode=")+ geneticCode)+", dnaSize=")+ dnaSize)+", numContigs=")+ numContigs)+", contigs=")+ contigs)+", contigLengths=")+ contigLengths)+", contigIds=")+ contigIds)+", source=")+ source)+", sourceId=")+ sourceId)+", md5=")+ md5)+", taxonomy=")+ taxonomy)+", gcContent=")+ gcContent)+", complete=")+ complete)+", publications=")+ publications)+", features=")+ features)+", contigsetRef=")+ contigsetRef)+", quality=")+ quality)+", closeGenomes=")+ closeGenomes)+", analysisEvents=")+ analysisEvents)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((("Genome"+" [id=")+ id)+", scientificName=")+ scientificName)+", domain=")+ domain)+", geneticCode=")+ geneticCode)+", dnaSize=")+ dnaSize)+", numContigs=")+ numContigs)+", contigs=")+ contigs)+", contigLengths=")+ contigLengths)+", contigIds=")+ contigIds)+", source=")+ source)+", sourceId=")+ sourceId)+", md5=")+ md5)+", taxonomy=")+ taxonomy)+", gcContent=")+ gcContent)+", complete=")+ complete)+", publications=")+ publications)+", features=")+ features)+", contigsetRef=")+ contigsetRef)+", assemblyRef=")+ assemblyRef)+", quality=")+ quality)+", closeGenomes=")+ closeGenomes)+", analysisEvents=")+ analysisEvents)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

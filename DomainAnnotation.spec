@@ -158,6 +158,38 @@ module DomainAnnotation {
     Search for domains in a genome
     */
     funcdef search_domains(SearchDomainsInput input) returns (SearchDomainsOutput output) authentication required;
+    
+    /* 
+    @id ws KBaseGenomeAnnotations.GenomeAnnotation
+    */
+    typedef string genome_annotation_ref;
+    
+    /*
+    genome_annotation_ref genome - genome annotaion for domain annotation process
+    dms_ref dms_ref - set of domain models that will be searched in defined genome
+    string ws - workspace
+    string output_result_id - id of resulting object of type GenomeAnnotation
+    */
+    typedef structure {
+        genome_annotation_ref genome_annotation_ref;
+        dms_ref dms_ref;
+        string ws;
+        genome_annotation_ref output_result_id;
+    } SearchDomainsGAInput;
+
+    /*
+    Output is a report, and a GenomeAnnotation object
+    */
+    typedef structure {
+	genome_annotation_ref output_result_id;
+	string report_name;
+	string report_ref;
+    } SearchDomainsGAOutput;
+
+    /*
+    Search for domains in a genome annotation
+    */
+    funcdef search_domains_ga(SearchDomainsGAInput input) returns (SearchDomainsGAOutput output) authentication required;
 
     /* returns version number of service */
     funcdef version() returns (string version);

@@ -25,7 +25,7 @@ import us.kbase.common.service.Tuple7;
  *     Should sequence be in separate objects too?
  *     We may want to add additional fields for other CDM functions
  *     (e.g., atomic regulons, coexpressed fids, co_occurring fids,...)
- *     @optional orthologs quality feature_creation_event md5 location function protein_translation protein_families subsystems publications subsystem_data aliases annotations regulon_data atomic_regulons coexpressed_fids co_occurring_fids dna_sequence protein_translation_length dna_sequence_length
+ *     @optional orthologs quality feature_creation_event md5 location function ontology_terms protein_translation protein_families subsystems publications subsystem_data aliases annotations regulon_data atomic_regulons coexpressed_fids co_occurring_fids dna_sequence protein_translation_length dna_sequence_length
  * </pre>
  * 
  */
@@ -36,6 +36,7 @@ import us.kbase.common.service.Tuple7;
     "location",
     "type",
     "function",
+    "ontology_terms",
     "md5",
     "protein_translation",
     "dna_sequence",
@@ -65,6 +66,8 @@ public class Feature {
     private java.lang.String type;
     @JsonProperty("function")
     private java.lang.String function;
+    @JsonProperty("ontology_terms")
+    private Map<String, Map<String, OntologyData>> ontologyTerms;
     @JsonProperty("md5")
     private java.lang.String md5;
     @JsonProperty("protein_translation")
@@ -181,6 +184,21 @@ public class Feature {
 
     public Feature withFunction(java.lang.String function) {
         this.function = function;
+        return this;
+    }
+
+    @JsonProperty("ontology_terms")
+    public Map<String, Map<String, OntologyData>> getOntologyTerms() {
+        return ontologyTerms;
+    }
+
+    @JsonProperty("ontology_terms")
+    public void setOntologyTerms(Map<String, Map<String, OntologyData>> ontologyTerms) {
+        this.ontologyTerms = ontologyTerms;
+    }
+
+    public Feature withOntologyTerms(Map<String, Map<String, OntologyData>> ontologyTerms) {
+        this.ontologyTerms = ontologyTerms;
         return this;
     }
 
@@ -508,7 +526,7 @@ public class Feature {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((((("Feature"+" [id=")+ id)+", location=")+ location)+", type=")+ type)+", function=")+ function)+", md5=")+ md5)+", proteinTranslation=")+ proteinTranslation)+", dnaSequence=")+ dnaSequence)+", proteinTranslationLength=")+ proteinTranslationLength)+", dnaSequenceLength=")+ dnaSequenceLength)+", publications=")+ publications)+", subsystems=")+ subsystems)+", proteinFamilies=")+ proteinFamilies)+", aliases=")+ aliases)+", orthologs=")+ orthologs)+", annotations=")+ annotations)+", subsystemData=")+ subsystemData)+", regulonData=")+ regulonData)+", atomicRegulons=")+ atomicRegulons)+", coexpressedFids=")+ coexpressedFids)+", coOccurringFids=")+ coOccurringFids)+", quality=")+ quality)+", featureCreationEvent=")+ featureCreationEvent)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((((("Feature"+" [id=")+ id)+", location=")+ location)+", type=")+ type)+", function=")+ function)+", ontologyTerms=")+ ontologyTerms)+", md5=")+ md5)+", proteinTranslation=")+ proteinTranslation)+", dnaSequence=")+ dnaSequence)+", proteinTranslationLength=")+ proteinTranslationLength)+", dnaSequenceLength=")+ dnaSequenceLength)+", publications=")+ publications)+", subsystems=")+ subsystems)+", proteinFamilies=")+ proteinFamilies)+", aliases=")+ aliases)+", orthologs=")+ orthologs)+", annotations=")+ annotations)+", subsystemData=")+ subsystemData)+", regulonData=")+ regulonData)+", atomicRegulons=")+ atomicRegulons)+", coexpressedFids=")+ coexpressedFids)+", coOccurringFids=")+ coOccurringFids)+", quality=")+ quality)+", featureCreationEvent=")+ featureCreationEvent)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

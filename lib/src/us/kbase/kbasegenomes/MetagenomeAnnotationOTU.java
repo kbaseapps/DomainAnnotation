@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *         string source_id - ID used for OTU in metagenome source
  *         string source - source OTU ID
  *         list<MetagenomeAnnotationOTUFunction> functions - list of functions in OTU
- *         
  *     @searchable ws_subset id name source_id source functions.[*].(id,abundance,confidence,functional_role)
  * </pre>
  * 
