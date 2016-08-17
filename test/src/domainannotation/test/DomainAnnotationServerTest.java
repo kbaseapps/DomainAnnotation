@@ -126,10 +126,10 @@ public class DomainAnnotationServerTest {
             .withDmsRef(smartRef)
             .withWs(getWsName())
             .withOutputResultId("test");
-        SearchDomainsOutput output = DomainAnnotationImpl.run(wsURL,
-                                                              shockURL,
-                                                              token,
-                                                              input);
+        SearchDomainsOutput output = DomainAnnotationImpl.searchDomains(wsURL,
+                                                                        shockURL,
+                                                                        token,
+                                                                        input);
         Assert.assertNotNull(output);
         String reportRef = output.getReportRef();
         Assert.assertNotNull(reportRef);

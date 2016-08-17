@@ -37,6 +37,8 @@ import org.strbio.IO;
 import org.strbio.io.*;
 import org.strbio.util.*;
 
+import genomeannotationapi.*;
+
 import static java.lang.ProcessBuilder.Redirect;
 
 /**
@@ -235,7 +237,7 @@ public class DomainAnnotationImpl {
             for (String id : domainLibMap.values()) {
                 reportText += "Running domain search against library "+id;
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
-                DomainAnnotation results = runDomainSearch(genome, genomeRef, domainModelSetRef, dl, shockURL, token);
+                DomainAnnotation results = runDomainSearch(genome, genomeRef, null, domainModelSetRef, dl, shockURL, token);
 
                 // combine all the results into one object
                 if (da==null)
@@ -328,7 +330,7 @@ public class DomainAnnotationImpl {
             for (String id : domainLibMap.values()) {
                 reportText += "Running domain search against library "+id;
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
-                DomainAnnotation results = runDomainSearchGA(proteinMap, domainModelSetRef, dl, shockURL, token);
+                DomainAnnotation results = runDomainSearch(null, null, proteinMap, domainModelSetRef, dl, shockURL, token);
 
                 // combine all the results into one object
                 if (da==null)
@@ -361,7 +363,7 @@ public class DomainAnnotationImpl {
                                                     methodName,
                                                     methodParams));
 
-        SearchDomainsOutput rv = new SearchDomainsGAOutput()
+        SearchDomainsGAOutput rv = new SearchDomainsGAOutput()
             .withOutputResultId(outputGenomeAnnotationRef)
             .withReportName(report[0])
             .withReportRef(report[1]);
@@ -376,11 +378,11 @@ public class DomainAnnotationImpl {
     */
     public static DomainAnnotation runDomainSearch(Genome genome,
                                                    String genomeRef,
+                                                   Map<String,ProteinData> proteinMap,
                                                    String domainModelSetRef,
                                                    DomainLibrary dl,
                                                    String shockURL,
                                                    AuthToken token) throws Exception {
-        String genomeName = genome.getScientificName();
         File dbFile = new File(getDomainsDir().getPath()+"/"+dl.getLibraryFiles().get(0).getFileName());
         File fastaFile = File.createTempFile("proteome", ".fasta", tempDir);
         File outFile = null;
@@ -410,73 +412,106 @@ public class DomainAnnotationImpl {
             // write out each protein sequentially into a FASTA file,
             // keeping track of its (first) position in the genome
             try {
-                List<Feature> features = genome.getFeatures();
-                int pos = -1;
-                for (Feature feat : features) {
-                    pos++;
-                    String seq = feat.getProteinTranslation();
-                    if (feat.getLocation().size() < 1)
-                        continue;
-                    Tuple4<String, Long, String, Long> loc = feat.getLocation().get(0);
-                    String contigId = loc.getE1();
-                    String featId = feat.getId();
-                    if ((contigId==null) || (featId==null))
-                        continue;
-                    if (seq != null && !seq.isEmpty()) {
+                if (genome != null) {
+                    List<Feature> features = genome.getFeatures();
+                    int pos = -1;
+                    for (Feature feat : features) {
+                        pos++;
+                        String seq = feat.getProteinTranslation();
+                        if (feat.getLocation().size() < 1)
+                            continue;
+                        Tuple4<String, Long, String, Long> loc = feat.getLocation().get(0);
+                        String contigId = loc.getE1();
+                        String featId = feat.getId();
+                        if ((contigId==null) || (featId==null))
+                            continue;
+                        if (seq != null && !seq.isEmpty()) {
+                            fw.write("" + pos, seq);
+                            Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);
+                            posToContigFeatIndex.put(pos, contigFeatIndex);
+                            featIdToContigFeatIndex.put(featId, contigFeatIndex);
+                            protCount++;
+                            realContigs.add(contigId);
+                        }
+                        List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
+                        if (prots == null) {
+                            prots = new ArrayList<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>();
+                            contig2prots.put(contigId, prots);
+                        }
+                        long start = loc.getE3().equals("-") ? (loc.getE2() - loc.getE4() + 1) : loc.getE2();
+                        // fake the stop site based on protein length
+                        long stop;
+                        if (seq != null)
+                            stop = start - 1 + ((seq.length()+1) * 3);
+                        else {
+                            // correct calculation for end of 1st exon:
+                            stop = loc.getE3().equals("-") ? loc.getE2() : (loc.getE2() + loc.getE4() - 1);
+                        }
+                        long dir = loc.getE3().equals("-") ? -1 : +1;
+                        prots.add(new Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>()
+                                  .withE1(feat.getId())
+                                  .withE2(start)
+                                  .withE3(stop)
+                                  .withE4(dir)
+                                  .withE5(new TreeMap<String, List<Tuple5<Long, Long, Double, Double, Double>>>()));
+                    }
+                }
+                else {
+                    int pos = -1;
+                    for (String proteinID : proteinMap.keySet()) {
+                        ProteinData pd = proteinMap.get(proteinID);
+                        String seq = pd.getProteinAminoAcidSequence();
+                        String contigId = "1";
+                        if ((seq==null) || (seq.isEmpty()))
+                            continue;
+                        pos++;
                         fw.write("" + pos, seq);
                         Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);
                         posToContigFeatIndex.put(pos, contigFeatIndex);
-                        featIdToContigFeatIndex.put(featId, contigFeatIndex);
+                        featIdToContigFeatIndex.put(proteinID, contigFeatIndex);
                         protCount++;
                         realContigs.add(contigId);
+                        List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
+                        if (prots == null) {
+                            prots = new ArrayList<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>();
+                            contig2prots.put(contigId, prots);
+                        }
+                        long start = 0;
+                        // fake the stop site based on protein length
+                        long stop = start - 1 + ((seq.length()+1) * 3);
                     }
-                    List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
-                    if (prots == null) {
-                        prots = new ArrayList<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>();
-                        contig2prots.put(contigId, prots);
-                    }
-                    long start = loc.getE3().equals("-") ? (loc.getE2() - loc.getE4() + 1) : loc.getE2();
-                    // fake the stop site based on protein length
-                    long stop;
-                    if (seq != null)
-                        stop = start - 1 + ((seq.length()+1) * 3);
-                    else {
-                        // correct calculation for end of 1st exon:
-                        stop = loc.getE3().equals("-") ? loc.getE2() : (loc.getE2() + loc.getE4() - 1);
-                    }
-                    long dir = loc.getE3().equals("-") ? -1 : +1;
-                    prots.add(new Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>()
-                              .withE1(feat.getId())
-                              .withE2(start)
-                              .withE3(stop)
-                              .withE4(dir)
-                              .withE5(new TreeMap<String, List<Tuple5<Long, Long, Double, Double, Double>>>()));
                 }
             }
             finally {
                 try { fw.close(); } catch (Exception ignore) {}
             }
-            if (protCount == 0)
-                throw new IllegalStateException("There are no protein translations in genome " + genomeName + " (" + genomeRef + ")");
+            if (protCount == 0) {
+                if (genome != null)
+                    throw new IllegalStateException("There are no protein translations in genome " + genome.getScientificName() + " (" + genomeRef + ")");
+                else
+                    throw new IllegalStateException("There are no proteins defined");
+            }
 
             // make contig-based indices
             HashMap<String,Long> contigLengths = new HashMap<String,Long>();
 
             // first, get the reported contigs from genome object
-            List<String> genomeContigs = genome.getContigIds();
-            List<Long> genomeContigLengths = genome.getContigLengths();
-            int nContigs = 0;
-            if (genomeContigs != null)
-                nContigs = genomeContigs.size();
-            for (int contigPos = 0; contigPos < nContigs; contigPos++) {
-                String contigId = genomeContigs.get(contigPos);
-                if (!contig2prots.containsKey(contigId))
-                    continue;
-                long contigLength = 1;
-                if ((genomeContigLengths != null) &&
-                    (genomeContigLengths.size() > contigPos))
-                    contigLength = genomeContigLengths.get(contigPos).longValue();
-                contigLengths.put(contigId, new Long(contigLength));
+            if (genome != null) {
+                List<String> genomeContigs = genome.getContigIds();
+                List<Long> genomeContigLengths = genome.getContigLengths();
+                int nContigs = 0;
+                if (genomeContigs != null)
+                    nContigs = genomeContigs.size();
+                for (int contigPos = 0; contigPos < nContigs; contigPos++) {
+                    String contigId = genomeContigs.get(contigPos);
+                    if (!contig2prots.containsKey(contigId))
+                        continue;
+                    long contigLength = 1;
+                    if ((genomeContigLengths != null) &&
+                        (genomeContigLengths.size() > contigPos))
+                        contigLength = genomeContigLengths.get(contigPos).longValue();
+                    contigLengths.put(contigId, new Long(contigLength));
+                }
             }
             // next, add any missing contigs as length 1
             for (String contigId : realContigs) {
