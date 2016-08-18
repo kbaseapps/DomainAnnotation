@@ -319,11 +319,17 @@ public class DomainAnnotationImpl {
             final DomainModelSet dms = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(domainModelSetRef))).get(0).getData().asClassInstance(DomainModelSet.class);
             
             reportText += "Getting Proteins in GenomeAnnotation from storage.\n";
+            
+            reportText += "Callback URL env variable is "+System.getenv("SDK_CALLBACK_URL");
             URL callbackUrl = new URL(System.getenv("SDK_CALLBACK_URL"));
+            reportText += "Callback URL is "+callbackUrl;
             GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
+            reportText += "got GA client";
             gaClient.setIsInsecureHttpConnectionAllowed(true);
+            reportText += "GA client is not null";
             InputsGetProteins igp = new InputsGetProteins().withRef(genomeAnnotationRef);
             Map<String,ProteinData> proteinMap = gaClient.getProteins(igp);
+            reportText += "got proteins from GA client";
             
             // collect one set of annotations per library
             Map<String,String> domainLibMap = dms.getDomainLibs();

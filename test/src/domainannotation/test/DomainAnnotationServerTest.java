@@ -29,13 +29,12 @@ public class DomainAnnotationServerTest {
     private static String wsName = null;
     private static DomainAnnotationServer impl = null;
     private static final String genomeWsName = "KBasePublicGenomesV5";
-    private static final String genomeAnnotationWsName = "8020";
     private static final String domainWsName = "KBasePublicGeneDomains";
     private static final String domainLibraryType = "KBaseGeneFamilies.DomainLibrary";
     private static final String domainModelSetType = "KBaseGeneFamilies.DomainModelSet";
     private static final String domainAnnotationType = "KBaseGeneFamilies.DomainAnnotation";
     private static final String ecoliRef = genomeWsName+"/kb|g.0";
-    private static final String ecoliGARef = genomeAnnotationWsName+"/511145_RefSeq";
+    private static final String ecoliGARef = "8020/27/2";
     private static final String smartRef = domainWsName+"/SMART-only";
     private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
     private static final String allLibsRef = domainWsName+"/All";
