@@ -36,7 +36,7 @@ public class ProteinData {
     @JsonProperty("protein_function")
     private java.lang.String proteinFunction;
     @JsonProperty("protein_aliases")
-    private List<String> proteinAliases;
+    private Map<String, List<String>> proteinAliases;
     @JsonProperty("protein_md5")
     private java.lang.String proteinMd5;
     @JsonProperty("protein_domain_locations")
@@ -89,16 +89,16 @@ public class ProteinData {
     }
 
     @JsonProperty("protein_aliases")
-    public List<String> getProteinAliases() {
+    public Map<String, List<String>> getProteinAliases() {
         return proteinAliases;
     }
 
     @JsonProperty("protein_aliases")
-    public void setProteinAliases(List<String> proteinAliases) {
+    public void setProteinAliases(Map<String, List<String>> proteinAliases) {
         this.proteinAliases = proteinAliases;
     }
 
-    public ProteinData withProteinAliases(List<String> proteinAliases) {
+    public ProteinData withProteinAliases(Map<String, List<String>> proteinAliases) {
         this.proteinAliases = proteinAliases;
         return this;
     }
