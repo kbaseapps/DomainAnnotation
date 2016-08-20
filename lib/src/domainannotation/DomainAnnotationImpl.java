@@ -238,7 +238,7 @@ public class DomainAnnotationImpl {
                 reportText += "Running domain search against library "+id;
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
                 DomainAnnotation results = runDomainSearch(genome, genomeRef, null, domainModelSetRef, dl, shockURL, token);
-
+                
                 // combine all the results into one object
                 if (da==null)
                     da = results;
@@ -320,16 +320,9 @@ public class DomainAnnotationImpl {
             
             reportText += "Getting Proteins in GenomeAnnotation from storage.\n";
             
-            reportText += "Callback URL env variable is "+System.getenv("SDK_CALLBACK_URL");
-            URL callbackUrl = new URL(System.getenv("SDK_CALLBACK_URL"));
-            reportText += "Callback URL is "+callbackUrl;
-            GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
-            reportText += "got GA client";
+            GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(new URL(System.getenv("SDK_CALLBACK_URL")), token);
             gaClient.setIsInsecureHttpConnectionAllowed(true);
-            reportText += "GA client is not null";
-            InputsGetProteins igp = new InputsGetProteins().withRef(genomeAnnotationRef);
-            Map<String,ProteinData> proteinMap = gaClient.getProteins(igp);
-            reportText += "got proteins from GA client";
+            Map<String,ProteinData> proteinMap = gaClient.getProteins(new InputsGetProteins().withRef(genomeAnnotationRef));
             
             // collect one set of annotations per library
             Map<String,String> domainLibMap = dms.getDomainLibs();
@@ -347,11 +340,13 @@ public class DomainAnnotationImpl {
 
             // save final GenomeAnnotation object
             // need API from Matt to do this
-            outputGenomeAnnotationRef = null;
+            /*
+            outputGenomeAnnotationRef = ?
 
             objects.add(new WorkspaceObject()
                         .withRef(outputGenomeAnnotationRef)
                         .withDescription("Genome with Domain Annotations"));
+            */
         }
         catch (Exception e) {
             reportText += "\n\nERROR: "+e.getMessage();
@@ -467,6 +462,7 @@ public class DomainAnnotationImpl {
                     for (String proteinID : proteinMap.keySet()) {
                         ProteinData pd = proteinMap.get(proteinID);
                         String seq = pd.getProteinAminoAcidSequence();
+                        // fake contig since we don't get that by default from GA-API
                         String contigId = "1";
                         if ((seq==null) || (seq.isEmpty()))
                             continue;
@@ -482,9 +478,17 @@ public class DomainAnnotationImpl {
                             prots = new ArrayList<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>();
                             contig2prots.put(contigId, prots);
                         }
-                        long start = 0;
+                        // fake start site since we don't get that by default from GA-API
+                        long start = pos + 1;
                         // fake the stop site based on protein length
                         long stop = start - 1 + ((seq.length()+1) * 3);
+                        // fake dir as always 1
+                        prots.add(new Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>()
+                                  .withE1(proteinID)
+                                  .withE2(start)
+                                  .withE3(stop)
+                                  .withE4(1L)
+                                  .withE5(new TreeMap<String, List<Tuple5<Long, Long, Double, Double, Double>>>()));
                     }
                 }
             }
@@ -551,6 +555,7 @@ public class DomainAnnotationImpl {
 
             if (program.equals("rpsblast-2.2.30")) {
                 outFile = runRpsBlast(dbFile, fastaFile);
+                try {
                 RpsBlastParser.processRpsOutput(outFile, new RpsBlastParser.RpsBlastCallback() {
                     @Override
                     public void next(String query,
@@ -564,7 +569,7 @@ public class DomainAnnotationImpl {
                                      double ident) throws Exception {
                         Long modelLength = modelNameToLength.get(subject);
                         if (modelLength == null)
-                            throw new IllegalStateException("Unexpected subject name in prs blast result: " + subject);
+                            throw new IllegalStateException("Unexpected subject name in rps blast result: " + subject);
                         int featurePos = Integer.parseInt(query);
                         String alignedSeq = AlignUtil.removeGapsFromSubject((int)(modelLength.longValue()), qseq, sstart - 1, sseq);
                         int coverage = 100 - AlignUtil.getGapPercent(alignedSeq);
@@ -585,6 +590,10 @@ public class DomainAnnotationImpl {
                                    .withE5(coverage / 100.0));
                     }
                 });
+                }
+                catch (Exception ee) {
+                    ee.printStackTrace();
+                }
             }
             else if (program.equals("hmmscan-3.1b1")) {
                 outFile = runHmmer(dbFile, fastaFile);
@@ -676,11 +685,14 @@ public class DomainAnnotationImpl {
                 throw new Exception("unsupported domain search program "+program);
 
             DomainAnnotation rv = new DomainAnnotation()
-                .withGenomeRef(genomeRef)
                 .withUsedDmsRef(domainModelSetRef)
                 .withData(contig2prots)
                 .withContigToSizeAndFeatureCount(contigSizes)
                 .withFeatureToContigAndIndex(featIdToContigFeatIndex);
+
+            if (genomeRef != null)
+                rv.setGenomeRef(genomeRef);
+
             return rv;
         }
         finally {
@@ -876,8 +888,6 @@ public class DomainAnnotationImpl {
     */
     public static void combineData(DomainAnnotation source,
                                    DomainAnnotation target) throws Exception {
-        if (!source.getGenomeRef().equals(target.getGenomeRef()))
-            throw new IllegalArgumentException("Error: DomainAnnotation objects from different genomes can't be combined");
         if (!source.getUsedDmsRef().equals(target.getUsedDmsRef()))
             throw new IllegalArgumentException("Error: DomainAnnotation objects from different domain model sets can't be combined");
 
