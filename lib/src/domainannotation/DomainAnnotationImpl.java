@@ -709,7 +709,7 @@ public class DomainAnnotationImpl {
         return ret;
     }
 
-    private static File getDomainsDir() {
+    public static File getDomainsDir() {
         File ret = new File(tempDir, "domains");
         if (!ret.exists())
             ret.mkdir();

@@ -74,7 +74,7 @@ public class DomainAnnotationServerTest {
 
     /**
        Check that we can get all the All Libraries DomainModelSet from the
-       public workspace.
+       public workspace, WITHOUT logging in
     */
     @Test
     public void checkDMS() throws Exception {
@@ -85,16 +85,21 @@ public class DomainAnnotationServerTest {
         for (String id : domainLibMap.values()) {
             DomainLibrary dl = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
             System.out.println("Testing shock files for "+dl.getSource()+" "+dl.getVersion());
-            DomainAnnotationImpl.prepareLibraryFiles(dl,
-                                                     shockURL,
-                                                     token);
+            File dir = DomainAnnotationImpl.getDomainsDir();
+            for (Handle h : dl.getLibraryFiles()) {
+                File f = new File(dir.getPath()+"/"+h.getFileName());
+                if (f.canRead())
+                    f.delete(); // to be sure we get new ones
+                System.out.println("getting shock id "+h.getShockId());
+                DomainAnnotationImpl.fromShock(h, shockURL, null, f, false);
+            }
         }
     }
 
     /**
        Check that we can read E coli genome
-    */
     @Test
+    */
     public void getEColi() throws Exception {
         Genome genome = null;
 
@@ -119,8 +124,8 @@ public class DomainAnnotationServerTest {
     /**
        Check that we can annotate E. coli with SMART.  This is
        fairly fast.
-    */
     @Test
+    */
     public void searchEColiPSSM() throws Exception {
         SearchDomainsInput input = new SearchDomainsInput()
             .withGenomeRef(ecoliRef)
@@ -142,8 +147,8 @@ public class DomainAnnotationServerTest {
     /**
        Check that we can annotate E. coli with SMART.  This is
        fairly fast.
-    */
     @Test
+    */
     public void searchEColiGAPSSM() throws Exception {
         SearchDomainsGAInput input = new SearchDomainsGAInput()
             .withGenomeAnnotationRef(ecoliGARef)

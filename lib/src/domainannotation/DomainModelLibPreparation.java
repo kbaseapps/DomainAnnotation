@@ -250,8 +250,11 @@ public class DomainModelLibPreparation {
             ShockNode sn = client.addNode(is,f.getName(),null);
             String shockNodeID = sn.getId().getId();
             String user = token.getClientId();
-            // this makes it world-readable:
+            // this used to make nodes world-readable;
+            // seems to do nothing now, but probably doesn't hurt to keep?
             client.removeFromNodeAcl(sn.getId(), Arrays.asList(user), ShockACLType.READ);
+            // this is the new API to make nodes world-readable:
+            client.setPubliclyReadable(sn.getId(), true);
             h.setShockId(shockNodeID);
         }
 	
