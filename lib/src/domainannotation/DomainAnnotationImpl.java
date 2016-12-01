@@ -206,13 +206,8 @@ public class DomainAnnotationImpl {
 
         WorkspaceClient wc = createWsClient(wsURL,token);
 
-        // turn local into absolute paths
         String genomeRef = input.getGenomeRef();
-        if (genomeRef.indexOf("/") == -1)
-            genomeRef = input.getWs()+"/"+genomeRef;
         String domainModelSetRef = input.getDmsRef();
-        if (domainModelSetRef.indexOf("/") == -1)
-            domainModelSetRef = input.getWs()+"/"+domainModelSetRef;
         
         // for provenance
         String methodName = "DomainAnnotation.search_domains";
@@ -296,11 +291,7 @@ public class DomainAnnotationImpl {
 
         // turn local into absolute paths
         String genomeAnnotationRef = input.getGenomeAnnotationRef();
-        if (genomeAnnotationRef.indexOf("/") == -1)
-            genomeAnnotationRef = input.getWs()+"/"+genomeAnnotationRef;
         String domainModelSetRef = input.getDmsRef();
-        if (domainModelSetRef.indexOf("/") == -1)
-            domainModelSetRef = input.getWs()+"/"+domainModelSetRef;
         
         // for provenance
         String methodName = "DomainAnnotation.search_domains_ga";
