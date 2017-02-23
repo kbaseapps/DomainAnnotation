@@ -208,6 +208,16 @@ public class DomainAnnotationImpl {
 
         String genomeRef = input.getGenomeRef();
         String domainModelSetRef = input.getDmsRef();
+
+        // check that all inputs are OK
+        if (genomeRef==null)
+            throw new IllegalArgumentException("searchDomains:  genome reference cannot be null");
+        if (domainModelSetRef==null)
+            throw new IllegalArgumentException("searchDomains:  domain model set reference cannot be null");
+        if (input.getWs()==null)
+            throw new IllegalArgumentException("searchDomains:  input workspace cannot be null");
+        if (input.getOutputResultId()==null)
+            throw new IllegalArgumentException("searchDomains:  output result name cannot be null");
         
         // for provenance
         String methodName = "DomainAnnotation.search_domains";
@@ -254,6 +264,7 @@ public class DomainAnnotationImpl {
                         .withDescription("Domain Annotations"));
         }
         catch (Exception e) {
+            System.err.println("ERROR: "+e.getMessage());
             reportText += "\n\nERROR: "+e.getMessage();
             warnings = new ArrayList<String>();
             warnings.add("ERROR: "+e.getMessage());

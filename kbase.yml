@@ -2,13 +2,13 @@ module-name:
     DomainAnnotation
 
 module-description:
-    A KBase module
+    This module finds domains (from public protein domain libraries such as COGs and Pfam) in proteins in a user-supplied genome.
 
 service-language:
     java
 
 module-version:
-    0.0.1
+    1.0.0
 
 owners:
     [jmc]

@@ -76,7 +76,7 @@ public class DomainAnnotationServerTest {
        Check that we can get all the All Libraries DomainModelSet from the
        public workspace, WITHOUT logging in
     */
-    @Test
+    // @Test
     public void checkDMS() throws Exception {
         DomainModelSet dms = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(allLibsRef))).get(0).getData().asClassInstance(DomainModelSet.class);
 
@@ -124,8 +124,8 @@ public class DomainAnnotationServerTest {
     /**
        Check that we can annotate E. coli with SMART.  This is
        fairly fast.
-    @Test
     */
+    @Test
     public void searchEColiPSSM() throws Exception {
         SearchDomainsInput input = new SearchDomainsInput()
             .withGenomeRef(ecoliRef)
