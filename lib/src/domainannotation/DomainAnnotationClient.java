@@ -53,6 +53,20 @@ public class DomainAnnotationClient {
         caller = new JsonClientCaller(url, user, password);
     }
 
+    /** Constructs a client with a custom URL
+     * and a custom authorization service URL.
+     * @param url the URL of the service.
+     * @param user the user name.
+     * @param password the password for the user name.
+     * @param auth the URL of the authorization server.
+     * @throws UnauthorizedException if the credentials are not valid.
+     * @throws IOException if an IOException occurs when checking the user's
+     * credentials.
+     */
+    public DomainAnnotationClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
+        caller = new JsonClientCaller(url, user, password, auth);
+    }
+
     /** Get the token this client uses to communicate with the server.
      * @return the authorization token.
      */
