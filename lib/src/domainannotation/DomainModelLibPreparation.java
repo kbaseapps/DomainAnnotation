@@ -249,7 +249,7 @@ public class DomainModelLibPreparation {
             InputStream is = new BufferedInputStream(new FileInputStream(f));
             ShockNode sn = client.addNode(is,f.getName(),null);
             String shockNodeID = sn.getId().getId();
-            String user = token.getClientId();
+            String user = token.getUserName();
             // this used to make nodes world-readable;
             // seems to do nothing now, but probably doesn't hurt to keep?
             client.removeFromNodeAcl(sn.getId(), Arrays.asList(user), ShockACLType.READ);
@@ -425,7 +425,7 @@ public class DomainModelLibPreparation {
        gets the auth token from the environment
     */
     public static AuthToken getDevToken() throws Exception {
-        return new AuthToken(System.getenv("KB_AUTH_TOKEN"));
+        return new AuthToken(System.getenv("KB_AUTH_TOKEN"), "<unknown>");
     }
 
     private static String getRefFromObjectInfo(Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String,String>> info) {

@@ -41,7 +41,7 @@ public class DomainAnnotationServerTest {
     
     @BeforeClass
     public static void init() throws Exception {
-        token = new AuthToken(System.getenv("KB_AUTH_TOKEN"));
+        token = new AuthToken(System.getenv("KB_AUTH_TOKEN"), "<unknown>");
         String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
         File deploy = new File(configFilePath);
         Ini ini = new Ini(deploy);

@@ -25,7 +25,6 @@ import us.kbase.common.service.Tuple5;
 import us.kbase.common.utils.AlignUtil;
 import us.kbase.common.utils.CorrectProcess;
 import us.kbase.common.utils.RpsBlastParser;
-import us.kbase.common.taskqueue.TaskQueueConfig;
 import us.kbase.kbasegenomes.Feature;
 import us.kbase.kbasegenomes.Genome;
 import us.kbase.workspace.ObjectData;
