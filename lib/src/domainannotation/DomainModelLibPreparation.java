@@ -249,10 +249,13 @@ public class DomainModelLibPreparation {
             InputStream is = new BufferedInputStream(new FileInputStream(f));
             ShockNode sn = client.addNode(is,f.getName(),null);
             String shockNodeID = sn.getId().getId();
-            String user = token.getUserName();
             // this used to make nodes world-readable;
-            // seems to do nothing now, but probably doesn't hurt to keep?
-            client.removeFromNodeAcl(sn.getId(), Arrays.asList(user), ShockACLType.READ);
+            // since auth2, it now fails because user is <unknown>
+            // String user = token.getUserName();
+            // client.removeFromNodeAcl(sn.getId(), Arrays.asList(user), ShockACLType.READ);
+            // the commented-out code above is now obsolete and
+            // can be safely removed.
+            // 
             // this is the new API to make nodes world-readable:
             client.setPubliclyReadable(sn.getId(), true);
             h.setShockId(shockNodeID);

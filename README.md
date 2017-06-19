@@ -23,13 +23,16 @@ The libraries have to be parsed and stored in DomainModelSet objects
 in a public KBase workspace called "KBasePublicGeneDomains."  This
 needs to be done once every time a new version of the libraries is
 desired (and once each per KBase environment, e.g., ci vs appdev vs
-production).  The code to do this is in
+next vs production).  The code to do this is in
 domainannotation.DomainModelLibPreparation and needs to be run by a
 developer with write access to that workspace.
 
 Once the libraries are downloaded using the script above, the
-developer needs to set environment variables: KB_AUTH_TOKEN (e.g., to
-`kbase-whoami -t`) and KB_DEPLOYMENT_CONFIG (e.g., to
-"/kb/dev_container/modules/kb_sdk/DomainAnnotation/test_local/workdir/config.properties"),
-then run "make prepare-library-objects" to create the workspace and
-all the library objects needed for this to run.
+developer needs to set environment variables: KB_AUTH_TOKEN (to a
+32-character developer token you can create from your Account page, if
+you're in the system as a developer) and KB_DEPLOYMENT_CONFIG (e.g., to
+"/kb/dev_container/modules/kb_sdk/DomainAnnotation/test_local/workdir/config.properties").
+Check that the config.properties refers to the correct KBase
+environment (e.g., ci vs next).  Then run "make
+prepare-library-objects" to create the workspace and all the library
+objects needed for this to run.
