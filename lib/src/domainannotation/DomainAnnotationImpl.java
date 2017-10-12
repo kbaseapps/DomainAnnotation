@@ -953,9 +953,9 @@ public class DomainAnnotationImpl {
                         Double eValue = domainElement.getE3();
                         line.set(8,eValue.toString());
                         Double bitScore = domainElement.getE4();
-                        line.set(9,eValue.toString());
+                        line.set(9,bitScore.toString());
                         Double domainCoverage = domainElement.getE5();
-                        line.set(10,eValue.toString());
+                        line.set(10,domainCoverage.toString());
                         outfile.writeNext(line.toArray(new String[line.size()]),false);
                     }
                 }
