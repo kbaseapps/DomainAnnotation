@@ -199,6 +199,23 @@ public class DomainAnnotationClient {
     }
 
     /**
+     * <p>Original spec-file function name: export_csv</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link domainannotation.ExportParams ExportParams}
+     * @return   parameter "result" of type {@link domainannotation.ExportResult ExportResult}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ExportResult exportCsv(ExportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ExportResult>> retType = new TypeReference<List<ExportResult>>() {};
+        List<ExportResult> res = caller.jsonrpcCall("DomainAnnotation.export_csv", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: version</p>
      * <pre>
      * returns version number of service

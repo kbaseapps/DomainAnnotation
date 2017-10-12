@@ -35,9 +35,9 @@ import us.kbase.workspace.WorkspaceClient;
  */
 public class DomainAnnotationServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
-    private static final String version = "1.0.1";
+    private static final String version = "1.0.2";
     private static final String gitUrl = "git@github.com:kbaseapps/DomainAnnotation.git";
-    private static final String gitCommitHash = "52dcb3931c5d3da9cec56a8f65bf54639ee0dfdf";
+    private static final String gitCommitHash = "4f973a347e9c380675edc3f1130ce2775c2cd7c5";
 
     //BEGIN_CLASS_HEADER
     private final String wsUrl;
@@ -83,6 +83,22 @@ public class DomainAnnotationServer extends JsonServerServlet {
         //BEGIN search_domains_ga
         returnVal = DomainAnnotationImpl.searchDomainsGA(wsUrl,shockUrl,authPart,input);
         //END search_domains_ga
+        return returnVal;
+    }
+
+    /**
+     * <p>Original spec-file function name: export_csv</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link domainannotation.ExportParams ExportParams}
+     * @return   parameter "result" of type {@link domainannotation.ExportResult ExportResult}
+     */
+    @JsonServerMethod(rpc = "DomainAnnotation.export_csv", async=true)
+    public ExportResult exportCsv(ExportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        ExportResult returnVal = null;
+        //BEGIN export_csv
+        returnVal = DomainAnnotationImpl.exportCSV(wsUrl,shockUrl,authPart,params);
+        //END export_csv
         return returnVal;
     }
 

@@ -141,7 +141,17 @@ public class DomainAnnotationServerTest {
         Assert.assertNotNull(reportRef);
         Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
         Assert.assertNotNull(report);
-        System.out.println(report.getTextMessage());   
+        System.out.println(report.getTextMessage());
+
+        // test that we can write the output to csv
+        String daRef = output.getOutputResultId();
+        ExportParams exportParams = new ExportParams()
+            .withInputRef(daRef);
+        ExportResult out2 = DomainAnnotationImpl.exportCSV(wsURL,
+                                                           shockURL,
+                                                           token,
+                                                           exportParams);
+        Assert.assertNotNull(out2);
     }
     
     /**

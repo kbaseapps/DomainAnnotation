@@ -27,10 +27,11 @@ import us.kbase.common.utils.CorrectProcess;
 import us.kbase.common.utils.RpsBlastParser;
 import us.kbase.kbasegenomes.Feature;
 import us.kbase.kbasegenomes.Genome;
-import us.kbase.workspace.ObjectData;
-import us.kbase.workspace.ObjectIdentity;
+import us.kbase.workspace.*;
 
 import com.fasterxml.jackson.databind.*;
+
+import com.opencsv.*;
 
 import org.strbio.IO;
 import org.strbio.io.*;
@@ -905,5 +906,109 @@ public class DomainAnnotationImpl {
                 tElement.getE5().putAll(sElement.getE5());
             }
         }
+    }
+
+    /**
+       Helper function to get name when listing/saving an object
+    */
+    private static String getNameFromObjectInfo(Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String,String>> info) {
+        return info.getE2();
+    }
+
+    /**
+       Writes a domain annotation object to a CSV file.
+    */
+    public static void writeCSV(DomainAnnotation da, DomainModelSet dms, CSVWriter outfile) throws Exception {
+        ArrayList<String> line = new ArrayList<String>(Arrays.asList("Contig", "Feature", "Feature Start in Contig", "Feature End in Contig", "Feature Direction in Contig", "Domain Accession", "Domain Start in Feature", "Domain End in Feature", "E-value", "Bit Score", "Domain Coverage", "Domain Description"));
+        outfile.writeNext(line.toArray(new String[line.size()]),false);
+        Map<String, List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>>> data = da.getData();
+        Map<String,String> descriptionMap = dms.getDomainAccessionToDescription();
+        for (String contigID : data.keySet()) {
+            line.set(0,contigID);
+            List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> elements = data.get(contigID);
+            ListIterator<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> fIterator = elements.listIterator();
+            while (fIterator.hasNext()) {
+                Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>> annotationElement = fIterator.next();
+                String featureID = annotationElement.getE1();
+                line.set(1,featureID);
+                Long featureStart = annotationElement.getE2();
+                line.set(2,featureStart.toString());
+                Long featureStop = annotationElement.getE3();
+                line.set(3,featureStop.toString());
+                Long featureDir = annotationElement.getE4();
+                line.set(4,(featureDir==1L) ? "+" : "-");
+                Map<String, List<Tuple5<Long, Long, Double, Double, Double>>> annots = annotationElement.getE5();
+                for (String domainAccession : annots.keySet()) {
+                    line.set(5,domainAccession);
+                    String domainDesc = descriptionMap.get(domainAccession);
+                    line.set(11,domainDesc);
+                    List<Tuple5<Long, Long, Double, Double, Double>> domainElements = annots.get(domainAccession);
+                    ListIterator<Tuple5<Long, Long, Double, Double, Double>> dIterator = domainElements.listIterator();
+                    while (dIterator.hasNext()) {
+                        Tuple5<Long, Long, Double, Double, Double> domainElement = dIterator.next();
+                        Long domainStart = domainElement.getE1();
+                        line.set(6,domainStart.toString());
+                        Long domainStop = domainElement.getE2();
+                        line.set(7,domainStop.toString());
+                        Double eValue = domainElement.getE3();
+                        line.set(8,eValue.toString());
+                        Double bitScore = domainElement.getE4();
+                        line.set(9,eValue.toString());
+                        Double domainCoverage = domainElement.getE5();
+                        line.set(10,eValue.toString());
+                        outfile.writeNext(line.toArray(new String[line.size()]),false);
+                    }
+                }
+            }
+        }
+        outfile.flush();
+    }
+    
+    /**
+       Exports a domain annotation object to a CSV file
+    */
+    public static ExportResult exportCSV(String wsURL,
+                                         String shockURL,
+                                         AuthToken token,
+                                         ExportParams params) throws Exception {
+        WorkspaceClient wc = createWsClient(wsURL,token);
+
+        // figure out name of object
+        GetObjectInfo3Results goir = wc.getObjectInfo3(new GetObjectInfo3Params().withObjects(Arrays.asList(new ObjectSpecification().withRef(params.getInputRef()))));
+        String oName = getNameFromObjectInfo(goir.getInfos().get(0));
+
+        // get from workspace
+        final DomainAnnotation da = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(params.getInputRef()))).get(0).getData().asClassInstance(DomainAnnotation.class);
+
+        // get linked domain model set
+        String dmsRef = da.getUsedDmsRef();
+        final DomainModelSet dms = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(dmsRef))).get(0).getData().asClassInstance(DomainModelSet.class);
+
+        // export to CSV file, which inexplicably has
+        // to be inside of a zip file.
+        java.io.File tmpFile = java.io.File.createTempFile("mat", ".zip", tempDir);
+        tmpFile.delete();
+        ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(tmpFile)));
+        CSVWriter outfile = new CSVWriter(new OutputStreamWriter(zout));
+
+        if (!oName.toLowerCase().endsWith(".csv"))
+            oName += ".csv";
+        zout.putNextEntry(new ZipEntry(oName));
+        zout.flush();
+        writeCSV(da, dms, outfile);
+        outfile.flush();
+        zout.flush();
+        zout.closeEntry();
+        outfile.close();
+
+        // save in Shock
+        Handle shockHandle = toShock(shockURL, token, tmpFile);
+        ExportResult rv = new ExportResult()
+            .withShockId(shockHandle.getShockId());
+
+        // clean up tmp file
+        tmpFile.delete();
+
+        return rv;
     }
 }

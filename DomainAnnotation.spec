@@ -191,6 +191,20 @@ module DomainAnnotation {
     */
     funcdef search_domains_ga(SearchDomainsGAInput input) returns (SearchDomainsGAOutput output) authentication required;
 
+    /*
+    Exporter for domain annotations as CSV files
+    */
+    typedef structure {
+        string input_ref;
+    } ExportParams;
+
+    typedef structure {
+        string shock_id;
+    } ExportResult;
+
+    funcdef export_csv(ExportParams params)
+      returns (ExportResult result) authentication required;
+
     /* returns version number of service */
     funcdef version() returns (string version);
 };
