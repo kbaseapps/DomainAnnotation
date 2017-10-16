@@ -73,5 +73,22 @@ description : |
     <p>For the two HMM libraries (Pfam and TIGRFAMs), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.1b1</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
 
     <p>The annotation job may run for an hour or longer, especially if all libraries are selected.  When the annotation job finishes, a DomainAnnotation object will be stored in your data store, which can be used to browse the domains that were identified in your genome.</p>
+
+    <p>The user can download the annotations in CSV (comma separated values) format.  The fields in this CSV file are as follows:</p>
+    
+    <ul>
+    <li><b>Contig</b> - Identifier of the contig containg an annotated feature.</li>
+    <li><b>Feature</b> - Identifier of the feature (in this case, the protein-encoding gene) annotated with domains.</li>
+    <li><b>Feature Start in Contig</b> - 1-indexed position of where the annotated feature starts in the contig.</li>
+    <li><b>Feature End in Contig</b> - 1-indexed position of where the annotated feature ends in the contig.</li>
+    <li><b>Feature Direction in Contig</b> - character indicating whether the annotated feature is on the '+' or '-' strand.</li>
+    <li><b>Domain Accession</b> - accession of the domain annotated in the feature.</li>
+    <li><b>Domain Start in Feature</b> - 1-indexed position indicating where the annotated domain starts, relative to the beginning of the feature.</li>
+    <li><b>Domain End in Feature</b> - 1-indexed position indicating where the annotated domain ends, relative to the beginning of the feature.</li>
+    <li><b>E-value</b> - E-value for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
+    <li><b>Bit Score</b> - Bit score for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
+    <li><b>Domain Coverage</b> - Fraction of the length of the protein covered by this domain annotation.</li>
+    <li><b>Domain Description</b> - Description of this domain.</li>
+    </ul>
     
     <p><strong>Team members who developed &amp; deployed methods in KBase:</strong> John-Marc Chandonia, Roman Sutormin, and Pavel Novichkov. For questions, <a href="mailto:help@kbase.us">e-mail help@kbase.us</a></p>
