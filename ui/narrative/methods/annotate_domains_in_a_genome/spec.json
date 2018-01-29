@@ -1,5 +1,5 @@
 {
-    "ver": "1.0.0",
+    "ver": "1.0.3",
     "authors": [
 	"jmc", "psnovichkov", "rsutormin"
     ],
@@ -37,19 +37,19 @@
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/COGs-only",
-			"display": "COGs 1.0 (from CDD 3.12) domains only"
+			"display": "COGs 1.0 (from CDD 3.16) domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/NCBI-CDD-only",
-			"display": "NCBI-curated CDD 3.12 domains only"
+			"display": "NCBI-curated CDD 3.16 domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/SMART-only",
-			"display": "SMART 6.0 (from CDD 3.12) domains only"
+			"display": "SMART 6.0 (from CDD 3.16) domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/Pfam-only",
-			"display": "Pfam 27 domains only"
+			"display": "Pfam 31 domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/TIGRFAMs-only",

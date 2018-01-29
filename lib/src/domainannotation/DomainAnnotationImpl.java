@@ -555,7 +555,7 @@ public class DomainAnnotationImpl {
             // run the appropriate annotation program
             String program = dl.getProgram();
 
-            if (program.equals("rpsblast-2.2.30")) {
+            if (program.startsWith("rpsblast")) {
                 outFile = runRpsBlast(dbFile, fastaFile);
                 try {
                 RpsBlastParser.processRpsOutput(outFile, new RpsBlastParser.RpsBlastCallback() {
@@ -597,7 +597,7 @@ public class DomainAnnotationImpl {
                     ee.printStackTrace();
                 }
             }
-            else if (program.equals("hmmscan-3.1b1")) {
+            else if (program.startsWith("hmmscan")) {
                 outFile = runHmmer(dbFile, fastaFile);
                 BufferedReader infile = IO.openReader(outFile.getPath());
                 if (infile==null)

@@ -14,8 +14,8 @@ fi
 ########### Pfam #############
 if [ ! -f ../db/Pfam-A.hmm ]; then
     echo "Downloading Pfam..."
-    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam27.0/Pfam-A.full.gz'
-    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam27.0/Pfam-A.hmm.gz'
+    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.full.gz'
+    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz'
     gzip -d ../db/Pfam-A.hmm.gz
     ../bin/hmmpress.$OS ../db/Pfam-A.hmm
 fi
@@ -52,6 +52,14 @@ if [ ! -f ../db/Cdd.rps ]; then
     ls -1 cd*.smp > Cdd
     ../../bin/makeprofiledb.$OS -in Cdd -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Cdd* ../../db
+    rm *.smp
+    cd ..
+    rm -rf smp
+
+    tar --wildcards -xf ../cdd.tar.gz 'sd*.smp'
+    ls -1 sd*.smp > Csd
+    ../../bin/makeprofiledb.$OS -in Csd -threshold 9.82 -scale 100.0 -dbtype rps -index true
+    mv Csd* ../../db
     rm *.smp
     cd ..
     rm -rf smp

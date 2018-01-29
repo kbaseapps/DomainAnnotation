@@ -26,38 +26,46 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
-        parseDomainLibrary("COGs-CDD-3.12",
+        parseDomainLibrary("COGs-CDD-3.16",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cog",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "3.12",
-                           "2014-10-03",
+                           "3.16",
+                           "2017-03-29",
                            "COG",
-                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=");
-        parseDomainLibrary("CDD-NCBI-curated-3.12",
+                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=COG");
+        parseDomainLibrary("CDD-NCBI-curated-3.16",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cdd",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "3.12",
-                           "2014-10-03",
+                           "3.16",
+                           "2017-03-29",
                            "cd",
-                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=");
-        parseDomainLibrary("SMART-6.0-CDD-3.12",
+                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=cd");
+        parseDomainLibrary("CDD-SD-NCBI-curated-3.16",
+                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Csd",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
+                           "3.16",
+                           "2017-03-29",
+                           "sd",
+                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=sd");
+        parseDomainLibrary("SMART-6.0-CDD-3.16",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Smart",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
                            "6.0",
-                           "2014-10-03",
+                           "2017-03-29",
                            "smart",
                            "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
-        parseDomainLibrary("Pfam-27.0",
-                           "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam27.0/Pfam-A.hmm.gz",
+        parseDomainLibrary("Pfam-31.0",
+                           "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.hmm",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.full.gz",
-                           "27.0",
-                           "2013-03-14",
+                           "31.0",
+                           "2017-02-24",
                            "PF",
-                           "http://pfam.xfam.org/family/");
+                           "http://pfam.xfam.org/family/PF");
         parseDomainLibrary("TIGRFAMs-15.0",
                            "ftp://ftp.jcvi.org/pub/data/TIGRFAMs/TIGRFAMs_15.0_HMM.LIB.gz",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/TIGRFAMs_15.0_HMM.LIB",
@@ -65,24 +73,19 @@ public class DomainModelLibPreparation {
                            "15.0",
                            "2014-09-17",
                            "TIGR",
-                           "http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=");
+                           "http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=TIGR");
 			   
-        String[] libraries = new String[] {"COGs-CDD-3.12"};
+        String[] libraries = new String[] {"COGs-CDD-3.16"};
 	
         makeDomainModelSet("COGs-only",
                            libraries);
 
-        libraries[0] = "CDD-NCBI-curated-3.12";
-	
-        makeDomainModelSet("NCBI-CDD-only",
-                           libraries);
-	
-        libraries[0] = "Pfam-27.0";
+        libraries[0] = "Pfam-31.0";
 	
         makeDomainModelSet("Pfam-only",
                            libraries);
 	
-        libraries[0] = "SMART-6.0-CDD-3.12";
+        libraries[0] = "SMART-6.0-CDD-3.16";
 	
         makeDomainModelSet("SMART-only",
                            libraries);
@@ -92,10 +95,17 @@ public class DomainModelLibPreparation {
         makeDomainModelSet("TIGRFAMs-only",
                            libraries);
 
-        libraries = new String[] { "COGs-CDD-3.12",
-                                   "CDD-NCBI-curated-3.12",
-                                   "SMART-6.0-CDD-3.12",
-                                   "Pfam-27.0",
+        libraries = new String[] { "CDD-NCBI-curated-3.16",
+                                   "CDD-SD-NCBI-curated-3.16"};
+	
+        makeDomainModelSet("NCBI-CDD-only",
+                           libraries);
+	
+        libraries = new String[] { "COGs-CDD-3.16",
+                                   "CDD-NCBI-curated-3.16",
+                                   "CDD-SD-NCBI-curated-3.16",
+                                   "SMART-6.0-CDD-3.16",
+                                   "Pfam-31.0",
                                    "TIGRFAMs-15.0"};
 	
         makeDomainModelSet("All",
@@ -176,15 +186,15 @@ public class DomainModelLibPreparation {
         String program = null;
         if (sourceURL.indexOf("cdd") > 0) {
             source = "CDD";
-            program = "rpsblast-2.2.30";
+            program = "rpsblast-2.2.31";
         }
         else if (sourceURL.indexOf("Pfam") > 0) {
             source = "Pfam";
-            program = "hmmscan-3.1b1";
+            program = "hmmscan-3.1b2";
         }
         else if (sourceURL.indexOf("TIGRFAMs") > 0) {
             source = "TIGRFAMs";
-            program = "hmmscan-3.1b1";
+            program = "hmmscan-3.1b2";
         }
         else throw new Exception("unknown domain library type");
 
