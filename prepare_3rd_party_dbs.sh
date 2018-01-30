@@ -53,8 +53,6 @@ if [ ! -f ../db/Cdd.rps ]; then
     ../../bin/makeprofiledb.$OS -in Cdd -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Cdd* ../../db
     rm *.smp
-    cd ..
-    rm -rf smp
 
     tar --wildcards -xf ../cdd.tar.gz 'sd*.smp'
     ls -1 sd*.smp > Csd
