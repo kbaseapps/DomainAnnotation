@@ -6,6 +6,7 @@ __Changes__
 - updated version of CDD and CDD-derived models (SMART, COG) to 3.16
 - include "sd" structural motif models from CDD
 - fixed bug in URL linking to website with SMART domains description (SCT-500)
+- compatible with new Genome object
 
 ### Version 1.0.2
 __Changes__

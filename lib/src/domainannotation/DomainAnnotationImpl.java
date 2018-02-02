@@ -13,7 +13,6 @@ import us.kbase.auth.AuthToken;
 import us.kbase.common.service.*;
 import us.kbase.workspace.*;
 import us.kbase.shock.client.*;
-import us.kbase.kbasegenomes.*;
 import us.kbase.kbasereport.*;
 import us.kbase.kbasecollections.*;
 import us.kbase.common.utils.FastaWriter;
@@ -25,9 +24,6 @@ import us.kbase.common.service.Tuple5;
 import us.kbase.common.utils.AlignUtil;
 import us.kbase.common.utils.CorrectProcess;
 import us.kbase.common.utils.RpsBlastParser;
-import us.kbase.kbasegenomes.Feature;
-import us.kbase.kbasegenomes.Genome;
-import us.kbase.workspace.*;
 
 import com.fasterxml.jackson.databind.*;
 
@@ -37,6 +33,7 @@ import org.strbio.IO;
 import org.strbio.io.*;
 import org.strbio.util.*;
 
+import kbasegenomes.*;
 import genomeannotationapi.*;
 
 import static java.lang.ProcessBuilder.Redirect;
@@ -234,13 +231,16 @@ public class DomainAnnotationImpl {
         try {
             reportText += "Getting DomainModelSet from storage.\n";
             final DomainModelSet dms = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(domainModelSetRef))).get(0).getData().asClassInstance(DomainModelSet.class);
-            reportText += "Getting Genome from storage.\n";
-            final Genome genome = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(genomeRef))).get(0).getData().asClassInstance(Genome.class);
-            Map<String,String> domainLibMap = dms.getDomainLibs();
 
+            reportText += "Getting Genome from storage.\n";
+            GenomeannotationapiClient gaClient = new GenomeannotationapiClient(new URL(System.getenv("SDK_CALLBACK_URL")), token);
+            gaClient.setIsInsecureHttpConnectionAllowed(true);
+            final Genome genome = gaClient.getGenomeV1(new GetGenomeParamsV1().withGenomes(Arrays.asList(new GenomeSelectorV1().withRef(genomeRef)))).getGenomes().get(0).getData();
+            
             // collect one set of annotations per library
+            Map<String,String> domainLibMap = dms.getDomainLibs();
             for (String id : domainLibMap.values()) {
-                reportText += "Running domain search against library "+id;
+                reportText += "Running domain search against library "+id+"\n";
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
                 DomainAnnotation results = runDomainSearch(genome, genomeRef, null, domainModelSetRef, dl, shockURL, token);
                 
@@ -268,6 +268,9 @@ public class DomainAnnotationImpl {
             reportText += "\n\nERROR: "+e.getMessage();
             warnings = new ArrayList<String>();
             warnings.add("ERROR: "+e.getMessage());
+
+            // almost all errors should be fatal, not warnings:
+            throw e;
         }
 
         // generate report with list of objects created
@@ -322,14 +325,14 @@ public class DomainAnnotationImpl {
             
             reportText += "Getting Proteins in GenomeAnnotation from storage.\n";
             
-            GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(new URL(System.getenv("SDK_CALLBACK_URL")), token);
+            GenomeannotationapiClient gaClient = new GenomeannotationapiClient(new URL(System.getenv("SDK_CALLBACK_URL")), token);
             gaClient.setIsInsecureHttpConnectionAllowed(true);
             Map<String,ProteinData> proteinMap = gaClient.getProteins(new InputsGetProteins().withRef(genomeAnnotationRef));
             
             // collect one set of annotations per library
             Map<String,String> domainLibMap = dms.getDomainLibs();
             for (String id : domainLibMap.values()) {
-                reportText += "Running domain search against library "+id;
+                reportText += "Running domain search against library "+id+"\n";
                 DomainLibrary dl = wc.getObjects(Arrays.asList(new ObjectIdentity().withRef(id))).get(0).getData().asClassInstance(DomainLibrary.class);
                 DomainAnnotation results = runDomainSearch(null, null, proteinMap, domainModelSetRef, dl, shockURL, token);
 
@@ -354,6 +357,9 @@ public class DomainAnnotationImpl {
             reportText += "\n\nERROR: "+e.getMessage();
             warnings = new ArrayList<String>();
             warnings.add("ERROR: "+e.getMessage());
+
+            // almost all errors should be fatal, not warnings:
+            throw e;
         }
 
         // generate report with list of objects created
@@ -571,7 +577,7 @@ public class DomainAnnotationImpl {
                                      double ident) throws Exception {
                         Long modelLength = modelNameToLength.get(subject);
                         if (modelLength == null)
-                            throw new IllegalStateException("Unexpected subject name in rps blast result: " + subject);
+                            throw new IllegalStateException("Unexpected subject name in RPS-BLAST result: " + subject);
                         int featurePos = Integer.parseInt(query);
                         String alignedSeq = AlignUtil.removeGapsFromSubject((int)(modelLength.longValue()), qseq, sstart - 1, sseq);
                         int coverage = 100 - AlignUtil.getGapPercent(alignedSeq);
@@ -684,7 +690,7 @@ public class DomainAnnotationImpl {
                 }
             }
             else
-                throw new Exception("unsupported domain search program "+program);
+                throw new Exception("Unsupported domain search program "+program);
 
             DomainAnnotation rv = new DomainAnnotation()
                 .withUsedDmsRef(domainModelSetRef)
