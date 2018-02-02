@@ -32,27 +32,27 @@
 	    "dropdown_options":{
 		"options": [
 		    {
-			"value": "KBasePublicGeneDomains/All",
+			"value": "KBasePublicGeneDomains/All-v2",
 			"display": "All domain libraries"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/COGs-only",
+			"value": "KBasePublicGeneDomains/COGs-only-v2",
 			"display": "COGs 1.0 (from CDD 3.16) domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/NCBI-CDD-only",
+			"value": "KBasePublicGeneDomains/NCBI-CDD-only-v2",
 			"display": "NCBI-curated CDD 3.16 domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/SMART-only",
+			"value": "KBasePublicGeneDomains/SMART-only-v2",
 			"display": "SMART 6.0 (from CDD 3.16) domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/Pfam-only",
+			"value": "KBasePublicGeneDomains/Pfam-only-v2",
 			"display": "Pfam 31 domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/TIGRFAMs-only",
+			"value": "KBasePublicGeneDomains/TIGRFAMs-only-v2",
 			"display": "TIGRFAM 15 domains only"
 		    }
 		]
