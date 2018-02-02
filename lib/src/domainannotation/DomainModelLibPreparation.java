@@ -77,28 +77,28 @@ public class DomainModelLibPreparation {
 			   
         String[] libraries = new String[] {"COGs-CDD-3.16"};
 	
-        makeDomainModelSet("COGs-only-v2",
+        makeDomainModelSet("COGs-1.0-3.16-only",
                            libraries);
 
         libraries[0] = "Pfam-31.0";
 	
-        makeDomainModelSet("Pfam-only-v2",
+        makeDomainModelSet("Pfam-31.0-only",
                            libraries);
 	
         libraries[0] = "SMART-6.0-CDD-3.16";
 	
-        makeDomainModelSet("SMART-only-v2",
+        makeDomainModelSet("SMART-6.0-3.16-only",
                            libraries);
 
         libraries[0] = "TIGRFAMs-15.0";
 
-        makeDomainModelSet("TIGRFAMs-only-v2",
+        makeDomainModelSet("TIGRFAMs-15.0-only",
                            libraries);
 
         libraries = new String[] { "CDD-NCBI-curated-3.16",
                                    "CDD-SD-NCBI-curated-3.16"};
 	
-        makeDomainModelSet("NCBI-CDD-only-v2",
+        makeDomainModelSet("NCBI-CDD-3.16-only",
                            libraries);
 	
         libraries = new String[] { "COGs-CDD-3.16",
@@ -108,7 +108,7 @@ public class DomainModelLibPreparation {
                                    "Pfam-31.0",
                                    "TIGRFAMs-15.0"};
 	
-        makeDomainModelSet("All-v2",
+        makeDomainModelSet("All-1.0.3",
                            libraries);
     }
 
