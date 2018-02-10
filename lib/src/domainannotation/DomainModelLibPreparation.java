@@ -26,6 +26,14 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
+        parseDomainLibrary("NCBIfam-AMR-1.1",
+                           "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-AMR.LIB",
+                           null,
+                           "1.1",
+                           "2017-11-28",
+                           "NCBIfam-AMR",
+                           "");
         parseDomainLibrary("COGs-CDD-3.16",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cog",
@@ -82,21 +90,13 @@ public class DomainModelLibPreparation {
                            "2014-09-17",
                            "TIGR",
                            "http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=TIGR");
-        parseDomainLibrary("NCBIfam-AMR-1.1",
-                           "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB",
-                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-AMR.LIB",
-                           null,
-                           "1.1",
-                           "2017-11-28",
-                           "NCBI-AMR",
-                           "");
         parseDomainLibrary("NCBIfam-PRK-1.1",
                            "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-PRK/1.1/NCBIfam-PRK.LIB",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-PRK.LIB",
                            null,
                            "1.1",
                            "2017-11-28",
-                           "NCBI-PRK",
+                           "NCBIfam-PRK",
                            "");
         parseDomainLibrary("NCBIfam-gen-1.1",
                            "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-gen/1.1/NCBIfam-gen.LIB",
@@ -104,7 +104,7 @@ public class DomainModelLibPreparation {
                            null,
                            "1.1",
                            "2017-11-28",
-                           "NCBI-gen",
+                           "NCBIfam-gen",
                            "");
 			   
         String[] libraries = new String[] {"COGs-CDD-3.16"};
@@ -289,7 +289,9 @@ public class DomainModelLibPreparation {
                 continue;
             if (f.getName().equals(fileName))
                 continue;
-	    
+
+            // System.out.println("debug:  adding "+f.getName());
+            
             libraryFiles.add(new Handle()
                              .withFileName(f.getName()));
         }
@@ -385,6 +387,8 @@ public class DomainModelLibPreparation {
             else if (buffer.startsWith("LENG "))
                 l = StringUtil.atol(buffer.substring(6));
             else if (buffer.startsWith("HMM ")) {
+                if (acc==null)
+                    continue;
                 DomainModel m = new DomainModel()
                     .withAccession(acc)
                     .withName(name)
