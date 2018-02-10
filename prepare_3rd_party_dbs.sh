@@ -28,6 +28,17 @@ if [ ! -f ../db/TIGRFAMs_15.0_HMM.LIB ]; then
     ../bin/hmmpress.$OS ../db/TIGRFAMs_15.0_HMM.LIB
 fi
 
+########### NCBIFAMS #############
+if [ ! -f ../db/NCBIfam-AMR.LIB ]; then
+    echo "Downloading NCBIFAMs..."
+    curl -o ../db/NCBIfam-gen.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-gen/1.1/NCBIfam-gen.LIB'
+    ../bin/hmmpress.$OS ../db/NCBIfam-gen.LIB
+    curl -o ../db/NCBIfam-PRK.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-PRK/1.1/NCBIfam-PRK.LIB'
+    ../bin/hmmpress.$OS ../db/NCBIfam-PRK.LIB
+    curl -o ../db/NCBIfam-AMR.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB'
+    ../bin/hmmpress.$OS ../db/NCBIfam-AMR.LIB
+fi
+
 ########### CDD #############
 if [ ! -f ../db/Cdd.rps ]; then
     echo "Downloading CDD..."
@@ -46,6 +57,12 @@ if [ ! -f ../db/Cdd.rps ]; then
     ls -1 smart*.smp > Smart
     ../../bin/makeprofiledb.$OS -in Smart -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Smart* ../../db
+    rm *.smp
+
+    tar --wildcards -xf ../cdd.tar.gz 'PRK*.smp'
+    ls -1 PRK*.smp > Prk
+    ../../bin/makeprofiledb.$OS -in Prk -threshold 9.82 -scale 100.0 -dbtype rps -index true
+    mv Prk* ../../db
     rm *.smp
 
     tar --wildcards -xf ../cdd.tar.gz 'cd*.smp'

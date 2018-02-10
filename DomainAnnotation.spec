@@ -14,7 +14,7 @@ module DomainAnnotation {
     typedef string date;
 
     /*
-    enum: hmmscan-3.1b1, rpsblast-2.2.30
+    enum: hmmscan-3.1b1, rpsblast-2.2.30, etc
     */
     typedef string program_version;
 

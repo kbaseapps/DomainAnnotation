@@ -58,6 +58,14 @@ public class DomainModelLibPreparation {
                            "2017-03-29",
                            "smart",
                            "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
+        parseDomainLibrary("PRK-6.0-CDD-3.16",
+                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Prk",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
+                           "6.0",
+                           "2017-03-29",
+                           "prk-no-url",
+                           "");
         parseDomainLibrary("Pfam-31.0",
                            "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.hmm",
@@ -74,6 +82,30 @@ public class DomainModelLibPreparation {
                            "2014-09-17",
                            "TIGR",
                            "http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=TIGR");
+        parseDomainLibrary("NCBIfam-AMR-1.1",
+                           "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-AMR.LIB",
+                           null,
+                           "1.1",
+                           "2017-11-28",
+                           "NCBI-AMR",
+                           "");
+        parseDomainLibrary("NCBIfam-PRK-1.1",
+                           "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-PRK/1.1/NCBIfam-PRK.LIB",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-PRK.LIB",
+                           null,
+                           "1.1",
+                           "2017-11-28",
+                           "NCBI-PRK",
+                           "");
+        parseDomainLibrary("NCBIfam-gen-1.1",
+                           "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-gen/1.1/NCBIfam-gen.LIB",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-gen.LIB",
+                           null,
+                           "1.1",
+                           "2017-11-28",
+                           "NCBI-gen",
+                           "");
 			   
         String[] libraries = new String[] {"COGs-CDD-3.16"};
 	
@@ -90,6 +122,11 @@ public class DomainModelLibPreparation {
         makeDomainModelSet("SMART-6.0-3.16-only",
                            libraries);
 
+        libraries[0] = "PRK-6.0-CDD-3.16";
+	
+        makeDomainModelSet("PRK-6.0-3.16-only",
+                           libraries);
+        
         libraries[0] = "TIGRFAMs-15.0";
 
         makeDomainModelSet("TIGRFAMs-15.0-only",
@@ -100,13 +137,23 @@ public class DomainModelLibPreparation {
 	
         makeDomainModelSet("NCBI-CDD-3.16-only",
                            libraries);
+
+        libraries = new String[] { "NCBIfam-PRK-1.1",
+                                   "NCBIfam-AMR-1.1",
+                                   "NCBIfam-gen-1.1"};
+
+        makeDomainModelSet("NCBIfam-1.1-only",
+                           libraries);
 	
         libraries = new String[] { "COGs-CDD-3.16",
                                    "CDD-NCBI-curated-3.16",
                                    "CDD-SD-NCBI-curated-3.16",
                                    "SMART-6.0-CDD-3.16",
                                    "Pfam-31.0",
-                                   "TIGRFAMs-15.0"};
+                                   "TIGRFAMs-15.0",
+                                   "NCBIfam-PRK-1.1",
+                                   "NCBIfam-AMR-1.1",
+                                   "NCBIfam-gen-1.1"};
 	
         makeDomainModelSet("All-1.0.3",
                            libraries);
@@ -194,6 +241,10 @@ public class DomainModelLibPreparation {
         }
         else if (sourceURL.indexOf("TIGRFAMs") > 0) {
             source = "TIGRFAMs";
+            program = "hmmscan-3.1b2";
+        }
+        else if (sourceURL.indexOf("NCBIfam") > 0) {
+            source = "NCBIfam";
             program = "hmmscan-3.1b2";
         }
         else throw new Exception("unknown domain library type");

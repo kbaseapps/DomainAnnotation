@@ -434,6 +434,9 @@ public class DomainAnnotationImpl {
                         String featId = feat.getId();
                         if ((contigId==null) || (featId==null))
                             continue;
+                        // skip features with parent gene
+                        // if (feat.getParentGene()!=null)
+                        //   continue;
                         if (seq != null && !seq.isEmpty()) {
                             fw.write("" + pos, seq);
                             Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);
