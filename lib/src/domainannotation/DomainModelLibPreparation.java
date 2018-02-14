@@ -376,19 +376,23 @@ public class DomainModelLibPreparation {
         while (infile.ready()) {
             String buffer = infile.readLine();
 
-            if (buffer.startsWith("NAME "))
-                name = buffer.substring(6).trim();
-            else if (buffer.startsWith("DESC "))
-                desc = buffer.substring(6).trim();
-            else if (buffer.startsWith("TC "))
-                tc = StringUtil.atod(buffer.substring(6));
-            else if (buffer.startsWith("ACC "))
-                acc = buffer.substring(6).trim();
-            else if (buffer.startsWith("LENG "))
-                l = StringUtil.atol(buffer.substring(6));
-            else if (buffer.startsWith("HMM ")) {
-                if (acc==null)
-                    continue;
+            if ((buffer.startsWith("NAME ")) ||
+                (buffer.startsWith("NAME\t")))
+                name = buffer.substring(5).trim();
+            else if ((buffer.startsWith("DESC ")) ||
+                     (buffer.startsWith("DESC\t")))
+                desc = buffer.substring(5).trim();
+            else if ((buffer.startsWith("TC ")) ||
+                     (buffer.startsWith("TC\t")))
+                tc = StringUtil.atod(buffer.substring(3));
+            else if ((buffer.startsWith("ACC ")) ||
+                     (buffer.startsWith("ACC\t")))
+                acc = buffer.substring(4).trim();
+            else if ((buffer.startsWith("LENG ")) ||
+                     (buffer.startsWith("LENG\t")))
+                l = StringUtil.atol(buffer.substring(5));
+            else if ((buffer.startsWith("HMM ")) ||
+                     (buffer.startsWith("HMM\t"))) {
                 DomainModel m = new DomainModel()
                     .withAccession(acc)
                     .withName(name)

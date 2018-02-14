@@ -37,7 +37,7 @@ public class DomainAnnotationServerTest {
     private static final String ecoliGARef = "8020/27/2";
     private static final String smartRef = domainWsName+"/SMART-only";
     private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
-    private static final String allLibsRef = domainWsName+"/All";
+    private static final String allLibsRef = domainWsName+"/All-1.0.3";
     
     @BeforeClass
     public static void init() throws Exception {
@@ -75,8 +75,8 @@ public class DomainAnnotationServerTest {
     /**
        Check that we can get all the All Libraries DomainModelSet from the
        public workspace, WITHOUT logging in
+    @Test
     */
-    // @Test
     public void checkDMS() throws Exception {
         DomainModelSet dms = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(allLibsRef))).get(0).getData().asClassInstance(DomainModelSet.class);
 
@@ -132,6 +132,39 @@ public class DomainAnnotationServerTest {
             .withDmsRef(smartRef)
             .withWs(getWsName())
             .withOutputResultId("test");
+        SearchDomainsOutput output = DomainAnnotationImpl.searchDomains(wsURL,
+                                                                        shockURL,
+                                                                        token,
+                                                                        input);
+        Assert.assertNotNull(output);
+        String reportRef = output.getReportRef();
+        Assert.assertNotNull(reportRef);
+        Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
+        Assert.assertNotNull(report);
+        System.out.println(report.getTextMessage());
+
+        // test that we can write the output to csv
+        String daRef = output.getOutputResultId();
+        ExportParams exportParams = new ExportParams()
+            .withInputRef(daRef);
+        ExportResult out2 = DomainAnnotationImpl.exportCSV(wsURL,
+                                                           shockURL,
+                                                           token,
+                                                           exportParams);
+        Assert.assertNotNull(out2);
+    }
+
+    /**
+       Check that we can annotate E. coli with all libraries.  This is
+       slow.
+    @Test
+    */
+    public void searchEColiAll() throws Exception {
+        SearchDomainsInput input = new SearchDomainsInput()
+            .withGenomeRef(ecoliRef)
+            .withDmsRef(allLibsRef)
+            .withWs(getWsName())
+            .withOutputResultId("test-all");
         SearchDomainsOutput output = DomainAnnotationImpl.searchDomains(wsURL,
                                                                         shockURL,
                                                                         token,
