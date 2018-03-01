@@ -48,12 +48,20 @@
 			"display": "SMART 6.0 (from CDD 3.16) domains only"
 		    },
 		    {
+			"value": "KBasePublicGeneDomains/PRK-6.0-3.16-only",
+			"display": "PRK 6.0 (from CDD 3.16) domains only"
+		    },
+		    {
 			"value": "KBasePublicGeneDomains/Pfam-31.0-only",
 			"display": "Pfam 31.0 domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/TIGRFAMs-15.0-only",
 			"display": "TIGRFAM 15.0 domains only"
+		    },
+		    {
+			"value": "KBasePublicGeneDomains/NCBIfam-1.1-only",
+			"display": "NCBIfam 1.1 domains only"
 		    }
 		]
 	    }
