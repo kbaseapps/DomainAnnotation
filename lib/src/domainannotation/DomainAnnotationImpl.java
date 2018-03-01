@@ -426,6 +426,9 @@ public class DomainAnnotationImpl {
                     List<Feature> features = genome.getFeatures();
                     int pos = -1;
                     for (Feature feat : features) {
+                        if (feat.getAdditionalProperties().containsKey("parent_gene")){
+                            continue;
+                        }
                         pos++;
                         String seq = feat.getProteinTranslation();
                         if (feat.getLocation().size() < 1)

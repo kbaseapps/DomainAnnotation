@@ -30,7 +30,7 @@ RUN rm ./hmmer.tar.gz
 
 COPY ./ /kb/module
 RUN mkdir -p /kb/module/work
-RUN chmod 777 /kb/module
+RUN chmod a+rw -R /kb/module
 
 WORKDIR /kb/module
 
