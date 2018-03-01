@@ -16,15 +16,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: ProteinSet</p>
  * <pre>
  * Type spec for the "ProteinSet" object
- *                 proteinset_id id - unique kbase ID of the protein set
- *                 string name - name of the protein set
- *                 string type - type of the protein set (values are: Organism,Environment,Collection)
- *                 source_id source_id - source ID of the protein set
- *                 string source - source of the protein set
- *                 list<Protein> proteins - list of proteins in the protein set
- *                 fasta_ref fasta_ref - reference to fasta file from which contig set were read
- *                 @optional name type fasta_ref
- *             @searchable ws_subset proteins.[*].(id,md5,function,length,aliases) md5 id name source_id source type
+ *         proteinset_id id - unique kbase ID of the protein set
+ *         string name - name of the protein set
+ *         string type - type of the protein set (values are: Organism,Environment,Collection)
+ *         source_id source_id - source ID of the protein set
+ *         string source - source of the protein set
+ *         list<Protein> proteins - list of proteins in the protein set
+ *         fasta_ref fasta_ref - reference to fasta file from which contig set were read
+ *         @optional name type fasta_ref
+ *         @searchable ws_subset proteins.[*].(id,md5,function,length,aliases) md5 id name source_id source type
  * </pre>
  * 
  */

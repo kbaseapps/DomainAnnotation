@@ -22,7 +22,7 @@ import us.kbase.common.service.Tuple2;
  *         mapping<Feature_id, list<function_probability>> roleset_probabilities - mapping of features to list of alternative function_probability objects
  *         list<Feature_id> skipped_features - list of features in genome with no probability
  *         
- *             @searchable ws_subset id genome_ref skipped_features
+ *         @searchable ws_subset id genome_ref skipped_features
  * </pre>
  * 
  */

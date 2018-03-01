@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: ProteinFamily</p>
  * <pre>
  * Structure for a protein family
- *         @optional query_begin query_end subject_begin subject_end score evalue subject_description release_version
+ *     @optional query_begin query_end subject_begin subject_end score evalue subject_description release_version
  * </pre>
  * 
  */

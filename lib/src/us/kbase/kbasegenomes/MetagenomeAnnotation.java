@@ -16,20 +16,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: MetagenomeAnnotation</p>
  * <pre>
  * Structure for the "MetagenomeAnnotation" object
- *         string type - type of metagenome object
- *         string name - name of metagenome object
- *         string kbid - KBase ID of metagenome object
- *         string source_id - ID used in metagenome source
- *         string source - source of metagenome data
- *         string confidence_type - type of confidence score
- *         list<MetagenomeAnnotationOTU> otus - list of otus in metagenome
- *         
+ *     string type - type of metagenome object
+ *     string name - name of metagenome object
+ *     string kbid - KBase ID of metagenome object
+ *     string source_id - ID used in metagenome source
+ *     string source - source of metagenome data
+ *     string confidence_type - type of confidence score
+ *     list<MetagenomeAnnotationOTU> otus - list of otus in metagenome
+ *     
  *     @searchable ws_subset type name id source_id source confidence_type otus.[*].(id,name,source_id,source,functions.[*].(id,abundance,confidence,functional_role))
- *         @metadata ws type as Type
- *         @metadata ws name as Name
- *         @metadata ws source_id as Source ID
- *         @metadata ws source as Source
- *         @metadata ws length(otus) as Number OTUs
+ *     @metadata ws type as Type
+ *     @metadata ws name as Name
+ *     @metadata ws source_id as Source ID
+ *     @metadata ws source as Source
+ *     @metadata ws length(otus) as Number OTUs
  * </pre>
  * 
  */

@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: MetagenomeAnnotationOTU</p>
  * <pre>
  * Structure for the "MetagenomeAnnotationOTU" object
- *         string name - name of metagenome OTU
- *         string kbid - KBase ID of OTU of metagenome object
- *         string source_id - ID used for OTU in metagenome source
- *         string source - source OTU ID
- *         list<MetagenomeAnnotationOTUFunction> functions - list of functions in OTU
+ *     string name - name of metagenome OTU
+ *     string kbid - KBase ID of OTU of metagenome object
+ *     string source_id - ID used for OTU in metagenome source
+ *     string source - source OTU ID
+ *     list<MetagenomeAnnotationOTUFunction> functions - list of functions in OTU
  *     @searchable ws_subset id name source_id source functions.[*].(id,abundance,confidence,functional_role)
  * </pre>
  * 

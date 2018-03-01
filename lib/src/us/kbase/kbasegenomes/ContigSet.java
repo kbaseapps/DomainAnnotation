@@ -16,20 +16,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: ContigSet</p>
  * <pre>
  * Type spec for the "ContigSet" object
- *                 contigset_id id - unique kbase ID of the contig set
- *                 string name - name of the contig set
- *                 string type - type of the contig set (values are: Genome,Transcripts,Environment,Collection)
- *                 source_id source_id - source ID of the contig set
- *                 string source - source of the contig set
- *                 list<Contig> contigs - list of contigs in the contig set
- *                 reads_ref reads_ref - reference to the shocknode with the rawreads from which contigs were assembled
- *                 fasta_ref fasta_ref - reference to fasta file from which contig set were read
- *                 @optional name type reads_ref fasta_ref
- *             @metadata ws type as Type
- *                 @metadata ws source_id as Source ID
- *                 @metadata ws source as Source
- *                 @metadata ws name as Name
- *                 @metadata ws length(contigs) as Number contigs
+ *         contigset_id id - unique kbase ID of the contig set
+ *         string name - name of the contig set
+ *         string type - type of the contig set (values are: Genome,Transcripts,Environment,Collection)
+ *         source_id source_id - source ID of the contig set
+ *         string source - source of the contig set
+ *         list<Contig> contigs - list of contigs in the contig set
+ *         reads_ref reads_ref - reference to the shocknode with the rawreads from which contigs were assembled
+ *         fasta_ref fasta_ref - reference to fasta file from which contig set were read
+ *         @optional name type reads_ref fasta_ref
+ *         @metadata ws type as Type
+ *         @metadata ws source_id as Source ID
+ *         @metadata ws source as Source
+ *         @metadata ws name as Name
+ *         @metadata ws length(contigs) as Number contigs
  * </pre>
  * 
  */

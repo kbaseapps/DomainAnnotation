@@ -13,7 +13,8 @@ import us.kbase.auth.AuthToken;
 import us.kbase.common.service.*;
 import us.kbase.workspace.*;
 import us.kbase.shock.client.*;
-import us.kbase.kbasereport.*;
+import us.kbase.kbasereport.Report;
+import us.kbase.kbasereport.WorkspaceObject;
 import us.kbase.kbasecollections.*;
 import us.kbase.common.utils.FastaWriter;
 

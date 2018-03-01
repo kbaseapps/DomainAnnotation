@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import domainannotation.*;
-import us.kbase.kbasereport.*;
+import us.kbase.kbasereport.Report;
 import us.kbase.auth.AuthToken;
 import us.kbase.shock.client.*;
 import us.kbase.common.service.*;

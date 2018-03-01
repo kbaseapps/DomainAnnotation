@@ -17,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <pre>
  * Pangenome object: this object holds all data regarding a pangenome
  * @searchable ws_subset id name
- *     @metadata ws type as Type
- *     @metadata ws name as Name
- *     @metadata ws length(orthologs) as Number orthologs
- *     @metadata ws length(genome_refs) as Number genomes
+ * @metadata ws type as Type
+ * @metadata ws name as Name
+ * @metadata ws length(orthologs) as Number orthologs
+ * @metadata ws length(genome_refs) as Number genomes
  * </pre>
  * 
  */

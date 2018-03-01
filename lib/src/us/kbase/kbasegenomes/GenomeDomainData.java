@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: GenomeDomainData</p>
  * <pre>
  * GenomeDomainData object: this object holds all data regarding protein domains in a genome in KBase
- *     @optional genome_ref
+ * @optional genome_ref
  * @searchable ws_subset id genome_id scientific_name genome_ref num_domains num_features
  * </pre>
  * 

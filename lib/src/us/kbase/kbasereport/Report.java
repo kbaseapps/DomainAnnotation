@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * <p>Original spec-file type: Report</p>
  * <pre>
  * A simple Report of a method run in KBase.
- * It only provides for now a way to display a fixed width text output summary message, a 
+ * It only provides for now a way to display a fixed width text output summary message, a
  * list of warnings, and a list of objects created (each with descriptions).
- * @optional warnings
+ * @optional warnings file_links html_links direct_html direct_html_link_index
  * @metadata ws length(warnings) as Warnings
  * @metadata ws length(text_message) as Size(characters)
  * @metadata ws length(objects_created) as Objects Created
@@ -30,7 +30,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "text_message",
     "warnings",
-    "objects_created"
+    "objects_created",
+    "file_links",
+    "html_links",
+    "direct_html",
+    "direct_html_link_index"
 })
 public class Report {
 
@@ -40,6 +44,14 @@ public class Report {
     private List<String> warnings;
     @JsonProperty("objects_created")
     private List<WorkspaceObject> objectsCreated;
+    @JsonProperty("file_links")
+    private List<us.kbase.kbasereport.LinkedFile> fileLinks;
+    @JsonProperty("html_links")
+    private List<us.kbase.kbasereport.LinkedFile> htmlLinks;
+    @JsonProperty("direct_html")
+    private java.lang.String directHtml;
+    @JsonProperty("direct_html_link_index")
+    private Long directHtmlLinkIndex;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("text_message")
@@ -87,6 +99,66 @@ public class Report {
         return this;
     }
 
+    @JsonProperty("file_links")
+    public List<us.kbase.kbasereport.LinkedFile> getFileLinks() {
+        return fileLinks;
+    }
+
+    @JsonProperty("file_links")
+    public void setFileLinks(List<us.kbase.kbasereport.LinkedFile> fileLinks) {
+        this.fileLinks = fileLinks;
+    }
+
+    public Report withFileLinks(List<us.kbase.kbasereport.LinkedFile> fileLinks) {
+        this.fileLinks = fileLinks;
+        return this;
+    }
+
+    @JsonProperty("html_links")
+    public List<us.kbase.kbasereport.LinkedFile> getHtmlLinks() {
+        return htmlLinks;
+    }
+
+    @JsonProperty("html_links")
+    public void setHtmlLinks(List<us.kbase.kbasereport.LinkedFile> htmlLinks) {
+        this.htmlLinks = htmlLinks;
+    }
+
+    public Report withHtmlLinks(List<us.kbase.kbasereport.LinkedFile> htmlLinks) {
+        this.htmlLinks = htmlLinks;
+        return this;
+    }
+
+    @JsonProperty("direct_html")
+    public java.lang.String getDirectHtml() {
+        return directHtml;
+    }
+
+    @JsonProperty("direct_html")
+    public void setDirectHtml(java.lang.String directHtml) {
+        this.directHtml = directHtml;
+    }
+
+    public Report withDirectHtml(java.lang.String directHtml) {
+        this.directHtml = directHtml;
+        return this;
+    }
+
+    @JsonProperty("direct_html_link_index")
+    public Long getDirectHtmlLinkIndex() {
+        return directHtmlLinkIndex;
+    }
+
+    @JsonProperty("direct_html_link_index")
+    public void setDirectHtmlLinkIndex(Long directHtmlLinkIndex) {
+        this.directHtmlLinkIndex = directHtmlLinkIndex;
+    }
+
+    public Report withDirectHtmlLinkIndex(Long directHtmlLinkIndex) {
+        this.directHtmlLinkIndex = directHtmlLinkIndex;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -99,7 +171,7 @@ public class Report {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((("Report"+" [textMessage=")+ textMessage)+", warnings=")+ warnings)+", objectsCreated=")+ objectsCreated)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((("Report"+" [textMessage=")+ textMessage)+", warnings=")+ warnings)+", objectsCreated=")+ objectsCreated)+", fileLinks=")+ fileLinks)+", htmlLinks=")+ htmlLinks)+", directHtml=")+ directHtml)+", directHtmlLinkIndex=")+ directHtmlLinkIndex)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

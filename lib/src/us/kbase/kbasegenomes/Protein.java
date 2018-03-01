@@ -17,17 +17,17 @@ import us.kbase.common.service.Tuple3;
  * <p>Original spec-file type: Protein</p>
  * <pre>
  * Type spec for the "Protein" object
- *         Protein_id id - unique external ID of protein
- *         string function - annotated function for protein
- *         string md5 - md5 hash of protein sequence
- *         string sequence - amino acid sequence of protein
- *         int length - length of protein
- *         list<ProteinFamily> protein_families - families to which the protein belongs
- *         list<string> aliases - aliases for the protein
- *         list<annotation> annotations - curator annotations on protein
- *         list<subsystem_data> subsystem_data;
- *         
- *         @optional function
+ *     Protein_id id - unique external ID of protein
+ *     string function - annotated function for protein
+ *     string md5 - md5 hash of protein sequence
+ *     string sequence - amino acid sequence of protein
+ *     int length - length of protein
+ *     list<ProteinFamily> protein_families - families to which the protein belongs
+ *     list<string> aliases - aliases for the protein
+ *     list<annotation> annotations - curator annotations on protein
+ *     list<subsystem_data> subsystem_data;
+ *     
+ *     @optional function
  *     @searchable ws_subset id md5 function length aliases
  * </pre>
  * 

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * int abundance - number of hits with associated role and OTU
  * float confidence - confidence of functional role hit
  * string confidence_type - type of functional role hit
- *             @searchable ws_subset id abundance confidence functional_role
+ * @searchable ws_subset id abundance confidence functional_role
  * </pre>
  * 
  */
