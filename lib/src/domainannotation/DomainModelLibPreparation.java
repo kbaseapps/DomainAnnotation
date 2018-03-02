@@ -26,6 +26,14 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
+        parseDomainLibrary("PRK-6.0-CDD-3.16",
+                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Prk",
+                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
+                           "6.0",
+                           "2017-03-29",
+                           "prk-no-url",
+                           "");
         parseDomainLibrary("NCBIfam-AMR-1.1",
                            "https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/NCBIfam-AMR.LIB",
@@ -66,14 +74,6 @@ public class DomainModelLibPreparation {
                            "2017-03-29",
                            "smart",
                            "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
-        parseDomainLibrary("PRK-6.0-CDD-3.16",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Prk",
-                           "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "6.0",
-                           "2017-03-29",
-                           "prk-no-url",
-                           "");
         parseDomainLibrary("Pfam-31.0",
                            "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.hmm",
@@ -106,9 +106,7 @@ public class DomainModelLibPreparation {
                            "2017-11-28",
                            "NCBIfam-gen",
                            "");
-			   
         String[] libraries = new String[] {"COGs-CDD-3.16"};
-	
         makeDomainModelSet("COGs-1.0-3.16-only",
                            libraries);
 
@@ -121,12 +119,11 @@ public class DomainModelLibPreparation {
 	
         makeDomainModelSet("SMART-6.0-3.16-only",
                            libraries);
-
         libraries[0] = "PRK-6.0-CDD-3.16";
 	
         makeDomainModelSet("PRK-6.0-3.16-only",
                            libraries);
-        
+
         libraries[0] = "TIGRFAMs-15.0";
 
         makeDomainModelSet("TIGRFAMs-15.0-only",
@@ -144,11 +141,12 @@ public class DomainModelLibPreparation {
 
         makeDomainModelSet("NCBIfam-1.1-only",
                            libraries);
-	
+
         libraries = new String[] { "COGs-CDD-3.16",
                                    "CDD-NCBI-curated-3.16",
                                    "CDD-SD-NCBI-curated-3.16",
                                    "SMART-6.0-CDD-3.16",
+                                   "PRK-6.0-CDD-3.16",
                                    "Pfam-31.0",
                                    "TIGRFAMs-15.0",
                                    "NCBIfam-PRK-1.1",
@@ -262,11 +260,12 @@ public class DomainModelLibPreparation {
 
         Map<String,DomainModel> domains;
         if (source.equals("CDD"))
-            domains = parseCDDDomains(indexName,
-                                      prefix);
+            domains = parseCDDDomains(fileName,
+                                      indexName);
         else
             domains = parseHMMDomains(fileName,
                                       indexName);
+        System.out.println("Found "+domains.size()+" domains");
 	
         dl.setDomains(domains);
 
@@ -335,11 +334,18 @@ public class DomainModelLibPreparation {
        cddid.tbl.gz, which is downloaded by prepare_3rd_party_dbs.sh)
     */
     private static Map<String,DomainModel> parseCDDDomains(String fileName,
-                                                           String prefix) throws Exception {
+                                                           String indexName) throws Exception {
         Map<String,DomainModel> domains = new HashMap<String,DomainModel>();
 
         BufferedReader infile = IO.openReader(fileName);
         String buffer;
+        HashSet<String> validAcc = new HashSet<String>();
+        while ((buffer=infile.readLine()) != null) {
+            int pos = buffer.indexOf(".smp");
+            if (pos>0)
+                validAcc.add(buffer.substring(0,pos));
+        }
+        infile = IO.openReader(indexName);
         while ((buffer=infile.readLine()) != null) {
             StringTokenizer st = new StringTokenizer(buffer,"\t");
             DomainModel m = new DomainModel();
@@ -351,7 +357,7 @@ public class DomainModelLibPreparation {
             m.setDescription(description);
             m.setLength(StringUtil.atol(st.nextToken()));
             m.setModelType("PSSM");
-            if (accession.startsWith(prefix))
+            if (validAcc.contains(accession))
                 domains.put(accession,m);
         }
         infile.close();

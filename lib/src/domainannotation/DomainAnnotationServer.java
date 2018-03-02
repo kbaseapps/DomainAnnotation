@@ -37,7 +37,7 @@ public class DomainAnnotationServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "1.0.3";
     private static final String gitUrl = "git@github.com:kbaseapps/DomainAnnotation.git";
-    private static final String gitCommitHash = "25d6a29a567e0661aa4eac1df29cc53a4b64cd41";
+    private static final String gitCommitHash = "9342021ba077a322cfcad1e24f40e6d5c2a7ae18";
 
     //BEGIN_CLASS_HEADER
     private final String wsUrl;
