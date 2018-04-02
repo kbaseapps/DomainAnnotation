@@ -426,21 +426,28 @@ public class DomainAnnotationImpl {
                     List<Feature> features = genome.getFeatures();
                     int pos = -1;
                     for (Feature feat : features) {
-                        if (feat.getAdditionalProperties().containsKey("parent_gene")){
+                        String myID = feat.getId();
+                        String parentGeneID = null;
+                        if (feat.getAdditionalProperties().get("parent_gene") != null)
+                            parentGeneID = feat.getAdditionalProperties().get("parent_gene").toString();
+                        if ((parentGeneID != null) && (myID != null) &&
+                            (!parentGeneID.equals(myID))) {
+                            // System.out.println("debug: skipping gene "+myID+" due to parent gene "+parentGeneID);
                             continue;
                         }
                         pos++;
                         String seq = feat.getProteinTranslation();
-                        if (feat.getLocation().size() < 1)
+                        if (feat.getLocation().size() < 1) {
+                            // System.out.println("debug: skipping gene "+myID+" due to no location info");
                             continue;
+                        }
                         Tuple4<String, Long, String, Long> loc = feat.getLocation().get(0);
                         String contigId = loc.getE1();
                         String featId = feat.getId();
-                        if ((contigId==null) || (featId==null))
+                        if ((contigId==null) || (featId==null)) {
+                            // System.out.println("debug: skipping gene +"+myID+" due to bad location info");
                             continue;
-                        // skip features with parent gene
-                        // if (feat.getParentGene()!=null)
-                        //   continue;
+                        }
                         if (seq != null && !seq.isEmpty()) {
                             fw.write("" + pos, seq);
                             Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);
@@ -448,6 +455,9 @@ public class DomainAnnotationImpl {
                             featIdToContigFeatIndex.put(featId, contigFeatIndex);
                             protCount++;
                             realContigs.add(contigId);
+                        }
+                        else {
+                            // System.out.println("debug: skipping protein "+myID+" due to no sequence");
                         }
                         List<Tuple5<String, Long, Long, Long, Map<String, List<Tuple5<Long, Long, Double, Double, Double>>>>> prots = contig2prots.get(contigId);
                         if (prots == null) {
@@ -479,8 +489,10 @@ public class DomainAnnotationImpl {
                         String seq = pd.getProteinAminoAcidSequence();
                         // fake contig since we don't get that by default from GA-API
                         String contigId = "1";
-                        if ((seq==null) || (seq.isEmpty()))
+                        if ((seq==null) || (seq.isEmpty())) {
+                            // System.out.println("debug: skipping protein "+proteinID+" due to no protein sequence");
                             continue;
+                        }
                         pos++;
                         fw.write("" + pos, seq);
                         Tuple2<String, Long> contigFeatIndex = new Tuple2<String, Long>().withE1(contigId);

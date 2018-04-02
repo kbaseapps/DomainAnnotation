@@ -2,6 +2,7 @@
 __Changes__
 - allow selection of PRK models in UI
 - updates to document newer libraries released in 1.0.3
+- compatible with genomes imported from JGI
 
 ### Version 1.0.3
 __Changes__
