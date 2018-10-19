@@ -51,35 +51,35 @@ parameters:
 
 description : |
    <p>This method identifies protein domains from widely used domain libraries.  It requires a Genome as input, which must already have annotated genes (e.g., those identified using the <a data-method-id=<D2>reannotate_microbial_genome<D3>>Annotate Microbial Genome</a> or <a data-method-id=<D2>annotate_contigset<D3>>Annotate Microbial Contigs</a> methods).</p>
-    
+
     <p>The user must choose one of the following sets of models with which to annotate their Genome:</p>
-    
+
     <ul>
     <li><b>COGs</b> (clusters of orthologous groups, <a href="http://www.ncbi.nlm.nih.gov/COG/">http://www.ncbi.nlm.nih.gov/COG/</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
-    
+
     <li>NCBI's <b>CDD</b> models from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.  This dataset includes only the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd_help.shtml#CDSource_NCBI_curated">NCBI-curated domains (including the structural motif "sd" models)</a>.</li>
-    
+
     <li><b>SMART</b> (Simple Modular Architecture Research Tool, <a href="http://smart.embl-heidelberg.de/">http://smart.embl-heidelberg.de/</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
 
     <li><b>PRK</b> (Protein Clusters, <a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">https://www.ncbi.nlm.nih.gov/proteinclusters/</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
-    
+
     <li><b>Pfam</b> version 31.0 hidden Markov models, from <a href="http://pfam.xfam.org/">http://pfam.xfam.org/</a>.</li>
-    
+
     <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org/cgi-bin/tigrfams/index.cgi">J. Craig Venter Institute</a>.</li>
 
     <li><b>NCBIfam</b> version 1.1 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
-    
+
     <li><b>All of the above</b> libraries.</li>
     </ul>
-    
+
     <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.2.31, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
-    
+
     <p>For the three HMM libraries (Pfam, TIGRFAMs and NCBIfam), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.1b2</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
 
     <p>The annotation job may run for an hour or longer, especially if all libraries are selected.  When the annotation job finishes, a DomainAnnotation object will be stored in your data store, which can be used to browse the domains that were identified in your genome.</p>
 
     <p>The user can download the annotations in CSV (comma separated values) format.  The fields in this CSV file are as follows:</p>
-    
+
     <ul>
     <li><b>Contig</b> - Identifier of the contig containg an annotated feature.</li>
     <li><b>Feature</b> - Identifier of the feature (in this case, the protein-encoding gene) annotated with domains.</li>
@@ -94,5 +94,56 @@ description : |
     <li><b>Domain Coverage</b> - Fraction of the length of the protein covered by this domain annotation.</li>
     <li><b>Domain Description</b> - Description of this domain.</li>
     </ul>
-    
+
     <p><strong>Team members who developed &amp; deployed methods in KBase:</strong> John-Marc Chandonia, Roman Sutormin, and Pavel Novichkov. For questions, <a href="mailto:help@kbase.us">e-mail help@kbase.us</a></p>
+
+publications :
+    -
+        display-text: |
+            Altschul SF, Madden TL, Schäffer AA, Zhang J, Zhang Z, Miller W, et al. Gapped BLAST and PSI-BLAST: a new generation of protein database search programs. Nucleic Acids Res. 1997;25: 3389–3402. doi:10.1093/nar/25.17.3389
+        link: https://academic.oup.com/nar/article/25/17/3389/1061651
+
+    -
+        display-text: |
+            Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, et al. BLAST+: architecture and applications. BMC Bioinformatics. 2009;10: 421. doi:10.1186/1471-2105-10-421
+        link: https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-10-421
+
+    -
+        display-text: |
+            Eddy SR. Accelerated Profile HMM Searches. PLOS Computational Biology. 2011;7: e1002195. doi:10.1371/journal.pcbi.1002195
+        link: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002195
+
+    -
+        display-text: |
+            Finn RD, Coggill P, Eberhardt RY, Eddy SR, Mistry J, Mitchell AL, et al. The Pfam protein families database: towards a more sustainable future. Nucleic Acids Res. 2016;44: D279–D285. doi:10.1093/nar/gkv1344
+        link: https://academic.oup.com/nar/article/44/D1/D279/2503120
+
+    -
+        display-text: |
+            Haft DH, Selengut JD, Richter RA, Harkins D, Basu MK, Beck E. TIGRFAMs and Genome Properties in 2013. Nucleic Acids Res. 2013;41: D387–D395. doi:10.1093/nar/gks1234
+        link: https://academic.oup.com/nar/article/41/D1/D387/1070451
+
+    -
+        display-text: |
+            Letunic I, Bork P. 20 years of the SMART protein domain annotation resource. Nucleic Acids Res. 2018;46: D493–D496. doi:10.1093/nar/gkx922
+        link: https://academic.oup.com/nar/article/46/D1/D493/4429069
+
+    -
+        display-text: |
+            Letunic I, Doerks T, Bork P. SMART: recent updates, new developments and status in 2015. Nucleic Acids Res. 2015;43: D257-260. doi:10.1093/nar/gku949
+        link: https://academic.oup.com/nar/article/43/D1/D257/2439521
+
+    -
+        display-text: |
+            Marchler-Bauer A, Bo Y, Han L, He J, Lanczycki CJ, Lu S, et al. CDD/SPARCLE: functional classification of proteins via subfamily domain architectures. Nucleic Acids Res. 2017;45: D200–D203. doi:10.1093/nar/gkw1129
+        link: https://academic.oup.com/nar/article/45/D1/D200/2605748
+
+    -
+        display-text: |
+            Selengut JD, Haft DH, Davidsen T, Ganapathy A, Gwinn-Giglio M, Nelson WC, et al. TIGRFAMs and Genome Properties: tools for the assignment of molecular function and biological process in prokaryotic genomes. Nucleic Acids Res. 2007;35: D260-264. doi:10.1093/nar/gkl1043
+        link: https://academic.oup.com/nar/article/35/suppl_1/D260/1088023
+
+    -
+        display-text: |
+            Tatusov RL, Koonin EV, Lipman DJ. A Genomic Perspective on Protein Families. Science. 1997;278: 631–637. doi:10.1126/science.278.5338.631
+        link: https://www.ncbi.nlm.nih.gov/pubmed/9381173
