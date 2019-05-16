@@ -3,7 +3,7 @@
 #
 name: Annotate Domains in a Genome
 tooltip: |
-  Annotate a genome with protein domains from widely used domain libraries.
+  Annotate a Genome object with protein domains from widely used domain libraries.
 screenshots: []
 
 icon: domains-red.png
@@ -14,12 +14,12 @@ icon: domains-red.png
 suggestions:
   apps:
     related:
-      []
+      [annotate_domains_in_a_genome_set]
     next:
-      []
+      [text_reports_-_domain_annotation]
   methods:
     related:
-      [annotate_genome_generic, annotate_contigset]
+      []
     next:
       []
 
@@ -28,74 +28,74 @@ parameters:
     ui-name : |
       Genome
     short-hint : |
-      Genome to annotate
-    long-hint  : |
-      Select a Genome from your data store to annotate with domains.  It must already have annotated genes
+      Select a Genome from your data oanel to annotate with domains. It must already have annotated protein-encoding genes.
 
   dms_ref :
     ui-name : |
       Domain Model Set
     short-hint : |
-      Set of domain models or libraries to use
-    long-hint  : |
-      Set of domain models or libraries to use
+      Set of domain models or libraries to use.
 
   output_result_id :
     ui-name : |
       Output DomainAnnotation Name
     short-hint : |
-      This object with annotated domains will be stored in your data store
-    long-hint  : |
-      This object with annotated domains will be stored in your data store
+      The name of the object with annotated domains that will be stored in your data panel.
 
 
 description : |
-   <p>This method identifies protein domains from widely used domain libraries.  It requires a Genome as input, which must already have annotated genes (e.g., those identified using the <a data-method-id=<D2>reannotate_microbial_genome<D3>>Annotate Microbial Genome</a> or <a data-method-id=<D2>annotate_contigset<D3>>Annotate Microbial Contigs</a> methods).</p>
+    <p>This App identifies protein domains from widely used domain libraries.  It requires a Genome as input, which must already have annotated protein-encoding genes (e.g., those identified using the <a href=”https://narrative.kbase.us/#catalog/apps/RAST_SDK/reannotate_microbial_genome/release”>Annotate Microbial Genome</a> or <a href=”https://narrative.kbase.us/#catalog/apps/RAST_SDK/annotate_contigset/release”>Annotate Microbial Assembly</a> Apps).</p>
 
-    <p>The user must choose one of the following sets of models with which to annotate their Genome:</p>
-
-    <ul>
-    <li><b>COGs</b> (clusters of orthologous groups, <a href="http://www.ncbi.nlm.nih.gov/COG/">http://www.ncbi.nlm.nih.gov/COG/</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
-
-    <li>NCBI's <b>CDD</b> models from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.  This dataset includes only the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd_help.shtml#CDSource_NCBI_curated">NCBI-curated domains (including the structural motif "sd" models)</a>.</li>
-
-    <li><b>SMART</b> (Simple Modular Architecture Research Tool, <a href="http://smart.embl-heidelberg.de/">http://smart.embl-heidelberg.de/</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
-
-    <li><b>PRK</b> (Protein Clusters, <a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">https://www.ncbi.nlm.nih.gov/proteinclusters/</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
-
-    <li><b>Pfam</b> version 31.0 hidden Markov models, from <a href="http://pfam.xfam.org/">http://pfam.xfam.org/</a>.</li>
-
-    <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org/cgi-bin/tigrfams/index.cgi">J. Craig Venter Institute</a>.</li>
-
-    <li><b>NCBIfam</b> version 1.1 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
-
-    <li><b>All of the above</b> libraries.</li>
+    <p>The user must choose one of the following sets of models with which to annotate their Genome:
+     <ul>
+      <li><b>All domain libraries</b> (details of each set are listed below).</li>
+      <li><b>COGs</b> (<a href="http://www.ncbi.nlm.nih.gov/COG/">Clusters of Orthologous Groups</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
+      <li>NCBI's <b>CDD</b> models from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.  This dataset includes only the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd_help.shtml#CDSource_NCBI_curated">NCBI-curated domains</a> (including the structural motif "sd" models).</li>
+      <li><b>SMART</b> (<a href="http://smart.embl-heidelberg.de/">Simple Modular Architecture Research Tool</a>) version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
+      <li><b>PRK</b> (<a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">Protein Clusters</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.16.</li>
+      <li><b>Pfam</b> <a href="http://pfam.xfam.org/">version 31.0 hidden Markov models</a>.</li>
+      <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org/cgi-bin/tigrfams/index.cgi">J. Craig Venter Institute</a>.</li>
+      <li><b>NCBIfam</b> version 1.1 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
     </ul>
+    <p>
 
     <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.2.31, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
 
     <p>For the three HMM libraries (Pfam, TIGRFAMs and NCBIfam), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.1b2</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
 
-    <p>The annotation job may run for an hour or longer, especially if all libraries are selected.  When the annotation job finishes, a DomainAnnotation object will be stored in your data store, which can be used to browse the domains that were identified in your genome.</p>
+    <p>The annotation job may run for a few hours depending on the total number of libraries selected and/or the size of the genome.  When the annotation job finishes, a DomainAnnotation object will be stored in your data panel, which can be used to browse the domains that were identified in your genome.</p>
 
-    <p>The user can download the annotations in CSV (comma separated values) format.  The fields in this CSV file are as follows:</p>
+    <p><strong>Annotate Domains in a Genome Output</strong><br>The output report currently consists of two tabs:
+      <ul>
+        <li><u>Overview:</u> this tab lists the Genome annotated, the model set used, the number of protein-encoding genes that were annotated, and the total number of annotated domains.</li>
+        <li><u>Domains:</u> this tab lists the domains that were annotated. It consists of 4 columns:
+          <ul>
+            <li><i>Domain:</i> this column lists the name of the domain and a link to more information about the domain.</li>
+            <li><i>Description:</i> this column lists a detailed text description of the domain.</li>
+            <li><i># Genes:</i> this column lists the number of protein-encoding genes in this genome within this domain annotation.</li>
+            <li><i>Genes:</i> This column lists the protein-encoding genes with this annotation. Note that each gene name is a link that will create a new tab listing all the annotated domains for that specific gene.</li>
+          </ul></li>
+      </ul>
 
-    <ul>
-    <li><b>Contig</b> - Identifier of the contig containg an annotated feature.</li>
-    <li><b>Feature</b> - Identifier of the feature (in this case, the protein-encoding gene) annotated with domains.</li>
-    <li><b>Feature Start in Contig</b> - 1-indexed position of where the annotated feature starts in the contig.</li>
-    <li><b>Feature End in Contig</b> - 1-indexed position of where the annotated feature ends in the contig.</li>
-    <li><b>Feature Direction in Contig</b> - character indicating whether the annotated feature is on the '+' or '-' strand.</li>
-    <li><b>Domain Accession</b> - accession of the domain annotated in the feature.</li>
-    <li><b>Domain Start in Feature</b> - 1-indexed position indicating where the annotated domain starts, relative to the beginning of the feature.</li>
-    <li><b>Domain End in Feature</b> - 1-indexed position indicating where the annotated domain ends, relative to the beginning of the feature.</li>
-    <li><b>E-value</b> - E-value for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
-    <li><b>Bit Score</b> - Bit score for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
-    <li><b>Domain Coverage</b> - Fraction of the length of the protein covered by this domain annotation.</li>
-    <li><b>Domain Description</b> - Description of this domain.</li>
-    </ul>
+    <p>The user can download the annotations in CSV (comma separated values) format.  The fields in this CSV file are as follows:
+      <ul>
+        <li><b>Contig</b> - Identifier of the contig containing an annotated feature.</li>
+        <li><b>Feature</b> - Identifier of the protein-encoding gene feature annotated with domains.</li>
+        <li><b>Feature Start in Contig</b> - 1-indexed position of where the annotated feature starts in the contig.</li>
+        <li><b>Feature End in Contig</b> - 1-indexed position of where the annotated feature ends in the contig.</li>
+        <li><b>Feature Direction in Contig</b> - Character indicating whether the annotated feature is on the '+' or '-' strand.</li>
+        <li><b>Domain Accession</b> - Accession of the domain annotated in the feature.</li>
+        <li><b>Domain Start in Feature</b> - 1-indexed amino acid position indicating where the annotated domain starts, relative to the beginning of the feature.</li>
+        <li><b>Domain End in Feature</b> - 1-indexed amino acid position indicating where the annotated domain ends, relative to the beginning of the feature.</li>
+        <li><b>E-value</b> - E-value for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
+        <li><b>Bit Score</b> - Bit score for each domain annotation, as returned by the annotation method (HMMER or RPS-BLAST).</li>
+        <li><b>Domain Coverage</b> - Fraction of the length of the protein covered by this domain annotation.</li>
+        <li><b>Domain Description</b> - Description of this domain.</li>
+      </ul>
+    </p>
 
-    <p><strong>Team members who developed &amp; deployed methods in KBase:</strong> John-Marc Chandonia, Roman Sutormin, and Pavel Novichkov. For questions, <a href="mailto:help@kbase.us">e-mail help@kbase.us</a></p>
+    <p><strong>Team members who developed &amp; deployed this App in KBase:</strong> John-Marc Chandonia, Roman Sutormin, and Pavel Novichkov. For questions, please <a href="http://kbase.us/contact-us/">contact us</a>.</p>
+
 
 publications :
     -
