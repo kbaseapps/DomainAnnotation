@@ -30,14 +30,13 @@ public class DomainAnnotationServerTest {
     private static String wsURL = null;
     private static String wsName = null;
     private static DomainAnnotationServer impl = null;
-    private static final String genomeWsName = "KBasePublicGenomesV5";
     private static final String domainWsName = "KBasePublicGeneDomains";
     private static final String domainLibraryType = "KBaseGeneFamilies.DomainLibrary";
     private static final String domainModelSetType = "KBaseGeneFamilies.DomainModelSet";
     private static final String domainAnnotationType = "KBaseGeneFamilies.DomainAnnotation";
-    private static final String ecoliRef = genomeWsName+"/kb|g.0";
-    private static final String ptv1087Ref = "30281/2/1";
-    private static final String ecoliGARef = "8020/27/2";
+    // needs to be in app-dev:
+    // private static final String ecoliRef = "19217/25575/2";
+    private static final String ecoliRef = "1621/14/1";
     private static final String smartRef = domainWsName+"/SMART-only";
     private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
     private static final String allLibsRef = domainWsName+"/All-1.0.3";
@@ -111,46 +110,9 @@ public class DomainAnnotationServerTest {
         genome = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(ecoliRef))).get(0).getData().asClassInstance(Genome.class);
 
         System.out.println(genome.getScientificName());
-        assertEquals(genome.getScientificName(), "Escherichia coli K12");
+        assertEquals(genome.getScientificName(), "Escherichia coli str. K-12 substr. MG1655");
     }
 
-    /**
-       Check that we can read the genome from PTV-1087
-    */
-    @Test
-    public void getGenomePTV1087() throws Exception {
-        Genome genome = null;
-
-        System.out.println("Reading genome from WS");
-        genome = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(ptv1087Ref))).get(0).getData().asClassInstance(Genome.class);
-
-        System.out.println(genome.getScientificName());
-        assertEquals(genome.getScientificName(), "Unconfirmed Organism: None");
-    }
-
-    /**
-       Check that we can annotate the genome from PTV-1087 with SMART.  This is
-       fairly fast.
-    */
-    @Test
-    public void searchGenomePTV1087PSSM() throws Exception {
-        SearchDomainsInput input = new SearchDomainsInput()
-            .withGenomeRef(ptv1087Ref)
-            .withDmsRef(smartRef)
-            .withWs(getWsName())
-            .withOutputResultId("test");
-        SearchDomainsOutput output = DomainAnnotationImpl.searchDomains(wsURL,
-                                                                        shockURL,
-                                                                        token,
-                                                                        input);
-        Assert.assertNotNull(output);
-        String reportRef = output.getReportRef();
-        Assert.assertNotNull(reportRef);
-        Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
-        Assert.assertNotNull(report);
-        System.out.println(report.getTextMessage());
-    }
-    
     /**
        Check that we can get the SMART-only DomainModelSet from the
        public workspace.
@@ -226,29 +188,6 @@ public class DomainAnnotationServerTest {
                                                            token,
                                                            exportParams);
         Assert.assertNotNull(out2);
-    }
-    
-    /**
-       Check that we can annotate E. coli with SMART.  This is
-       fairly fast.
-    @Test
-    */
-    public void searchEColiGAPSSM() throws Exception {
-        SearchDomainsGAInput input = new SearchDomainsGAInput()
-            .withGenomeAnnotationRef(ecoliGARef)
-            .withDmsRef(smartRef)
-            .withWs(getWsName())
-            .withOutputResultId("test");
-        SearchDomainsGAOutput output = DomainAnnotationImpl.searchDomainsGA(wsURL,
-                                                                            shockURL,
-                                                                            token,
-                                                                            input);
-        Assert.assertNotNull(output);
-        String reportRef = output.getReportRef();
-        Assert.assertNotNull(reportRef);
-        Report report = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(reportRef))).get(0).getData().asClassInstance(us.kbase.kbasereport.Report.class);
-        Assert.assertNotNull(report);
-        System.out.println(report.getTextMessage());
     }
     
     @AfterClass

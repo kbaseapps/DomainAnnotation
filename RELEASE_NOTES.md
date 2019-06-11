@@ -1,3 +1,7 @@
+### Version 1.0.6
+__Changes__
+- Fixed PUBLIC-748, SSL certificate error
+
 ### Version 1.0.5
 __Changes__
 - changed citation to PLOS format
