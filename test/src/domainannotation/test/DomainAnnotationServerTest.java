@@ -36,7 +36,7 @@ public class DomainAnnotationServerTest {
     private static final String domainAnnotationType = "KBaseGeneFamilies.DomainAnnotation";
     // needs to be in app-dev:
     // private static final String ecoliRef = "19217/25575/2";
-    private static final String ecoliRef = "1621/14/1";
+    private static final String ecoliRef = "79/11/1";
     private static final String smartRef = domainWsName+"/SMART-only";
     private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
     private static final String allLibsRef = domainWsName+"/All-1.0.3";
