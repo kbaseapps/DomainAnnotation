@@ -1,3 +1,8 @@
+### Version 1.0.7
+__Changes__
+- Updated the BasicShockClient to make it compatible with both Shock and the
+  blobstore
+
 ### Version 1.0.6
 __Changes__
 - Fixed PUBLIC-748, SSL certificate error
