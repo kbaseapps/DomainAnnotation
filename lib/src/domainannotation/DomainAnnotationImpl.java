@@ -90,7 +90,7 @@ public class DomainAnnotationImpl {
         
         BasicShockClient shockClient = new BasicShockClient(new URL(shockURL), token);
         InputStream is = new BufferedInputStream(new FileInputStream(f));
-        ShockNode sn = shockClient.addNode(is,f.getName(),null);
+        ShockNode sn = shockClient.addNode(is, f.length(), f.getName(), null);
         is.close();
         String shockNodeID = sn.getId().getId();
         rv.setShockId(shockNodeID);
