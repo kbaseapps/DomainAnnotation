@@ -309,7 +309,7 @@ public class DomainModelLibPreparation {
         for (Handle h : libraryFiles) {
             File f = new File(libDir.getPath()+"/"+h.getFileName());
             InputStream is = new BufferedInputStream(new FileInputStream(f));
-            ShockNode sn = client.addNode(is,f.getName(),null);
+            ShockNode sn = client.addNode(is, f.length(), f.getName(), null);
             String shockNodeID = sn.getId().getId();
             // this used to make nodes world-readable;
             // since auth2, it now fails because user is <unknown>

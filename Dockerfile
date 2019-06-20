@@ -26,6 +26,28 @@ RUN rmdir ./hmmer-3.1b2-linux-intel-x86_64/binaries
 RUN rmdir ./hmmer-3.1b2-linux-intel-x86_64
 RUN rm ./hmmer.tar.gz
 
+RUN add-apt-repository ppa:openjdk-r/ppa \
+	&& sudo apt-get update \
+	&& sudo apt-get -y install openjdk-8-jdk \
+	&& echo java versions: \
+	&& java -version \
+	&& javac -version \
+	&& echo $JAVA_HOME \
+	&& ls -l /usr/lib/jvm \
+	&& cd /kb/runtime \
+	&& rm java \
+	&& ln -s /usr/lib/jvm/java-8-openjdk-amd64 java \
+	&& ls -l
+
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+
+# get most up to date jars, note will be cached so change this RUN to update
+RUN cd /kb/dev_container/modules/jars \
+    && git pull \
+    && . /kb/dev_container/user-env.sh \
+    && make deploy \
+    && echo "this is only here to force an update: 1"
+
 # -----------------------------------------
 
 COPY ./ /kb/module
