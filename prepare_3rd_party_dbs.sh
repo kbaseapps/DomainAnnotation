@@ -14,8 +14,8 @@ fi
 ########### Pfam #############
 if [ ! -f ../db/Pfam-A.hmm ]; then
     echo "Downloading Pfam..."
-    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.full.gz'
-    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz'
+    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.full.gz'
+    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz'
     gzip -d ../db/Pfam-A.hmm.gz
     ../bin/hmmpress.$OS ../db/Pfam-A.hmm
 fi

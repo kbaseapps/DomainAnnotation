@@ -1,3 +1,10 @@
+### Version 1.0
+__Changes__
+- updated version of HMMER to 3.2.1
+- updated version of RPSBLAST to 2.9.0
+- updated version of Pfam to 32.0
+- updated version of CDD and CDD-derived models (SMART, COG) to 3.17
+
 ### Version 1.0.7
 __Changes__
 - Updated the BasicShockClient to make it compatible with both Shock and the
