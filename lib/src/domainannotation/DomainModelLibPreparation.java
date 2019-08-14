@@ -26,12 +26,12 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
-        parseDomainLibrary("PRK-6.0-CDD-3.16",
+        parseDomainLibrary("PRK-2017-12-04-CDD-3.17",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Prk",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "6.0",
-                           "2017-03-29",
+                           "2017-12-04",
+                           "2019-04-03",
                            "prk-no-url",
                            "");
         parseDomainLibrary("NCBIfam-AMR-1.1",
@@ -42,44 +42,44 @@ public class DomainModelLibPreparation {
                            "2017-11-28",
                            "NCBIfam-AMR",
                            "");
-        parseDomainLibrary("COGs-CDD-3.16",
+        parseDomainLibrary("COGs-CDD-3.17",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cog",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "3.16",
-                           "2017-03-29",
+                           "3.17",
+                           "2019-04-03",
                            "COG",
                            "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=COG");
-        parseDomainLibrary("CDD-NCBI-curated-3.16",
+        parseDomainLibrary("CDD-NCBI-curated-3.17",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Cdd",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "3.16",
-                           "2017-03-29",
+                           "3.17",
+                           "2019-04-03",
                            "cd",
                            "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=cd");
-        parseDomainLibrary("CDD-SD-NCBI-curated-3.16",
+        parseDomainLibrary("CDD-SD-NCBI-curated-3.17",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Csd",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
-                           "3.16",
-                           "2017-03-29",
+                           "3.17",
+                           "2019-04-03",
                            "sd",
                            "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=sd");
-        parseDomainLibrary("SMART-6.0-CDD-3.16",
+        parseDomainLibrary("SMART-6.0-CDD-3.17",
                            "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Smart",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/cddid.tbl.gz",
                            "6.0",
-                           "2017-03-29",
+                           "2019-04-03",
                            "smart",
                            "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
-        parseDomainLibrary("Pfam-31.0",
-                           "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam31.0/Pfam-A.hmm.gz",
+        parseDomainLibrary("Pfam-32.0",
+                           "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.hmm",
                            "/kb/dev_container/modules/kb_sdk/DomainAnnotation/data/db/Pfam-A.full.gz",
-                           "31.0",
-                           "2017-02-24",
+                           "32.0",
+                           "2018-08-30",
                            "PF",
                            "http://pfam.xfam.org/family/PF");
         parseDomainLibrary("TIGRFAMs-15.0",
@@ -106,22 +106,22 @@ public class DomainModelLibPreparation {
                            "2017-11-28",
                            "NCBIfam-gen",
                            "");
-        String[] libraries = new String[] {"COGs-CDD-3.16"};
-        makeDomainModelSet("COGs-1.0-3.16-only",
+        String[] libraries = new String[] {"COGs-CDD-3.17"};
+        makeDomainModelSet("COGs-1.0-3.17-only",
                            libraries);
 
-        libraries[0] = "Pfam-31.0";
+        libraries[0] = "Pfam-32.0";
 	
-        makeDomainModelSet("Pfam-31.0-only",
+        makeDomainModelSet("Pfam-32.0-only",
                            libraries);
 	
-        libraries[0] = "SMART-6.0-CDD-3.16";
+        libraries[0] = "SMART-6.0-CDD-3.17";
 	
-        makeDomainModelSet("SMART-6.0-3.16-only",
+        makeDomainModelSet("SMART-6.0-3.17-only",
                            libraries);
-        libraries[0] = "PRK-6.0-CDD-3.16";
+        libraries[0] = "PRK-2017-12-04-CDD-3.17";
 	
-        makeDomainModelSet("PRK-6.0-3.16-only",
+        makeDomainModelSet("PRK-2017-12-04-CDD-3.17-only",
                            libraries);
 
         libraries[0] = "TIGRFAMs-15.0";
@@ -129,10 +129,10 @@ public class DomainModelLibPreparation {
         makeDomainModelSet("TIGRFAMs-15.0-only",
                            libraries);
 
-        libraries = new String[] { "CDD-NCBI-curated-3.16",
-                                   "CDD-SD-NCBI-curated-3.16"};
+        libraries = new String[] { "CDD-NCBI-curated-3.17",
+                                   "CDD-SD-NCBI-curated-3.17"};
 	
-        makeDomainModelSet("NCBI-CDD-3.16-only",
+        makeDomainModelSet("NCBI-CDD-3.17-only",
                            libraries);
 
         libraries = new String[] { "NCBIfam-PRK-1.1",
@@ -142,18 +142,18 @@ public class DomainModelLibPreparation {
         makeDomainModelSet("NCBIfam-1.1-only",
                            libraries);
 
-        libraries = new String[] { "COGs-CDD-3.16",
-                                   "CDD-NCBI-curated-3.16",
-                                   "CDD-SD-NCBI-curated-3.16",
-                                   "SMART-6.0-CDD-3.16",
-                                   "PRK-6.0-CDD-3.16",
-                                   "Pfam-31.0",
+        libraries = new String[] { "COGs-CDD-3.17",
+                                   "CDD-NCBI-curated-3.17",
+                                   "CDD-SD-NCBI-curated-3.17",
+                                   "SMART-6.0-CDD-3.17",
+                                   "PRK-2017-12-04-CDD-3.17",
+                                   "Pfam-32.0",
                                    "TIGRFAMs-15.0",
                                    "NCBIfam-PRK-1.1",
                                    "NCBIfam-AMR-1.1",
                                    "NCBIfam-gen-1.1"};
 	
-        makeDomainModelSet("All-1.0.3",
+        makeDomainModelSet("All-1.0.8",
                            libraries);
     }
 
@@ -231,19 +231,19 @@ public class DomainModelLibPreparation {
         String program = null;
         if (sourceURL.indexOf("cdd") > 0) {
             source = "CDD";
-            program = "rpsblast-2.2.31";
+            program = "rpsblast-2.9.0";
         }
         else if (sourceURL.indexOf("Pfam") > 0) {
             source = "Pfam";
-            program = "hmmscan-3.1b2";
+            program = "hmmscan-3.2.1";
         }
         else if (sourceURL.indexOf("TIGRFAMs") > 0) {
             source = "TIGRFAMs";
-            program = "hmmscan-3.1b2";
+            program = "hmmscan-3.2.1";
         }
         else if (sourceURL.indexOf("NCBIfam") > 0) {
             source = "NCBIfam";
-            program = "hmmscan-3.1b2";
+            program = "hmmscan-3.2.1";
         }
         else throw new Exception("unknown domain library type");
 
