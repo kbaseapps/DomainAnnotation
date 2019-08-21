@@ -20,13 +20,12 @@ if [[ "$unamestr" == 'Linux' ]]; then
 	########### HMMER #############
 	if [ ! -f ../bin/hmmscan.linux ]; then
 		echo "Downloading hmmer..."
-		curl -o hmmer.tar.gz 'http://eddylab.org/software/hmmer3/3.2.1/hmmer-3.2.1-linux-intel-x86_64.tar.gz'
-		tar -zxvf hmmer.tar.gz hmmer-3.2.1-linux-intel-x86_64/binaries/hmmscan hmmer-3.2.1-linux-intel-x86_64/binaries/hmmpress
-		mv ./hmmer-3.2.1-linux-intel-x86_64/binaries/hmmscan ../bin/hmmscan.linux
-		mv ./hmmer-3.2.1-linux-intel-x86_64/binaries/hmmpress ../bin/hmmpress.linux
-		rmdir ./hmmer-3.2.1-linux-intel-x86_64/binaries
-		rmdir ./hmmer-3.2.1-linux-intel-x86_64
-		rm ./hmmer.tar.gz
+		wget https://anaconda.org/bioconda/hmmer/3.2.1/download/linux-64/hmmer-3.2.1-hf484d3e_1.tar.bz2
+		tar xvf hmmer-3.2.1-hf484d3e_1.tar.bz2 bin/hmmpress bin/hmmscan
+		mv ./bin/hmmpress ../bin/hmmpress.linux
+		mv ./bin/hmmscan ../bin/hmmscan.linux
+		rmdir ./bin
+		rm ./hmmer-3.2.1-hf484d3e_1.tar.bz2
 	fi
 elif [[ "$unamestr" == 'Darwin' ]]; then
 	echo "OS architecture: mac os x"
@@ -44,13 +43,12 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
 	########### HMMER #############
 	if [ ! -f ../bin/hmmscan.macosx ]; then
 		echo "Downloading hmmer..."
-		curl -o hmmer.tar.gz 'http://eddylab.org/software/hmmer3/3.2.1/hmmer-3.2.1-macosx-intel.tar.gz'
-		tar -zxvf hmmer.tar.gz hmmer-3.2.1-macosx-intel/binaries/hmmscan hmmer-3.2.1-macosx-intel/binaries/hmmpress
-		mv ./hmmer-3.2.1-macosx-intel/binaries/hmmscan ../bin/hmmscan.macosx
-		mv ./hmmer-3.2.1-macosx-intel/binaries/hmmpress ../bin/hmmpress.macosx
-		rmdir ./hmmer-3.2.1-macosx-intel/binaries
-		rmdir ./hmmer-3.2.1-macosx-intel
-		rm ./hmmer.tar.gz
+		wget https://anaconda.org/bioconda/hmmer/3.2.1/download/osx-64/hmmer-3.2.1-h0a44026_1.tar.bz2
+		tar xvf hmmer-3.2.1-h0a44026_1.tar.bz2 bin/hmmpress bin/hmmscan
+		mv ./bin/hmmpress ../bin/hmmpress.macosx
+		mv ./bin/hmmscan ../bin/hmmscan.macosx
+		rmdir ./bin
+		rm ./hmmer-3.2.1-h0a44026_1.tar.bz2
 	fi
 else
 	echo "Unknown OS architecture: $unamestr"
