@@ -7,14 +7,13 @@ LIB_DIR = lib
 SCRIPTS_DIR = scripts
 TEST_DIR = test
 LBIN_DIR = bin
-TARGET ?= /kb/deployment
+TARGET ?= ../jars
 JARS_DIR = $(TARGET)/lib/jars
 EXECUTABLE_SCRIPT_NAME = run_$(SERVICE_CAPS)_async_job.sh
 STARTUP_SCRIPT_NAME = start_server.sh
 TEST_SCRIPT_NAME = run_tests.sh
-KB_RUNTIME ?= /kb/runtime
-ANT_HOME ?= $(KB_RUNTIME)/ant
-ANT = $(KB_RUNTIME)/ant/bin/ant
+# ANT = $(KB_RUNTIME)/bin/ant
+ANT=docker run --rm -v /homes/chicago/jmc/:/homes/chicago/jmc/ -w /homes/chicago/jmc/DomainAnnotation --rm --entrypoint ant kbase/kb-sdk
 
 .PHONY: test
 

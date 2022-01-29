@@ -1,4 +1,13 @@
-### Version 1.0
+### Version 1.0.9
+__Changes__
+- updated version of HMMER to 3.3.2
+- updated version of RPSBLAST to 2.12.0
+- updated version of Pfam to 35.0
+- updated version of CDD and CDD-derived models (SMART, COG) to 3.19
+- Replaced NCBIfam 1.1 with NCBI PGAP 7.0 HMMs
+- New download URL for TIGRFAMs 15.0; deprecated by NCBI PGAP, but still available as an option
+
+### Version 1.0.8
 __Changes__
 - updated version of HMMER to 3.2.1
 - updated version of RPSBLAST to 2.9.0

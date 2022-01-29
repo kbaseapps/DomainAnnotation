@@ -14,8 +14,8 @@ fi
 ########### Pfam #############
 if [ ! -f ../db/Pfam-A.hmm ]; then
     echo "Downloading Pfam..."
-    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.full.gz'
-    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam32.0/Pfam-A.hmm.gz'
+    curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.full.gz'
+    curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.hmm.gz'
     gzip -d ../db/Pfam-A.hmm.gz
     ../bin/hmmpress.$OS ../db/Pfam-A.hmm
 fi
@@ -23,20 +23,16 @@ fi
 ########### TIGRFAMS #############
 if [ ! -f ../db/TIGRFAMs_15.0_HMM.LIB ]; then
     echo "Downloading TIGRFAMs..."
-    curl -o ../db/TIGRFAMs_15.0_HMM.LIB.gz 'ftp://ftp.jcvi.org/pub/data/TIGRFAMs/TIGRFAMs_15.0_HMM.LIB.gz'
+    curl -o ../db/TIGRFAMs_15.0_HMM.LIB.gz 'https://ftp.ncbi.nlm.nih.gov/hmm/TIGRFAMs/release_15.0/TIGRFAMs_15.0_HMM.LIB.gz'
     gzip -d ../db/TIGRFAMs_15.0_HMM.LIB.gz
     ../bin/hmmpress.$OS ../db/TIGRFAMs_15.0_HMM.LIB
 fi
 
 ########### NCBIFAMS #############
-if [ ! -f ../db/NCBIfam-AMR.LIB ]; then
+if [ ! -f ../db/hmm_PGAP.LIB ]; then
     echo "Downloading NCBIFAMs..."
-    curl -o ../db/NCBIfam-gen.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-gen/1.1/NCBIfam-gen.LIB'
-    ../bin/hmmpress.$OS ../db/NCBIfam-gen.LIB
-    curl -o ../db/NCBIfam-PRK.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-PRK/1.1/NCBIfam-PRK.LIB'
-    ../bin/hmmpress.$OS ../db/NCBIfam-PRK.LIB
-    curl -o ../db/NCBIfam-AMR.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/NCBIfam-AMR/1.1/NCBIfam-AMR.LIB'
-    ../bin/hmmpress.$OS ../db/NCBIfam-AMR.LIB
+    curl -o ../db/hmm_PGAP.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/7.0/hmm_PGAP.LIB'
+    ../bin/hmmpress.$OS ../db/hmm_PGAP.LIB
 fi
 
 ########### CDD #############

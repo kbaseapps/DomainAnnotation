@@ -9,21 +9,21 @@ WORKDIR /kb/module
 RUN mkdir -p /kb/module/dependencies/bin
 
 WORKDIR /kb/module/dependencies/bin
-RUN curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.9.0/ncbi-blast-2.9.0+-x64-linux.tar.gz'
-RUN tar -zxvf blast.tar.gz ncbi-blast-2.9.0+/bin/makeprofiledb ncbi-blast-2.9.0+/bin/rpsblast
-RUN mv ./ncbi-blast-2.9.0+/bin/makeprofiledb makeprofiledb.linux
-RUN mv ./ncbi-blast-2.9.0+/bin/rpsblast rpsblast.linux
-RUN rmdir ./ncbi-blast-2.9.0+/bin
-RUN rmdir ./ncbi-blast-2.9.0+
+RUN curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.12.0/ncbi-blast-2.12.0+-x64-linux.tar.gz'
+RUN tar -zxvf blast.tar.gz ncbi-blast-2.12.0+/bin/makeprofiledb ncbi-blast-2.12.0+/bin/rpsblast
+RUN mv ./ncbi-blast-2.12.0+/bin/makeprofiledb makeprofiledb.linux
+RUN mv ./ncbi-blast-2.12.0+/bin/rpsblast rpsblast.linux
+RUN rmdir ./ncbi-blast-2.12.0+/bin
+RUN rmdir ./ncbi-blast-2.12.0+
 RUN rm ./blast.tar.gz
 
 WORKDIR /kb/module/dependencies/bin
-RUN wget https://anaconda.org/bioconda/hmmer/3.2.1/download/linux-64/hmmer-3.2.1-hf484d3e_1.tar.bz2
-RUN tar xvf hmmer-3.2.1-hf484d3e_1.tar.bz2 bin/hmmpress bin/hmmscan
+RUN wget https://anaconda.org/bioconda/hmmer/3.3.2/download/linux-64/hmmer-3.3.2-h1b792b2_1.tar.bz2
+RUN tar xvf hmmer-3.3.2-h1b792b2_1.tar.bz2 bin/hmmpress bin/hmmscan
 RUN mv ./bin/hmmpress hmmpress.linux
 RUN mv ./bin/hmmscan hmmscan.linux
 RUN rmdir ./bin
-RUN rm ./hmmer-3.2.1-hf484d3e_1.tar.bz2
+RUN rm ./hmmer-3.3.2-h1b792b2_1.tar.bz2
 
 RUN add-apt-repository ppa:openjdk-r/ppa \
 	&& sudo apt-get update \
