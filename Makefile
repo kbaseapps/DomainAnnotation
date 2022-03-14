@@ -12,8 +12,7 @@ JARS_DIR = $(TARGET)/lib/jars
 EXECUTABLE_SCRIPT_NAME = run_$(SERVICE_CAPS)_async_job.sh
 STARTUP_SCRIPT_NAME = start_server.sh
 TEST_SCRIPT_NAME = run_tests.sh
-# ANT = $(KB_RUNTIME)/bin/ant
-ANT=docker run --rm -v /homes/chicago/jmc/:/homes/chicago/jmc/ -w /homes/chicago/jmc/DomainAnnotation --rm --entrypoint ant kbase/kb-sdk
+ANT = $(KB_RUNTIME)/bin/ant
 
 .PHONY: test
 
