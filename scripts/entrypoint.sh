@@ -16,7 +16,14 @@ elif [ "${1}" = "test" ] ; then
 elif [ "${1}" = "async" ] ; then
   sh ./scripts/run_async.sh
 elif [ "${1}" = "init" ] ; then
-  echo "Initialize module"
+    echo "Initialize module"
+    download_3rd_party_bins.sh
+    prepare_3rd_party_dbs.sh
+    if [ -d db/Csd.freq ] ; then
+  	touch __READY__
+    else
+	echo "Init failed"
+    fi
 elif [ "${1}" = "bash" ] ; then
   bash
 elif [ "${1}" = "report" ] ; then

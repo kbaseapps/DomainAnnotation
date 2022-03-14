@@ -10,5 +10,8 @@ service-language:
 module-version:
     1.0.8
 
+data-version:
+    1.0.8
+
 owners:
     [jmc]
