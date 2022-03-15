@@ -1,5 +1,5 @@
 #!/bin/bash
-cd data
+cd /data
 mkdir -p bin
 mkdir -p tmp
 cd ./tmp
