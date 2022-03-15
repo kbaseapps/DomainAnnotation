@@ -27,7 +27,7 @@ RUN rm ./hmmer-3.3.2-h1b792b2_1.tar.bz2
 
 RUN add-apt-repository ppa:openjdk-r/ppa \
 	&& sudo apt-get update \
-	&& sudo apt-get -y install openjdk-8-jdk \
+	&& sudo apt-get -y install openjdk-8-jdk ant \
 	&& echo java versions: \
 	&& java -version \
 	&& javac -version \
