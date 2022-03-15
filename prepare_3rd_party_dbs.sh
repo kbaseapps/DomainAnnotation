@@ -36,7 +36,7 @@ if [ ! -f ../db/hmm_PGAP.LIB ]; then
 fi
 
 ########### CDD #############
-if [ ! -f ../db/Cdd.rps ]; then
+if [ ! -f ../db/Csd.rps ]; then
     echo "Downloading CDD..."
     curl -o ../db/cddid.tbl.gz 'ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/cddid.tbl.gz'
     curl -o cdd.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/cdd.tar.gz'
