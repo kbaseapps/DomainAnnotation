@@ -49,24 +49,28 @@ if [ ! -f ../db/Csd.rps ]; then
     mv Cog* ../../db
     rm *.smp
 
+    echo "doing smart"
     tar --wildcards -xf ../cdd.tar.gz 'smart*.smp'
     ls -1 smart*.smp > Smart
     ../../bin/makeprofiledb.$OS -in Smart -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Smart* ../../db
     rm *.smp
 
+    echo "doing prk"
     tar --wildcards -xf ../cdd.tar.gz 'PRK*.smp'
     ls -1 PRK*.smp > Prk
     ../../bin/makeprofiledb.$OS -in Prk -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Prk* ../../db
     rm *.smp
 
+    echo "doing cdd"
     tar --wildcards -xf ../cdd.tar.gz 'cd*.smp'
     ls -1 cd*.smp > Cdd
     ../../bin/makeprofiledb.$OS -in Cdd -threshold 9.82 -scale 100.0 -dbtype rps -index true
     mv Cdd* ../../db
     rm *.smp
 
+    echo "doing csd"
     tar --wildcards -xf ../cdd.tar.gz 'sd*.smp'
     ls -1 sd*.smp > Csd
     ../../bin/makeprofiledb.$OS -in Csd -threshold 9.82 -scale 100.0 -dbtype rps -index true

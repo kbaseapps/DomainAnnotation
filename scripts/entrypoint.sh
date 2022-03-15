@@ -21,7 +21,7 @@ elif [ "${1}" = "init" ] ; then
     /kb/module/download_3rd_party_bins.sh
     /kb/module/prepare_3rd_party_dbs.sh
     if [ -f /data/db/Csd.rps ] ; then
-  	touch __READY__
+  	touch /data/__READY__
     else
 	echo "Init failed"
     fi
