@@ -20,6 +20,7 @@ elif [ "${1}" = "init" ] ; then
     pwd
     /kb/module/download_3rd_party_bins.sh
     /kb/module/prepare_3rd_party_dbs.sh
+    ls -l /data/db/
     if [ -f /data/db/Csd.rps ] ; then
   	touch /data/__READY__
     else
