@@ -17,10 +17,8 @@ elif [ "${1}" = "async" ] ; then
   sh ./scripts/run_async.sh
 elif [ "${1}" = "init" ] ; then
     echo "Initialize module"
-    pwd
     /kb/module/download_3rd_party_bins.sh
     /kb/module/prepare_3rd_party_dbs.sh
-    ls -l /data/db/
     if [ -f /data/db/Csd.rps ] ; then
   	touch /data/__READY__
     else
