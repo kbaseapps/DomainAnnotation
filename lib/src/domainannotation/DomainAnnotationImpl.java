@@ -736,8 +736,17 @@ public class DomainAnnotationImpl {
         return ret;
     }
 
+    /**
+       As of version 1.0.8, DomainAnnotation uses reference
+       data objects.  Therefore, this function looks for the
+       reference data directory, and if there, uses it.  If not
+       there, makes a temporary directory instead so the reference
+       data can be downloaded from shock.
+    */
     public static File getDomainsDir() {
-        File ret = new File(tempDir, "domains");
+        File ret = new File("/data/db/");
+        if (!ret.exists())
+            ret = new File(tempDir, "domains");
         if (!ret.exists())
             ret.mkdir();
         return ret;
@@ -746,7 +755,10 @@ public class DomainAnnotationImpl {
     /**
        gets all the required library files out of shock.  Only
        supports publicly readable libraries for now (private libraries
-       cannot currently be uploaded)
+       cannot currently be uploaded).
+
+       As of 1.0.8, the files should already be in the reference
+       data directory.  Therefore, warn if they are missing.
     */
     public static void prepareLibraryFiles(DomainLibrary dl,
                                            String shockURL,
@@ -754,8 +766,11 @@ public class DomainAnnotationImpl {
         File dir = getDomainsDir();
         for (Handle h : dl.getLibraryFiles()) {
             File f = new File(dir.getPath()+"/"+h.getFileName());
-            if (f.canRead())
+            if (f.canRead()) {
+                System.out.println("Found reference data: "+f.getPath());
                 continue;
+            }
+            System.out.println("Downloading missing reference data: library file "+f.getPath());
             fromShock(h, shockURL, token, f, false);
         }
     }
