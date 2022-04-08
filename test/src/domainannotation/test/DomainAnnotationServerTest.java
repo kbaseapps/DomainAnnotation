@@ -37,9 +37,9 @@ public class DomainAnnotationServerTest {
     // needs to be in app-dev:
     // private static final String ecoliRef = "19217/25575/2";
     private static final String ecoliRef = "79/11/1";
-    private static final String smartRef = domainWsName+"/SMART-only";
-    private static final String tigrRef = domainWsName+"/TIGRFAMs-only";
-    private static final String allLibsRef = domainWsName+"/All-1.0.3";
+    private static final String smartRef = domainWsName+"/SMART-6.0-3.19-only";
+    private static final String tigrRef = domainWsName+"/TIGRFAMs-15.0-only";
+    private static final String allLibsRef = domainWsName+"/All-1.0.9";
     
     @BeforeClass
     public static void init() throws Exception {
@@ -121,7 +121,7 @@ public class DomainAnnotationServerTest {
     public void getSMART() throws Exception {
         DomainModelSet smart = wsClient.getObjects(Arrays.asList(new ObjectIdentity().withRef(smartRef))).get(0).getData().asClassInstance(DomainModelSet.class);
 
-        assertEquals(smart.getSetName(),"SMART-only");
+        assertEquals(smart.getSetName(),"SMART-6.0-3.19-only");
     }
 
     /**
