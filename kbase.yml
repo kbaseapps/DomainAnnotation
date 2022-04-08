@@ -8,10 +8,10 @@ service-language:
     java
 
 module-version:
-    1.0.8
+    1.0.9
 
 data-version:
-    1.0.8
+    1.0.9
 
 owners:
     [jmc]
