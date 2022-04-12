@@ -1,5 +1,5 @@
 {
-    "ver": "1.0.3",
+    "ver": "1.0.9",
     "authors": [
 	"jmc", "psnovichkov", "rsutormin"
     ],
@@ -27,41 +27,41 @@
 	    "optional" : false,
 	    "advanced" : false,
 	    "allow_multiple" : false,
-	    "default_values" : [ "KBasePublicGeneDomains/All-1.0.8" ],
+	    "default_values" : [ "KBasePublicGeneDomains/All-1.0.9" ],
 	    "field_type" : "dropdown",
 	    "dropdown_options":{
 		"options": [
 		    {
-			"value": "KBasePublicGeneDomains/All-1.0.8",
+			"value": "KBasePublicGeneDomains/All-1.0.9",
 			"display": "All domain libraries"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/COGs-1.0-3.17-only",
-			"display": "COGs 1.0 (from CDD 3.17) domains only"
+			"value": "KBasePublicGeneDomains/COGs-1.0-3.19-only",
+			"display": "COGs 1.0 (from CDD 3.19) domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/NCBI-CDD-3.17-only",
-			"display": "NCBI-curated CDD 3.17 domains only"
+			"value": "KBasePublicGeneDomains/NCBI-CDD-3.19-only",
+			"display": "NCBI-curated CDD 3.19 domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/SMART-6.0-3.17-only",
-			"display": "SMART 6.0 (from CDD 3.17) domains only"
+			"value": "KBasePublicGeneDomains/SMART-6.0-3.19-only",
+			"display": "SMART 6.0 (from CDD 3.19) domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/PRK-2017-12-04-CDD-3.17-only",
-			"display": "PRK 2017-12-04 (from CDD 3.17) domains only"
+			"value": "KBasePublicGeneDomains/PRK-2017-12-04-CDD-3.19-only",
+			"display": "PRK 2017-12-04 (from CDD 3.19) domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/Pfam-32.0-only",
-			"display": "Pfam 32.0 domains only"
+			"value": "KBasePublicGeneDomains/Pfam-35.0-only",
+			"display": "Pfam 35.0 domains only"
 		    },
 		    {
 			"value": "KBasePublicGeneDomains/TIGRFAMs-15.0-only",
 			"display": "TIGRFAM 15.0 domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/NCBIfam-1.1-only",
-			"display": "NCBIfam 1.1 domains only"
+			"value": "KBasePublicGeneDomains/NCBI-PGAP-7.0-only",
+			"display": "NCBI PGAP 7.0 domains only"
 		    }
 		]
 	    }

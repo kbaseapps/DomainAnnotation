@@ -49,19 +49,19 @@ description : |
     <p>The user must choose one of the following sets of models with which to annotate their Genome:
      <ul>
       <li><b>All domain libraries</b> (details of each set are listed below).</li>
-      <li><b>COGs</b> (<a href="http://www.ncbi.nlm.nih.gov/COG/">Clusters of Orthologous Groups</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.17.</li>
-      <li>NCBI's <b>CDD</b> models from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.17.  This dataset includes only the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd_help.shtml#CDSource_NCBI_curated">NCBI-curated domains</a> (including the structural motif "sd" models).</li>
-      <li><b>SMART</b> (<a href="http://smart.embl-heidelberg.de/">Simple Modular Architecture Research Tool</a>) version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.17.</li>
-      <li><b>PRK</b> (<a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">Protein Clusters</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.17.</li>
-      <li><b>Pfam</b> <a href="http://pfam.xfam.org/">version 33.0 hidden Markov models</a>.</li>
+      <li><b>COGs</b> (<a href="http://www.ncbi.nlm.nih.gov/COG/">Clusters of Orthologous Groups</a>) from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.</li>
+      <li>NCBI's <b>CDD</b> models from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.  This dataset includes only the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd_help.shtml#CDSource_NCBI_curated">NCBI-curated domains</a> (including the structural motif "sd" models).</li>
+      <li><b>SMART</b> (<a href="http://smart.embl-heidelberg.de/">Simple Modular Architecture Research Tool</a>) version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.</li>
+      <li><b>PRK</b> (<a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">Protein Clusters</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.</li>
+      <li><b>Pfam</b> <a href="http://pfam.xfam.org/">version 35.0 hidden Markov models</a>.</li>
       <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org/cgi-bin/tigrfams/index.cgi">J. Craig Venter Institute</a>.</li>
-      <li><b>NCBIfam</b> version 1.1 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
+      <li><b>NCBI Prokaryotic Genome Annotation Pipeline (PGAP)</b> version 7.0 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
     </ul>
     <p>
 
-    <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.9.0, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
+    <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.12.0, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
 
-    <p>For the three HMM libraries (Pfam, TIGRFAMs and NCBIfam), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.2.1</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
+    <p>For the three HMM libraries (Pfam, TIGRFAMs and NCBIfam), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.3.2</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
 
     <p>The annotation job may run for a few hours depending on the total number of libraries selected and/or the size of the genome.  When the annotation job finishes, a DomainAnnotation object will be stored in your data panel, which can be used to browse the domains that were identified in your genome.</p>
 
