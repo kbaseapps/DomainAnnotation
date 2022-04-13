@@ -10,7 +10,7 @@ if [[ "$unamestr" == 'Linux' ]]; then
 	if [ ! -f ../bin/rpsblast.linux ]; then
 		echo "Downloading blast..."
 		curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz'
-		tar -zxvf blast.tar.gz ncbi-blast-2.13.0+/bin/makeprofiledb ncbi-blast-2.13.0+/bin/rpsblast
+		tar -zxvf blast.tar.gz ./ncbi-blast-2.13.0+/bin/makeprofiledb ./ncbi-blast-2.13.0+/bin/rpsblast
 		mv ./ncbi-blast-2.13.0+/bin/makeprofiledb ../bin/makeprofiledb.linux
 		mv ./ncbi-blast-2.13.0+/bin/rpsblast ../bin/rpsblast.linux
 		rmdir ./ncbi-blast-2.13.0+/bin
@@ -33,7 +33,7 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
 	if [ ! -f ../bin/rpsblast.macosx ]; then
 		echo "Downloading blast..."
 		curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-universal-macosx.tar.gz'
-		tar -zxvf blast.tar.gz ncbi-blast-2.13.0+/bin/makeprofiledb ncbi-blast-2.13.0+/bin/rpsblast
+		tar -zxvf blast.tar.gz ./ncbi-blast-2.13.0+/bin/makeprofiledb ./ncbi-blast-2.13.0+/bin/rpsblast
 		mv ./ncbi-blast-2.13.0+/bin/makeprofiledb ../bin/makeprofiledb.macosx
 		mv ./ncbi-blast-2.13.0+/bin/rpsblast ../bin/rpsblast.macosx
 		rmdir ./ncbi-blast-2.13.0+/bin
