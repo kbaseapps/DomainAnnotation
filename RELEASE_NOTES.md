@@ -1,3 +1,8 @@
+### Version 1.0.10
+__Changes__
+- updated version of RPSBLAST to 2.13.0
+- updated version of NCBI PGAP models to 8.0
+
 ### Version 1.0.9
 __Changes__
 - updated version of HMMER to 3.3.2

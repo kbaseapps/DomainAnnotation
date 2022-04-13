@@ -28,7 +28,7 @@ parameters:
     ui-name : |
       Genome
     short-hint : |
-      Select a Genome from your data oanel to annotate with domains. It must already have annotated protein-encoding genes.
+      Select a Genome from your data panel to annotate with domains. It must already have annotated protein-encoding genes.
 
   dms_ref :
     ui-name : |
@@ -54,12 +54,12 @@ description : |
       <li><b>SMART</b> (<a href="http://smart.embl-heidelberg.de/">Simple Modular Architecture Research Tool</a>) version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.</li>
       <li><b>PRK</b> (<a href="https://www.ncbi.nlm.nih.gov/proteinclusters/">Protein Clusters</a> version 6.0, from the <a href="http://www.ncbi.nlm.nih.gov/Structure/cdd/cdd.shtml">NCBI conserved domains database</a> (CDD) version 3.19.</li>
       <li><b>Pfam</b> <a href="http://pfam.xfam.org/">version 35.0 hidden Markov models</a>.</li>
-      <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org/cgi-bin/tigrfams/index.cgi">J. Craig Venter Institute</a>.</li>
-      <li><b>NCBI Prokaryotic Genome Annotation Pipeline (PGAP)</b> version 7.0 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
+      <li><b>TIGRFAMs</b> version 15.0 hidden Markov models, from the <a href="http://www.jcvi.org">J. Craig Venter Institute</a>.</li>
+      <li><b>NCBI Prokaryotic Genome Annotation Pipeline (PGAP)</b> version 8.0 hidden Markov models, from the <a href="https://ftp.ncbi.nlm.nih.gov/hmm/">NCBI</a>.</li>
     </ul>
     <p>
 
-    <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.12.0, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
+    <p>For the first four libraries above (COGs, CDD, SMART and PRK), KBase runs RPS-BLAST version 2.13.0, from the <a href="http://www.ncbi.nlm.nih.gov/books/NBK1762/">BLAST+ package at NCBI</a>, identifying all domain hits with an E-value of 10<sup>-4</sup> or better.</p>
 
     <p>For the three HMM libraries (Pfam, TIGRFAMs and NCBIfam), KBase runs <a href="http://hmmer.janelia.org/">HMMER version 3.3.2</a>, identifying all domain hits at least as significant as the family-specific <i>trusted cutoff</i> identified by the curators of each model.</p>
 

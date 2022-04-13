@@ -31,7 +31,7 @@ fi
 ########### NCBIFAMS #############
 if [ ! -f ../db/hmm_PGAP.LIB ]; then
     echo "Downloading NCBIFAMs..."
-    curl -o ../db/hmm_PGAP.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/7.0/hmm_PGAP.LIB'
+    curl -o ../db/hmm_PGAP.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/8.0/hmm_PGAP.LIB'
     ../bin/hmmpress.$OS ../db/hmm_PGAP.LIB
 fi
 

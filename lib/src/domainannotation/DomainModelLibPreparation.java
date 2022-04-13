@@ -26,12 +26,12 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
-        parseDomainLibrary("NCBI-PGAP-7.0",
-                           "https://ftp.ncbi.nlm.nih.gov/hmm/7.0/hmm_PGAP.LIB",
+        parseDomainLibrary("NCBI-PGAP-8.0",
+                           "https://ftp.ncbi.nlm.nih.gov/hmm/8.0/hmm_PGAP.LIB",
                            "data/db/hmm_PGAP.LIB",
                            null,
-                           "7.0",
-                           "2021-11-18",
+                           "8.0",
+                           "2022-03-11",
                            "NF-no-url",
                            "");
         parseDomainLibrary("PRK-2017-12-04-CDD-3.19",
@@ -119,9 +119,9 @@ public class DomainModelLibPreparation {
         makeDomainModelSet("NCBI-CDD-3.19-only",
                            libraries);
 
-        libraries = new String[] { "NCBI-PGAP-7.0" };
+        libraries = new String[] { "NCBI-PGAP-8.0" };
 
-        makeDomainModelSet("NCBI-PGAP-7.0-only",
+        makeDomainModelSet("NCBI-PGAP-8.0-only",
                            libraries);
 
         libraries = new String[] { "COGs-CDD-3.19",
@@ -130,9 +130,9 @@ public class DomainModelLibPreparation {
                                    "SMART-6.0-CDD-3.19",
                                    "PRK-2017-12-04-CDD-3.19",
                                    "Pfam-35.0",
-                                   "NCBI-PGAP-7.0" };
+                                   "NCBI-PGAP-8.0" };
 	
-        makeDomainModelSet("All-1.0.9",
+        makeDomainModelSet("All-1.0.10",
                            libraries);
     }
 
@@ -210,7 +210,7 @@ public class DomainModelLibPreparation {
         String program = null;
         if (sourceURL.indexOf("cdd") > 0) {
             source = "CDD";
-            program = "rpsblast-2.12.0";
+            program = "rpsblast-2.13.0";
         }
         else if (sourceURL.indexOf("Pfam") > 0) {
             source = "Pfam";

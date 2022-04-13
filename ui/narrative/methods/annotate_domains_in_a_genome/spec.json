@@ -1,5 +1,5 @@
 {
-    "ver": "1.0.9",
+    "ver": "1.0.10",
     "authors": [
 	"jmc", "psnovichkov", "rsutormin"
     ],
@@ -27,12 +27,12 @@
 	    "optional" : false,
 	    "advanced" : false,
 	    "allow_multiple" : false,
-	    "default_values" : [ "KBasePublicGeneDomains/All-1.0.9" ],
+	    "default_values" : [ "KBasePublicGeneDomains/All-1.0.10" ],
 	    "field_type" : "dropdown",
 	    "dropdown_options":{
 		"options": [
 		    {
-			"value": "KBasePublicGeneDomains/All-1.0.9",
+			"value": "KBasePublicGeneDomains/All-1.0.10",
 			"display": "All domain libraries"
 		    },
 		    {
@@ -60,8 +60,8 @@
 			"display": "TIGRFAM 15.0 domains only"
 		    },
 		    {
-			"value": "KBasePublicGeneDomains/NCBI-PGAP-7.0-only",
-			"display": "NCBI PGAP 7.0 domains only"
+			"value": "KBasePublicGeneDomains/NCBI-PGAP-8.0-only",
+			"display": "NCBI PGAP 8.0 domains only"
 		    }
 		]
 	    }
