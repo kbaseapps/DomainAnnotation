@@ -8,23 +8,7 @@ MAINTAINER John-Marc Chandonia
 WORKDIR /kb/module
 RUN mkdir -p /kb/module/dependencies/bin
 
-WORKDIR /kb/module/dependencies/bin
-RUN curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.12.0/ncbi-blast-2.12.0+-x64-linux.tar.gz'
-RUN tar -zxvf blast.tar.gz ncbi-blast-2.12.0+/bin/makeprofiledb ncbi-blast-2.12.0+/bin/rpsblast
-RUN mv ./ncbi-blast-2.12.0+/bin/makeprofiledb makeprofiledb.linux
-RUN mv ./ncbi-blast-2.12.0+/bin/rpsblast rpsblast.linux
-RUN rmdir ./ncbi-blast-2.12.0+/bin
-RUN rmdir ./ncbi-blast-2.12.0+
-RUN rm ./blast.tar.gz
-
-WORKDIR /kb/module/dependencies/bin
-RUN wget https://anaconda.org/bioconda/hmmer/3.3.2/download/linux-64/hmmer-3.3.2-h1b792b2_1.tar.bz2
-RUN tar xvf hmmer-3.3.2-h1b792b2_1.tar.bz2 bin/hmmpress bin/hmmscan
-RUN mv ./bin/hmmpress hmmpress.linux
-RUN mv ./bin/hmmscan hmmscan.linux
-RUN rmdir ./bin
-RUN rm ./hmmer-3.3.2-h1b792b2_1.tar.bz2
-
+# get java from old Ubuntu version
 RUN add-apt-repository ppa:openjdk-r/ppa \
 	&& sudo apt-get update \
 	&& sudo apt-get -y install openjdk-8-jdk ant \
@@ -39,6 +23,30 @@ RUN add-apt-repository ppa:openjdk-r/ppa \
 	&& ls -l
 
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+
+# update apt/dpkg so that further upgrades will work
+RUN apt-get -y upgrade
+
+# NCBI blast needs GOMP_4.0 library, so move from trusty to xenial
+RUN grep trusty /etc/apt/sources.list | sed -e s/trusty/xenial/ >> /etc/apt/sources.list
+RUN apt-get update && apt-get -y install g++-4.9
+
+WORKDIR /kb/module/dependencies/bin
+RUN curl -o blast.tar.gz 'ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz'
+RUN tar -zxvf blast.tar.gz ./ncbi-blast-2.13.0+/bin/makeprofiledb ./ncbi-blast-2.13.0+/bin/rpsblast
+RUN mv ./ncbi-blast-2.13.0+/bin/makeprofiledb makeprofiledb.linux
+RUN mv ./ncbi-blast-2.13.0+/bin/rpsblast rpsblast.linux
+RUN rmdir ./ncbi-blast-2.13.0+/bin
+RUN rmdir ./ncbi-blast-2.13.0+
+RUN rm ./blast.tar.gz
+
+WORKDIR /kb/module/dependencies/bin
+RUN wget https://anaconda.org/bioconda/hmmer/3.3.2/download/linux-64/hmmer-3.3.2-h1b792b2_1.tar.bz2
+RUN tar xvf hmmer-3.3.2-h1b792b2_1.tar.bz2 bin/hmmpress bin/hmmscan
+RUN mv ./bin/hmmpress hmmpress.linux
+RUN mv ./bin/hmmscan hmmscan.linux
+RUN rmdir ./bin
+RUN rm ./hmmer-3.3.2-h1b792b2_1.tar.bz2
 
 # get most up to date jars, note will be cached so change this RUN to update
 RUN cd /kb/dev_container/modules/jars \
