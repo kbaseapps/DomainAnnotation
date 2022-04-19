@@ -12,7 +12,7 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
 fi
 
 ########### Pfam #############
-if [ ! -f ../db/Pfam-A.hmm ]; then
+if [ ! -f ../db/Pfam-A.hmm.h3f ]; then
     echo "Downloading Pfam..."
     curl -o ../db/Pfam-A.full.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.full.gz'
     curl -o ../db/Pfam-A.hmm.gz 'ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.hmm.gz'
@@ -21,7 +21,7 @@ if [ ! -f ../db/Pfam-A.hmm ]; then
 fi
 
 ########### TIGRFAMS #############
-if [ ! -f ../db/TIGRFAMs_15.0_HMM.LIB ]; then
+if [ ! -f ../db/TIGRFAMs_15.0_HMM.LIB.h3f ]; then
     echo "Downloading TIGRFAMs..."
     curl -o ../db/TIGRFAMs_15.0_HMM.LIB.gz 'https://ftp.ncbi.nlm.nih.gov/hmm/TIGRFAMs/release_15.0/TIGRFAMs_15.0_HMM.LIB.gz'
     gzip -d ../db/TIGRFAMs_15.0_HMM.LIB.gz
@@ -29,9 +29,14 @@ if [ ! -f ../db/TIGRFAMs_15.0_HMM.LIB ]; then
 fi
 
 ########### NCBIFAMS #############
-if [ ! -f ../db/hmm_PGAP.LIB ]; then
+if [ ! -f ../db/hmm_PGAP.LIB.h3f ]; then
     echo "Downloading NCBIFAMs..."
     curl -o ../db/hmm_PGAP.LIB 'https://ftp.ncbi.nlm.nih.gov/hmm/8.0/hmm_PGAP.LIB'
+    # fix bug where PRK11594.1 appears twice: remove second instance
+    head -n +6493307 ../db/hmm_PGAP.LIB > hmm_PGAP.LIB.tmp
+    tail -n +6493536 ../db/hmm_PGAP.LIB >> hmm_PGAP.LIB.tmp
+    mv hmm_PGAP.LIB.tmp ../db/hmm_PGAP.LIB
+    # now hmmpress should run without error
     ../bin/hmmpress.$OS ../db/hmm_PGAP.LIB
 fi
 
