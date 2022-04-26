@@ -26,103 +26,104 @@ public class DomainModelLibPreparation {
     public static void main(String[] args) throws Exception {
         checkOrCreateWorkspace();
 	
-        parseDomainLibrary("NCBI-PGAP-8.0",
-                           "https://ftp.ncbi.nlm.nih.gov/hmm/8.0/hmm_PGAP.LIB",
-                           "data/db/hmm_PGAP.LIB",
-                           null,
-                           "8.0",
-                           "2022-03-11",
-                           "NF-no-url",
-                           "");
-        parseDomainLibrary("PRK-2017-12-04-CDD-3.19",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "data/db/Prk",
-                           "data/db/cddid.tbl.gz",
-                           "2017-12-04",
-                           "2021-02-23",
-                           "prk-no-url",
-                           "");
-        parseDomainLibrary("COGs-CDD-3.19",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "data/db/Cog",
-                           "data/db/cddid.tbl.gz",
-                           "3.19",
-                           "2021-02-23",
-                           "COG",
-                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=COG");
-        parseDomainLibrary("CDD-NCBI-curated-3.19",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "data/db/Cdd",
-                           "data/db/cddid.tbl.gz",
-                           "3.19",
-                           "2021-02-23",
-                           "cd",
-                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=cd");
-        parseDomainLibrary("CDD-SD-NCBI-curated-3.19",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "data/db/Csd",
-                           "data/db/cddid.tbl.gz",
-                           "3.19",
-                           "2021-02-23",
-                           "sd",
-                           "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=sd");
-        parseDomainLibrary("SMART-6.0-CDD-3.19",
-                           "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
-                           "data/db/Smart",
-                           "data/db/cddid.tbl.gz",
-                           "6.0",
-                           "2021-02-23",
-                           "smart",
-                           "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=");
-        parseDomainLibrary("Pfam-35.0",
-                           "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.hmm.gz",
-                           "data/db/Pfam-A.hmm",
-                           "data/db/Pfam-A.full.gz",
-                           "35.0",
-                           "2021-11-15",
-                           "PF",
-                           "http://pfam.xfam.org/family/PF");
-        parseDomainLibrary("TIGRFAMs-15.0",
-                           "https://ftp.ncbi.nlm.nih.gov/hmm/TIGRFAMs/release_15.0/TIGRFAMs_15.0_HMM.LIB.gz",
-                           "data/db/TIGRFAMs_15.0_HMM.LIB",
-                           null,
-                           "15.0",
-                           "2014-09-17",
-                           "TIGR",
-                           "https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR");
+        System.out.println(parseDomainLibrary("NCBI-PGAP-8.0",
+                                              "https://ftp.ncbi.nlm.nih.gov/hmm/8.0/hmm_PGAP.LIB",
+                                              "data/db/hmm_PGAP.LIB",
+                                              null,
+                                              "8.0",
+                                              "2022-03-11",
+                                              "NF-no-url",
+                                              ""));
+        System.out.println(parseDomainLibrary("PRK-2017-12-04-CDD-3.19",
+                                              "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                                              "data/db/Prk",
+                                              "data/db/cddid.tbl.gz",
+                                              "2017-12-04",
+                                              "2021-02-23",
+                                              "prk-no-url",
+                                              ""));
+        System.out.println(parseDomainLibrary("COGs-CDD-3.19",
+                                              "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                                              "data/db/Cog",
+                                              "data/db/cddid.tbl.gz",
+                                              "3.19",
+                                              "2021-02-23",
+                                              "COG",
+                                              "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=COG"));
+        System.out.println(parseDomainLibrary("CDD-NCBI-curated-3.19",
+                                              "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                                              "data/db/Cdd",
+                                              "data/db/cddid.tbl.gz",
+                                              "3.19",
+                                              "2021-02-23",
+                                              "cd",
+                                              "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=cd"));
+        System.out.println(parseDomainLibrary("CDD-SD-NCBI-curated-3.19",
+                                              "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                                              "data/db/Csd",
+                                              "data/db/cddid.tbl.gz",
+                                              "3.19",
+                                              "2021-02-23",
+                                              "sd",
+                                              "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=sd"));
+        System.out.println(parseDomainLibrary("SMART-6.0-CDD-3.19",
+                                              "ftp://ftp.ncbi.nih.gov/pub/mmdb/cdd/",
+                                              "data/db/Smart",
+                                              "data/db/cddid.tbl.gz",
+                                              "6.0",
+                                              "2021-02-23",
+                                              "smart",
+                                              "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN="));
+        System.out.println(parseDomainLibrary("Pfam-35.0",
+                                              "ftp://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam35.0/Pfam-A.hmm.gz",
+                                              "data/db/Pfam-A.hmm",
+                                              "data/db/Pfam-A.full.gz",
+                                              "35.0",
+                                              "2021-11-15",
+                                              "PF",
+                                              "http://pfam.xfam.org/family/PF"));
+        System.out.println(parseDomainLibrary("TIGRFAMs-15.0",
+                                              "https://ftp.ncbi.nlm.nih.gov/hmm/TIGRFAMs/release_15.0/TIGRFAMs_15.0_HMM.LIB.gz",
+                                              "data/db/TIGRFAMs_15.0_HMM.LIB",
+                                              null,
+                                              "15.0",
+                                              "2014-09-17",
+                                              "TIGR",
+                                              "https://www.ncbi.nlm.nih.gov/Structure/cdd/TIGR"));
         String[] libraries = new String[] {"COGs-CDD-3.19"};
-        makeDomainModelSet("COGs-1.0-3.19-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("COGs-1.0-3.19-only",
+                                              libraries));
 
         libraries[0] = "Pfam-35.0";
 	
-        makeDomainModelSet("Pfam-35.0-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("Pfam-35.0-only",
+                                              libraries));
 	
         libraries[0] = "SMART-6.0-CDD-3.19";
 	
-        makeDomainModelSet("SMART-6.0-3.19-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("SMART-6.0-3.19-only",
+                                              libraries));
+
         libraries[0] = "PRK-2017-12-04-CDD-3.19";
 	
-        makeDomainModelSet("PRK-2017-12-04-CDD-3.19-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("PRK-2017-12-04-CDD-3.19-only",
+                                              libraries));
 
         libraries[0] = "TIGRFAMs-15.0";
 
-        makeDomainModelSet("TIGRFAMs-15.0-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("TIGRFAMs-15.0-only",
+                                              libraries));
 
         libraries = new String[] { "CDD-NCBI-curated-3.19",
                                    "CDD-SD-NCBI-curated-3.19"};
 	
-        makeDomainModelSet("NCBI-CDD-3.19-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("NCBI-CDD-3.19-only",
+                                              libraries));
 
         libraries = new String[] { "NCBI-PGAP-8.0" };
 
-        makeDomainModelSet("NCBI-PGAP-8.0-only",
-                           libraries);
+        System.out.println(makeDomainModelSet("NCBI-PGAP-8.0-only",
+                                              libraries));
 
         libraries = new String[] { "COGs-CDD-3.19",
                                    "CDD-NCBI-curated-3.19",
@@ -132,8 +133,8 @@ public class DomainModelLibPreparation {
                                    "Pfam-35.0",
                                    "NCBI-PGAP-8.0" };
 	
-        makeDomainModelSet("All-1.0.10",
-                           libraries);
+        System.out.println(makeDomainModelSet("All-1.0.10",
+                                              libraries));
     }
 
     /**
