@@ -2,6 +2,7 @@
 __Changes__
 - updated version of RPSBLAST to 2.13.0
 - updated version of NCBI PGAP models to 8.0
+- retrieve HMMER from eddylab instead of anaconda
 
 ### Version 1.0.9
 __Changes__
