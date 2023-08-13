@@ -42,12 +42,19 @@ RUN rm ./blast.tar.gz
 
 WORKDIR /kb/module/dependencies/bin
 ENV HMMER_VERSION='3.3.2'
-RUN curl http://eddylab.org/software/hmmer/hmmer-${HMMER_VERSION}.tar.gz > hmmer-${HMMER_VERSION}.tar.gz
-RUN tar xvf hmmer-${HMMER_VERSION}.tar.gz bin/hmmpress bin/hmmscan
-RUN mv ./bin/hmmpress hmmpress.linux
-RUN mv ./bin/hmmscan hmmscan.linux
-RUN rmdir ./bin
-RUN rm ./hmmer-${HMMER_VERSION}.tar.gz
+RUN \
+    curl http://eddylab.org/software/hmmer/hmmer-${HMMER_VERSION}.tar.gz > hmmer-${HMMER_VERSION}.tar.gz && \
+    tar xvf hmmer-${HMMER_VERSION}.tar.gz && \
+    ln -s hmmer-${HMMER_VERSION} hmmer && \
+    rm -f hmmer-${HMMER_VERSION}.tar.gz    
+WORKDIR /kb/module/dependencies/bin/hmmer
+RUN \
+  ./configure --prefix /kb/module/dependencies/bin/hmmer && \
+  make && \
+  make install
+WORKDIR	/kb/module/dependencies/bin
+RUN mv ./hmmer/bin/hmmpress hmmpress.linux
+RUN mv ./hmmer/bin/hmmscan hmmscan.linux
 
 # get most up to date jars, note will be cached so change this RUN to update
 RUN cd /kb/dev_container/modules/jars \
