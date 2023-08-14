@@ -1,7 +1,7 @@
 #
 # define display information
 #
-name: Annotate Domains in a Genome
+name: Annotate Domains in a Genome - v1.0.10
 tooltip: |
   Annotate a Genome object with protein domains from widely used domain libraries.
 screenshots: []

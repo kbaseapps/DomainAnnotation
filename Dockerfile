@@ -41,12 +41,20 @@ RUN rmdir ./ncbi-blast-2.13.0+
 RUN rm ./blast.tar.gz
 
 WORKDIR /kb/module/dependencies/bin
-RUN wget https://anaconda.org/bioconda/hmmer/3.3.2/download/linux-64/hmmer-3.3.2-h1b792b2_1.tar.bz2
-RUN tar xvf hmmer-3.3.2-h1b792b2_1.tar.bz2 bin/hmmpress bin/hmmscan
-RUN mv ./bin/hmmpress hmmpress.linux
-RUN mv ./bin/hmmscan hmmscan.linux
-RUN rmdir ./bin
-RUN rm ./hmmer-3.3.2-h1b792b2_1.tar.bz2
+ENV HMMER_VERSION='3.3.2'
+RUN \
+    curl http://eddylab.org/software/hmmer/hmmer-${HMMER_VERSION}.tar.gz > hmmer-${HMMER_VERSION}.tar.gz && \
+    tar xvf hmmer-${HMMER_VERSION}.tar.gz && \
+    ln -s hmmer-${HMMER_VERSION} hmmer && \
+    rm -f hmmer-${HMMER_VERSION}.tar.gz    
+WORKDIR /kb/module/dependencies/bin/hmmer
+RUN \
+  ./configure --prefix /kb/module/dependencies/bin/hmmer && \
+  make && \
+  make install
+WORKDIR	/kb/module/dependencies/bin
+RUN mv ./hmmer/bin/hmmpress hmmpress.linux
+RUN mv ./hmmer/bin/hmmscan hmmscan.linux
 
 # get most up to date jars, note will be cached so change this RUN to update
 RUN cd /kb/dev_container/modules/jars \
